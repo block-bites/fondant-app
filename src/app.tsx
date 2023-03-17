@@ -1,7 +1,12 @@
-import * as ReactDOM from "react-dom";
+import * as ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
+import { AppRoutes } from "./routes/Routes";
 
-function render() {
-  ReactDOM.render(<h2>Hello from React!</h2>, document.body);
-}
-
-render();
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(
+  <Router>
+    <AppRoutes />
+  </Router>
+);

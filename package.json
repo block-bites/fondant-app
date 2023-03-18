@@ -30,6 +30,8 @@
     "@typescript-eslint/parser": "^5.0.0",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
     "css-loader": "^6.0.0",
+    "sass": "^1.59.3",
+    "sass-loader": "^13.2.0",
     "electron": "23.1.4",
     "eslint": "^8.0.1",
     "eslint-plugin-import": "^2.25.0",
@@ -43,6 +45,7 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.9.0"
   }
 }

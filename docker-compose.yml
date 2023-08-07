@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  # mynctl:
+  #   image: makesoftware/casper-nctl:latest
+  #   container_name: mynctl
+  #   ports:
+  #     - 11101-11105:11101-11105
+  #     - 14101-14105:14101-14105
+  #     - 18101-18105:18101-18105
+  #   environment:
+  #     PREDEFINED_ACCOUNTS: "true"
+  #     #PATH_TO_CONFIG_TOML: '/home/casper/config/config.toml'
+  #     #PATH_TO_CHAINSPEC: '/home/casper/config/chainspec.toml'
+  #     #MINIMUM_ROUND_EXPONENT: '12'
+  #     #MAXIMUM_ROUND_EXPONENT: '14'
+  #     DEPLOY_DELAY: "5sec"
+
+  # cors-anywhere:
+  #   container_name: cors-anywhere
+  #   profiles: ["cors-anywhere"]
+  #   build:
+  #     context: ./cors
+  #     dockerfile: cors-anywhere.Dockerfile
+  #   tty: true
+  #   environment:
+  #     PORT: 11100
+  #   ports:
+  #     - 11100:11100
+
+  # proxy-api:
+  #   build:
+  #     context: ./proxy-api # Path to the directory containing the proxy API code
+  #   ports:
+  #     - "80:3000" # Expose the proxy API on port 80
+  #   depends_on:
+  #     - mynctl
+
+  lean-api:
+    build:
+      context: ./lean-api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Expose the lean API on port 3000
+    # depends_on:
+    #   - proxy-api
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#tag new image as latest
+docker tag $IMAGE_NAME $DOCKER_REPO:latest
+docker push $DOCKER_REPO:latest

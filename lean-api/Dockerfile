@@ -1,6 +1,4 @@
-FROM makesoftware/casper-nctl:latest AS casper-nctl
-
-FROM node:14
+FROM node:18
 
 ENV NODE_ENV=production
 ENV NODE_PATH=/usr/local/lib/node_modules
@@ -17,4 +15,4 @@ COPY server.js .
 EXPOSE 3000
 
 # Start the lean API
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]

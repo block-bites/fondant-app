@@ -26,6 +26,7 @@ services:
     build:
       context: ./lean-api
       dockerfile: Dockerfile
+        #- fondant-network:3000/node/1/rpc -> http://nctl-container:11101/rpc
     ports:
       - "3000:3000" # Expose the lean API on port 3000
     networks:

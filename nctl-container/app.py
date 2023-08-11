@@ -22,4 +22,6 @@ def my_callback_fn(context, future):
   # optional user-defined callback function
   print(context, future.result())
 
-shell2http.register_command(endpoint="saythis", command_name="/bin/bash run.sh", callback_fn=my_callback_fn, decorators=[])
+#shell2http.register_command(endpoint="saythis", command_name="/bin/bash run.sh", callback_fn=my_callback_fn, decorators=[])
+
+shell2http.register_command(endpoint="saythis", command_name="nctl-assets-setup", callback_fn=my_callback_fn, decorators=[])

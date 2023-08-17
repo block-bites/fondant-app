@@ -1,6 +1,7 @@
 // index.js
 const express = require("express");
 const axios = require("axios");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
 const port = 3000;
@@ -10,26 +11,6 @@ app.use(express.json());
 app.post("/health-check", (req, res) => {
   res.json({ message: "OK" });
 });
-
-// app.post("/start", (req, res) => {
-//   const { node, delays, chainspec } = req.body;
-
-//   // Stop the previous NCTL process (if any)
-//   if (nctlProcess) {
-//     nctlProcess.kill();
-//   }
-
-//   // Start the new NCTL process with user-provided parameters
-//   nctlProcess = exec(`sh restart.sh`, (error, stdout, stderr) => {
-//     if (error) {
-//       console.error("Error starting NCTL process:", stderr);
-//       res.status(500).json({ error: "Error starting NCTL process" });
-//     } else {
-//       console.log("NCTL process started:", stdout);
-//       res.json({ message: "NCTL process started successfully" });
-//     }
-//   });
-// });
 
 app.post("/nctl-start", async (req, res) => {
   try {
@@ -64,7 +45,15 @@ app.post("/nctl-start", async (req, res) => {
         `http://nctl-container:4000/commands/nctl_view_node_ports?key=${key3}&wait=true`
       )
     ).data;
-    res.status(200).send(parseResponse(data3.report));
+    const parsedResponse = parseResponse(data3.report);
+    res.status(200).send(parsedResponse);
+
+    // Create proxy Middlewares
+    const middlewares = createProxyMiddlewares(parsedResponse);
+    // Add middlewares to the app
+    for (const middleware of middlewares) {
+      app.use(middleware);
+    }
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -92,6 +81,27 @@ function parseResponse(response) {
   }
 
   return data;
+}
+function createProxyMiddlewares(response) {
+  const middlewares = [];
+  for (const node in response) {
+    const ports = response[node];
+    for (const portType in ports) {
+      const port = ports[portType];
+
+      const middleware = createProxyMiddleware(
+        `/net/${node.split("-")[1]}/${portType.toLowerCase()}`,
+        {
+          target: `http://nctl-container:${port}/${portType.toLowerCase()}`,
+          changeOrigin: true,
+        }
+      );
+
+      middlewares.push(middleware);
+    }
+  }
+
+  return middlewares;
 }
 
 app.post("/nctl-status", async (req, res) => {
@@ -136,7 +146,14 @@ app.post("/nctl-view-faucet", async (req, res) => {
   }
 });
 
-// // Add other API endpoints for status, RPC, SSE, etc.
+// Forward requests
+//app.use(
+//  "/net/1/rpc",
+//  createProxyMiddleware({
+//    target: "http://nctl-container:11101/rpc",
+//    changeOrigin: true,
+//  })
+//);
 
 app.listen(port, () => {
   console.log(`Lean Node.js Express API listening at http://localhost:${port}`);

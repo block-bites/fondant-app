@@ -4,7 +4,7 @@ ENV NODE_ENV=production
 ENV NODE_PATH=/usr/local/lib/node_modules
 ARG version=latest
 
-RUN npm install -g express@$version  dockerode@$version axios@$version
+RUN npm install -g express@$version  dockerode@$version axios@$version http-proxy-middleware@$version
 COPY index.js .
 COPY server.js .
 

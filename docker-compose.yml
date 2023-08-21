@@ -1,0 +1,36 @@
+version: "2"
+
+services:
+  nctl-container:
+    build:
+      context: ./nctl-container
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    # image: makesoftware/casper-nctl:latest
+    # ports:
+    #   - 11101-11105:11101-11105
+    #   - 14101-14105:14101-14105
+    #   - 18101-18105:18101-18105
+    networks:
+      - fondant-network
+    environment:
+      PREDEFINED_ACCOUNTS: "true"
+      #PATH_TO_CONFIG_TOML: '/home/casper/config/config.toml'
+      #PATH_TO_CHAINSPEC: '/home/casper/config/chainspec.toml'
+      #MINIMUM_ROUND_EXPONENT: '12'
+      #MAXIMUM_ROUND_EXPONENT: '14'
+      DEPLOY_DELAY: "5sec"
+
+  lean-api:
+    build:
+      context: ./lean-api
+      dockerfile: Dockerfile
+        #- fondant-network:3000/node/1/rpc -> http://nctl-container:11101/rpc
+    ports:
+      - "3000:3000" # Expose the lean API on port 3000
+    networks:
+      - fondant-network
+
+networks:
+  fondant-network:

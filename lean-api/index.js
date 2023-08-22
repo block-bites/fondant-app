@@ -4,6 +4,7 @@ const axios = require("axios");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
+app.setMaxListeners(Infinity);
 const port = 3000;
 
 app.use(express.json());
@@ -48,9 +49,9 @@ app.post("/nctl-start", async (req, res) => {
     const parsedResponse = parseResponse(data3.report);
     res.status(200).send(parsedResponse);
 
-    // Create proxy Middlewares
+    //Create proxy Middlewares
     const middlewares = createProxyMiddlewares(parsedResponse);
-    // Add middlewares to the app
+    //Add middlewares to the app
     for (const middleware of middlewares) {
       app.use(middleware);
     }
@@ -92,8 +93,11 @@ function createProxyMiddlewares(response) {
       const middleware = createProxyMiddleware(
         `/net/${node.split("-")[1]}/${portType.toLowerCase()}`,
         {
-          target: `http://nctl-container:${port}/${portType.toLowerCase()}`,
+          target: `http://nctl-container:${port}/`,
           changeOrigin: true,
+          pathRewrite: {
+            [`^/net/${node.split("-")[1]}/${portType.toLowerCase()}`]: "",
+          },
         }
       );
 

@@ -90,16 +90,20 @@ function createProxyMiddlewares(response) {
     for (const portType in ports) {
       const port = ports[portType];
 
-      const middleware = createProxyMiddleware(
-        `/net/${node.split("-")[1]}/${portType.toLowerCase()}`,
-        {
-          target: `http://nctl-container:${port}/`,
-          changeOrigin: true,
-          pathRewrite: {
-            [`^/net/${node.split("-")[1]}/${portType.toLowerCase()}`]: "",
-          },
-        }
-      );
+      const pathPrefix = `/net/${node.split("-")[1]}/${portType.toLowerCase()}`;
+      const pathRewrite = {
+        [`^${pathPrefix}`]: "",
+      };
+
+      if (portType.toLowerCase() === "rpc") {
+        pathRewrite[`^${pathPrefix}`] = "rpc";
+      }
+
+      const middleware = createProxyMiddleware(pathPrefix, {
+        target: `http://nctl-container:${port}/`,
+        changeOrigin: true,
+        pathRewrite,
+      });
 
       middlewares.push(middleware);
     }

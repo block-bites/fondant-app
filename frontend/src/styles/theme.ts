@@ -9,6 +9,7 @@ export const fondantTheme = extendTheme({
         mx: "0",
         marginInlineStart: "0",
         fontFamily: "primary",
+        bg: "grey.50",
       },
     },
   },

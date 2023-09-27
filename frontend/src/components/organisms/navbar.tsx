@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FaBell } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -22,26 +23,36 @@ const Navbar = () => {
         <HStack maxW="1440px" w="100%" p="32px" justify="space-between">
           <Tabs variant="line" color="grey.100" size="lg">
             <TabList border="none" gap="32px">
-              <Tab>
-                <Icon as={FaBell} size="24px" />
-                Accounts
-              </Tab>
-              <Tab>
-                <Icon as={FaBell} size="24px" />
-                Blocks
-              </Tab>
-              <Tab>
-                <Icon as={FaBell} size="24px" />
-                Deploys
-              </Tab>
-              <Tab>
-                <Icon as={FaBell} size="24px" />
-                Events
-              </Tab>
-              <Tab>
-                <Icon as={FaBell} size="24px" />
-                Logs
-              </Tab>
+              <Link to="/">
+                <Tab>
+                  <Icon as={FaBell} size="24px" />
+                  Accounts
+                </Tab>
+              </Link>
+              <Link to="/blocks">
+                <Tab>
+                  <Icon as={FaBell} size="24px" />
+                  Blocks
+                </Tab>
+              </Link>
+              <Link to="/deplys">
+                <Tab>
+                  <Icon as={FaBell} size="24px" />
+                  Deploys
+                </Tab>
+              </Link>
+              <Link to="/events">
+                <Tab>
+                  <Icon as={FaBell} size="24px" />
+                  Events
+                </Tab>
+              </Link>
+              <Link to="/logs">
+                <Tab>
+                  <Icon as={FaBell} size="24px" />
+                  Logs
+                </Tab>
+              </Link>
             </TabList>
           </Tabs>
           <InputGroup w="100%" maxW="340px">

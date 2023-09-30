@@ -1,10 +1,13 @@
 // index.js
 const express = require("express");
 const axios = require("axios");
-const { createProxyMiddleware } = require("http-proxy-middleware");
+const {
+  createProxyMiddleware,
+  fixRequestBody,
+} = require("http-proxy-middleware");
 
 const app = express();
-app.setMaxListeners(Infinity);
+app.setMaxListeners(0);
 const port = 3000;
 
 app.use(express.json());
@@ -103,6 +106,7 @@ function createProxyMiddlewares(response) {
         target: `http://nctl-container:${port}/`,
         changeOrigin: true,
         pathRewrite,
+        onProxyReq: fixRequestBody,
       });
 
       middlewares.push(middleware);
@@ -153,15 +157,6 @@ app.post("/nctl-view-faucet", async (req, res) => {
     res.sendStatus(500);
   }
 });
-
-// Forward requests
-//app.use(
-//  "/net/1/rpc",
-//  createProxyMiddleware({
-//    target: "http://nctl-container:11101/rpc",
-//    changeOrigin: true,
-//  })
-//);
 
 app.listen(port, () => {
   console.log(`Lean Node.js Express API listening at http://localhost:${port}`);

@@ -12,14 +12,12 @@ import Accounts from "./components/pages/accounts";
 import Blocks from "./components/pages/blocks";
 
 export const App = () => {
-  const isMobile = () => {
-    const deviceinfo = navigator.userAgent;
-    const regexp = /android|iphone|kindle|ipad/i;
-    const isSmallScreen = window.innerWidth < 768;
-    return regexp.test(deviceinfo) || isSmallScreen;
-  };
 
-  if (isMobile()) {
+  const isMobile =
+    /android|iphone|kindle|ipad/i.test(navigator.userAgent) ||
+    window.innerWidth < 768;
+
+  if (isMobile) {
     return (
       <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
         <Text align="center">Used device and resolution is unsupported</Text>

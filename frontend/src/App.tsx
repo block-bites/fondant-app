@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import { ChakraProvider, HStack, Text } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
@@ -12,10 +14,14 @@ import Accounts from "./components/pages/accounts";
 import Blocks from "./components/pages/blocks";
 
 export const App = () => {
+  const [isMobile, setIsMobile] = useState(false);
 
-  const isMobile =
-    /android|iphone|kindle|ipad/i.test(navigator.userAgent) ||
-    window.innerWidth < 768;
+  useEffect(() => {
+    setIsMobile(
+      /android|iphone|kindle|ipad/i.test(navigator.userAgent) ||
+        window.innerWidth < 768
+    );
+  }, [window.innerWidth]);
 
   if (isMobile) {
     return (

@@ -1,7 +1,9 @@
-import { Box, Flex, HStack, Text, VStack, Button } from "@chakra-ui/react";
+import { useState } from "react";
+
+import { Flex, HStack, Text, VStack, Center } from "@chakra-ui/react";
+import { BiKey } from "react-icons/bi";
 
 import AccountModal from "./account-modal";
-import { useState } from "react";
 
 const AccountRowElement = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,14 +49,25 @@ const AccountRowElement = () => {
           </VStack>
         </HStack>
         <HStack>
-          <VStack align="center" justify="center">
-            <Button fontSize="16px" onClick={handleOpenModal}>
-              Open modal
-            </Button>
+          <VStack
+            onClick={handleOpenModal}
+            align="center"
+            justify="center"
+            style={{
+              background: "#DEDEDE",
+              borderRadius: "5px",
+              height: "60px",
+              width: "60px",
+              transform: "scaleX(-1)",
+            }}
+          >
+            <BiKey style={{ width: "19px", height: "19px" }} />
           </VStack>
         </HStack>
       </Flex>
-      <AccountModal isOpen={isOpen} onClose={handleCloseModal} />
+      <Center>
+        <AccountModal isOpen={isOpen} onClose={handleCloseModal} />
+      </Center>
     </>
   );
 };

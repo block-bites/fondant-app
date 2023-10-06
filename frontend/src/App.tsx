@@ -9,6 +9,7 @@ import { fondantTheme } from "./styles/theme";
 
 import Navbar from "./components/organisms/navbar";
 import Accounts from "./components/pages/accounts";
+import Blocks from "./components/pages/blocks";
 
 export const App = () => (
   <ChakraProvider theme={fondantTheme}>
@@ -16,7 +17,7 @@ export const App = () => (
       <Navbar />
       <Routes>
         <Route path="/" element={<Accounts />} />
-        <Route path="/blocks" element={<div>Blocks</div>} />
+        <Route path="/blocks" element={<Blocks />} />
         <Route path="/deploys" element={<div>Dploys</div>} />
         <Route path="/events" element={<div>Events</div>} />
         <Route path="/logs" element={<div>Logs</div>} />

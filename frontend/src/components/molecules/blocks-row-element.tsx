@@ -12,20 +12,20 @@ export default function BlockRowElement() {
       align="center"
       p="0 32px 0 0"
     >
-      <VStack background="#00800033" p="8px 32px" h="100%">
+      <VStack background="#00800033" p="8px 32px" h="100%" justify="center">
         <Text>BLOCK</Text>
         <p>0</p>
       </VStack>
       <VStack align="left">
-        <p>MINED ON</p>
-        <p>2023-09-20 12:37:25</p>
+        <Text>MINED ON</Text>
+        <Text>2023-09-20 12:37:25</Text>
       </VStack>
       <VStack align="left">
-        <p>GAS USED</p>
-        <p>0</p>
+        <Text>GAS USED</Text>
+        <Text>0</Text>
       </VStack>
       <VStack align="left">
-        <p>NO TRANSACTION</p>
+        <Text>NO TRANSACTION</Text>
       </VStack>
     </Flex>
   );

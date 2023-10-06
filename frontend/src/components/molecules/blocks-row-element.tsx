@@ -1,5 +1,5 @@
-import { Flex, VStack, Text } from "@chakra-ui/react";
 import React from "react";
+import { Flex, VStack, Text } from "@chakra-ui/react";
 
 export default function BlockRowElement() {
   return (
@@ -13,19 +13,43 @@ export default function BlockRowElement() {
       p="0 32px 0 0"
     >
       <VStack background="#00800033" p="8px 32px" h="100%" justify="center">
-        <Text>BLOCK</Text>
-        <p>0</p>
+        <Text
+          fontSize="18px"
+          lineHeight="170%"
+          fontWeight="400"
+          color="grey.border"
+        >
+          BLOCK
+        </Text>
+        <Text
+          fontSize="18px"
+          lineHeight="170%"
+          fontWeight="400"
+          color="grey.border"
+        >
+          0
+        </Text>
       </VStack>
       <VStack align="left">
-        <Text>MINED ON</Text>
-        <Text>2023-09-20 12:37:25</Text>
+        <Text fontSize="18px" fontWeight="400">
+          MINED ON
+        </Text>
+        <Text fontSize="18px" fontWeight="600">
+          2023-09-20 12:37:25
+        </Text>
       </VStack>
       <VStack align="left">
-        <Text>GAS USED</Text>
-        <Text>0</Text>
+        <Text fontSize="18px" fontWeight="400">
+          GAS USED
+        </Text>
+        <Text fontSize="18px" fontWeight="600">
+          0
+        </Text>
       </VStack>
       <VStack align="left">
-        <Text>NO TRANSACTION</Text>
+        <Text fontSize="18px" fontWeight="400" color="grey.400">
+          NO TRANSACTION
+        </Text>
       </VStack>
     </Flex>
   );

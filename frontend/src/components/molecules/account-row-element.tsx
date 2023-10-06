@@ -13,7 +13,7 @@ const AccountRowElement = () => {
   };
 
   const handleCloseModal = () => {
-    setIsOpen(false); // Закрываем модальное окно
+    setIsOpen(false);
   };
   return (
     <>
@@ -22,7 +22,7 @@ const AccountRowElement = () => {
         p="16px 32px"
         justify="space-between"
         borderBottom="1px solid"
-        borderBottomColor="red"
+        borderBottomColor="grey.100"
       >
         <VStack align="left">
           <Text fontSize="16px">Address</Text>

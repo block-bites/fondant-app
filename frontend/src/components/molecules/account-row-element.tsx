@@ -65,9 +65,7 @@ const AccountRowElement = () => {
           </VStack>
         </HStack>
       </Flex>
-      <Center>
-        <AccountModal isOpen={isOpen} onClose={handleCloseModal} />
-      </Center>
+      <AccountModal isOpen={isOpen} onClose={handleCloseModal} />
     </>
   );
 };

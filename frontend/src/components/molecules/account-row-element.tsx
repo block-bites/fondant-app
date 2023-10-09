@@ -45,7 +45,7 @@ const AccountRowElement = ({
         <HStack>
           <VStack align="left">
             <Text fontSize="16px">TX Count</Text>
-            <Text fontSize="18px">0</Text>
+            <Text fontSize="18px">{txCount}</Text>
           </VStack>
           <VStack align="left">
             <Text fontSize="16px">Index</Text>

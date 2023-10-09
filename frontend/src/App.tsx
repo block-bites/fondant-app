@@ -12,6 +12,7 @@ import { fondantTheme } from "./styles/theme";
 import Navbar from "./components/organisms/navbar";
 import Accounts from "./components/pages/accounts";
 import Blocks from "./components/pages/blocks";
+import Logs from "./components/pages/logs";
 
 export const App = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -51,7 +52,7 @@ export const App = () => {
           <Route path="/blocks" element={<Blocks />} />
           <Route path="/deploys" element={<div>Dploys</div>} />
           <Route path="/events" element={<div>Events</div>} />
-          <Route path="/logs" element={<div>Logs</div>} />
+          <Route path="/logs" element={<Logs />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>

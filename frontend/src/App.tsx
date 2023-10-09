@@ -14,14 +14,25 @@ import Accounts from "./components/pages/accounts";
 import Blocks from "./components/pages/blocks";
 
 export const App = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
 
+  //Set screen width state
+  useEffect(() => {
+    function handleResize() {
+      setScreenWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  //Check device and screen width
   useEffect(() => {
     setIsMobile(
       /android|iphone|kindle|ipad/i.test(navigator.userAgent) ||
-        window.innerWidth < 768
+        window.innerWidth <= 768
     );
-  }, [window.innerWidth]);
+  }, [screenWidth]);
 
   if (isMobile) {
     return (

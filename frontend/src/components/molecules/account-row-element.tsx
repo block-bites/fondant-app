@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Flex, HStack, Text, VStack, Center } from "@chakra-ui/react";
+import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { BiKey } from "react-icons/bi";
 
 import AccountModal from "./account-modal";

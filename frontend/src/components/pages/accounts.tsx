@@ -1,6 +1,6 @@
 import { useSearchContext } from "../../context/SearchContext";
 
-import { Flex, VStack } from "@chakra-ui/react";
+import { Flex, VStack, Text } from "@chakra-ui/react";
 import AccountRowElement from "../molecules/account-row-element";
 
 const accountsData = [
@@ -75,16 +75,20 @@ const Accounts = () => {
   return (
     <Flex w="100%" justify="center">
       <VStack w="100%" maxW="1440px" gap="0" mt="16px">
-        {filteredAccounts.map((item, index) => {
-          return (
-            <AccountRowElement
-              key={index}
-              hash={item.hash}
-              txCount={item.txCount}
-              balance={item.balance}
-            />
-          );
-        })}
+        {filteredAccounts.length > 0 ? (
+          filteredAccounts.map((item, index) => {
+            return (
+              <AccountRowElement
+                key={index}
+                hash={item.hash}
+                txCount={item.txCount}
+                balance={item.balance}
+              />
+            );
+          })
+        ) : (
+          <Text>No results</Text>
+        )}
       </VStack>
     </Flex>
   );

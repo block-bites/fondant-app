@@ -37,7 +37,7 @@ export const App = () => {
   if (isMobile) {
     return (
       <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
-        <Text align="center">Used device and resolution is unsupported</Text>
+        <Text align="center">Used device and resolution not supported</Text>
       </HStack>
     );
   }

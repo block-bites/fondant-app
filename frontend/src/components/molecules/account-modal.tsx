@@ -13,12 +13,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-interface AccountModalProps {
+interface IAccountModalProps {
+  hash: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-function AccountModal({ isOpen, onClose }: AccountModalProps) {
+function AccountModal({ isOpen, onClose, hash }: IAccountModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
       <ModalOverlay />
@@ -45,7 +46,7 @@ function AccountModal({ isOpen, onClose }: AccountModalProps) {
                   fontWeight="300"
                   color="grey.border"
                 >
-                  0×93D512eFd915Da033D6109451beb@ef24bab2ea1
+                  {hash}
                 </Text>
               </Stack>
               <Stack spacing="8px">

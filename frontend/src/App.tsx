@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { SearchProvider } from "./context/SearchContext";
 
 import { ChakraProvider, HStack, Text } from "@chakra-ui/react";
 import {
@@ -44,17 +45,19 @@ export const App = () => {
 
   return (
     <ChakraProvider theme={fondantTheme}>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Accounts />} />
-          <Route path="/blocks" element={<Blocks />} />
-          <Route path="/deploys" element={<div>Dploys</div>} />
-          <Route path="/events" element={<div>Events</div>} />
-          <Route path="/logs" element={<div>Logs</div>} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Router>
+      <SearchProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Accounts />} />
+            <Route path="/blocks" element={<Blocks />} />
+            <Route path="/deploys" element={<div>Dploys</div>} />
+            <Route path="/events" element={<div>Events</div>} />
+            <Route path="/logs" element={<div>Logs</div>} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Router>
+      </SearchProvider>
     </ChakraProvider>
   );
 };

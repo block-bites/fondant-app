@@ -22,7 +22,7 @@ const Navbar = () => {
   const { searchValue, setSearchValue } = useSearchContext();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value.trim().toLowerCase());
+    setSearchValue(event.target.value);
   };
 
   return (

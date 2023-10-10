@@ -70,7 +70,7 @@ const Accounts = () => {
   const { searchValue } = useSearchContext();
 
   const filteredAccounts = accountsData.filter((item) =>
-    item.hash.toLowerCase().includes(searchValue)
+    item.hash.toLowerCase().includes(searchValue.toLowerCase().trim())
   );
   return (
     <Flex w="100%" justify="center">

@@ -155,11 +155,7 @@ const Navbar = () => {
               </Text>
               <Text fontSize="14px">QUICKSTART</Text>
             </Box>
-            <HStack
-              // gap={{ "2xl": "16px", xl: "12px", lg: "8px" }}
-              gap="16px"
-              pl={{ "2xl": "24px", xl: "20px", lg: "12px" }}
-            >
+            <HStack gap="16px" pl={{ "2xl": "24px", xl: "20px", lg: "12px" }}>
               <Button size="sm" bg="pri.orange" color="white">
                 Save
               </Button>

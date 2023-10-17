@@ -10,7 +10,12 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import ServerTab from "../organisms/server-tab";
+import WorkspaceTab from "../organisms/tab-workspace";
+import ServerTab from "../organisms/tab-server";
+import AccountTab from "../organisms/tab-account";
+import ChainTab from "../organisms/tab-chain";
+import AbvancedTab from "../organisms/tab-advanced";
+import AboutTab from "../organisms/tab-about";
 
 export default function Settings() {
   return (
@@ -36,22 +41,22 @@ export default function Settings() {
         <Flex width="100%" maxW="1440px" justifyContent="flex-start" p="0 32px">
           <TabPanels>
             <TabPanel p="0">
-              <p>Workspace!</p>
+              <WorkspaceTab />
             </TabPanel>
             <TabPanel p="0">
               <ServerTab />
             </TabPanel>
             <TabPanel p="0">
-              <p>Account & keys!</p>
+              <AccountTab />
             </TabPanel>
             <TabPanel p="0">
-              <p>Chains!</p>
+              <ChainTab />
             </TabPanel>
             <TabPanel p="0">
-              <p>Advanced!</p>
+              <AbvancedTab />
             </TabPanel>
             <TabPanel p="0">
-              <p>About!</p>
+              <AboutTab />
             </TabPanel>
           </TabPanels>
         </Flex>

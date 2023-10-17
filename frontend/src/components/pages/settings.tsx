@@ -32,25 +32,25 @@ export default function Settings() {
             <Tab>About</Tab>
           </TabList>
         </Flex>
-        <Divider m="20px 0" border="1px grey.100 solid" />
+        <Divider m="20px 0" borderTop="1px grey.100 solid" />
         <Flex width="100%" maxW="1440px" justifyContent="flex-start" p="0 32px">
           <TabPanels>
-            <TabPanel>
+            <TabPanel p="0">
               <p>Workspace!</p>
             </TabPanel>
-            <TabPanel>
+            <TabPanel p="0">
               <ServerTab />
             </TabPanel>
-            <TabPanel>
+            <TabPanel p="0">
               <p>Account & keys!</p>
             </TabPanel>
-            <TabPanel>
+            <TabPanel p="0">
               <p>Chains!</p>
             </TabPanel>
-            <TabPanel>
+            <TabPanel p="0">
               <p>Advanced!</p>
             </TabPanel>
-            <TabPanel>
+            <TabPanel p="0">
               <p>About!</p>
             </TabPanel>
           </TabPanels>

@@ -1,4 +1,4 @@
-import { Box, Flex, VStack } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
 import AccountRowElement from "../molecules/account-row-element";
 
 const Accounts = () => {

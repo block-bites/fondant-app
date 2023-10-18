@@ -20,11 +20,13 @@ export default function WorkspaceTab() {
         h="32px"
         p="0 12px"
         _placeholder={{ color: "gray.400", fontSize: "14px" }}
+        borderRadius="4px"
       />
       <Text fontSize="12px" color="grey.400" mt="16px" lineHeight="120%">
         A friendly name for this workspace.
       </Text>
       <Textarea
+        borderRadius="4px"
         variant="filled"
         w="654px"
         h="154px"

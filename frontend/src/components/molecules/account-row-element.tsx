@@ -67,6 +67,7 @@ const AccountRowElement = ({
               height: "60px",
               width: "60px",
               transform: "scaleX(-1)",
+              cursor: "pointer",
             }}
           >
             <BiKey style={{ width: "19px", height: "19px" }} />

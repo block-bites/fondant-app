@@ -10,6 +10,7 @@ export const fondantTheme = extendTheme({
         marginInlineStart: "0",
         fontFamily: "primary",
         marginRight: "calc(-1 * (100vw - 100%))",
+        overflowX: "hidden",
       },
     },
   },
@@ -48,6 +49,10 @@ export const fondantTheme = extendTheme({
           },
         },
       },
+    },
+    Modal: {
+      marginRight: "calc(-1 * (100vw - 100%))",
+      overflowX: "hidden",
     },
     Input: {
       variants: {

@@ -1,4 +1,4 @@
-import { Flex, Text, Select, Input, Switch } from "@chakra-ui/react";
+import { Flex, Text, Select, Input, Switch, Divider } from "@chakra-ui/react";
 
 export default function ServerTab() {
   return (
@@ -6,20 +6,20 @@ export default function ServerTab() {
       <Text
         fontFamily="secondary"
         fontSize="48px"
-        lineHeight="120%"
-        fontWeight="400"
+        lineHeight="shorter"
+        fontWeight="normal"
       >
         Server
       </Text>
       <Flex direction="column" gap="32px" mt="56px">
-        <Flex direction="column" gap="32px" pb="24px">
+        <Flex direction="column" gap="32px">
           <Flex direction="column" gap="16px">
             <Select>
               <option value="option1">0.0.0.0</option>
               <option value="option2">192.168.1.1</option>
               <option value="option3">192.168.0.2</option>
             </Select>
-            <Text fontSize="12px" color="grey.400" lineHeight="120%">
+            <Text fontSize="xs" color="grey.400" lineHeight="shorter">
               The server will accept RPC connections on the following host and
               port.
             </Text>
@@ -43,56 +43,66 @@ export default function ServerTab() {
             borderRadius="4px"
           />
         </Flex>
+        <Divider />
         <Flex justifyContent="space-between" gap="32px">
           <Flex direction="column" gap="8px">
             <Text
               fontFamily="secondary"
               color="grey.400"
-              lineHeight="170%"
-              fontWeight="600"
+              lineHeight="tall"
+              fontWeight="semibold"
+              fontSize="md"
             >
               Automine
             </Text>
             <Switch colorScheme="blue" size="lg" />
           </Flex>
-          <Text fontSize="12px" color="grey.400" lineHeight="120%">
+          <Text fontSize="xs" color="grey.400" lineHeight="shorter">
             Process transactions instantaneously.
           </Text>
         </Flex>
-        <Flex pb="24px" justifyContent="space-between" gap="32px">
+        <Flex justifyContent="space-between" gap="32px">
           <Flex direction="column" gap="8px">
             <Text
               fontFamily="secondary"
               color="grey.400"
-              lineHeight="170%"
-              fontWeight="600"
+              lineHeight="tall"
+              fontWeight="semibold"
+              fontSize="md"
             >
               Error on transaction failure
             </Text>
             <Switch colorScheme="blue" size="lg" />
           </Flex>
-          <Text fontSize="12px" color="grey.400" lineHeight="120%" maxW="210px">
+          <Text
+            fontSize="xs"
+            color="grey.400"
+            lineHeight="shorter"
+            maxW="210px"
+          >
             failures wact only all detectable era the statubled, a in action
             transaction receipt. Disabling this feature will make Ganache handle
-            transaction failures like other Ethereum clients.{" "}
+            transaction failures like other Ethereum clients.
           </Text>
         </Flex>
+        <Divider />
         <Flex gap="24px" direction="column">
           <Text
             fontFamily="secondary"
-            fontSize="24px"
-            lineHeight="155%"
-            fontWeight="400"
+            fontSize="2xl"
+            lineHeight="base"
+            fontWeight="normal"
           >
             Chain Forking
           </Text>
           <Text
             fontFamily="secondary"
             color="grey.400"
-            lineHeight="170%"
-            fontWeight="600"
+            lineHeight="tall"
+            fontWeight="semibold"
+            fontSize="md"
           >
-            Error on transaction failure
+            Forking is Disabled
           </Text>
         </Flex>
       </Flex>

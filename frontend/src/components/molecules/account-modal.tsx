@@ -24,7 +24,7 @@ function AccountModal({ isOpen, onClose }: AccountModalProps) {
       <ModalOverlay />
       <Center>
         <ModalContent>
-          <ModalHeader fontSize="18px" fontWeight="700" fontFamily="primary">
+          <ModalHeader fontSize="lg" fontWeight="bold" fontFamily="primary">
             Account Information
           </ModalHeader>
           <ModalCloseButton />
@@ -32,17 +32,17 @@ function AccountModal({ isOpen, onClose }: AccountModalProps) {
             <Stack spacing="16px">
               <Stack spacing="8px">
                 <Text
-                  fontSize="18px"
-                  lineHeight="170%"
-                  fontWeight="400"
+                  fontSize="lg"
+                  lineHeight="tall"
+                  fontWeight="normal"
                   color="grey.border"
                 >
                   ACCOUNT ADDRESS
                 </Text>
                 <Text
-                  fontSize="14px"
-                  lineHeight="170%"
-                  fontWeight="300"
+                  fontSize="sm"
+                  lineHeight="tall"
+                  fontWeight="light"
                   color="grey.border"
                 >
                   0×93D512eFd915Da033D6109451beb@ef24bab2ea1
@@ -50,17 +50,17 @@ function AccountModal({ isOpen, onClose }: AccountModalProps) {
               </Stack>
               <Stack spacing="8px">
                 <Text
-                  fontSize="18px"
-                  lineHeight="170%"
-                  fontWeight="400"
+                  fontSize="lg"
+                  lineHeight="tall"
+                  fontWeight="normal"
                   color="grey.border"
                 >
                   PRIVATE KEY
                 </Text>
                 <Text
-                  fontSize="14px"
-                  lineHeight="170%"
-                  fontWeight="300"
+                  fontSize="sm"
+                  lineHeight="tall"
+                  fontWeight="light"
                   color="grey.border"
                 >
                   0×832077664976484ebb562a1(8248e64072449c75482941977df3ef7f2606)
@@ -68,9 +68,9 @@ function AccountModal({ isOpen, onClose }: AccountModalProps) {
               </Stack>
               <Box>
                 <Text
-                  fontSize="16px"
-                  lineHeight="170%"
-                  fontWeight="400"
+                  fontSize="md"
+                  lineHeight="tall"
+                  fontWeight="normal"
                   color="#F00"
                 >
                   Do not use this private key on a public blockchain; use it for

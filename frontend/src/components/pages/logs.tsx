@@ -12,8 +12,8 @@ export default function Logs() {
         align="left"
         p="0 32px"
         color="#F9F9F9"
-        fontSize="16px"
-        lineHeight="170%"
+        fontSize="md"
+        lineHeight="tall"
         fontFamily="secondary"
       >
         <Text>[12:37:25] Starting server with initial configuration:</Text>

@@ -5,9 +5,9 @@ export default function AccountTab() {
     <Flex>
       <Text
         fontFamily="secondary"
-        fontSize="48px"
-        lineHeight="120%"
-        fontWeight="400"
+        fontSize="5xl"
+        lineHeight="shorter"
+        fontWeight="normal"
       >
         Account
       </Text>

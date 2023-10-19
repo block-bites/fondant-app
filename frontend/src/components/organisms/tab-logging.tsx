@@ -5,9 +5,9 @@ export default function LoggingTab() {
     <Flex maxW="910px" gap="56px" direction="column">
       <Text
         fontFamily="secondary"
-        fontSize="48px"
-        lineHeight="120%"
-        fontWeight="400"
+        fontSize="5xl"
+        lineHeight="shorter"
+        fontWeight="normal"
       >
         Logging
       </Text>

@@ -9,7 +9,7 @@ export default function AbvancedTab() {
         lineHeight="120%"
         fontWeight="400"
       >
-        Server
+        Advanced
       </Text>
     </Flex>
   );

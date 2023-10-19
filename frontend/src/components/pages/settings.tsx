@@ -16,12 +16,13 @@ import AccountTab from "../organisms/tab-account";
 import ChainTab from "../organisms/tab-chain";
 import AbvancedTab from "../organisms/tab-advanced";
 import AboutTab from "../organisms/tab-about";
+import LoggingTab from "../organisms/tab-logging";
+import GasTab from "../organisms/tab-gas";
 
 export default function Settings() {
   return (
-    <Tabs w="100%" variant="enclosed">
+    <Tabs variant="enclosed">
       <Flex
-        w="100%"
         justifyContent="center"
         direction="column"
         alignItems="center"
@@ -34,6 +35,8 @@ export default function Settings() {
             <Tab>Account & keys</Tab>
             <Tab>Chain</Tab>
             <Tab>Advanced</Tab>
+            <Tab>Logging</Tab>
+            <Tab>Gas</Tab>
             <Tab>About</Tab>
           </TabList>
         </Flex>
@@ -54,6 +57,12 @@ export default function Settings() {
             </TabPanel>
             <TabPanel p="0">
               <AbvancedTab />
+            </TabPanel>
+            <TabPanel p="0">
+              <LoggingTab />
+            </TabPanel>
+            <TabPanel p="0">
+              <GasTab />
             </TabPanel>
             <TabPanel p="0">
               <AboutTab />

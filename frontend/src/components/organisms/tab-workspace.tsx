@@ -2,12 +2,12 @@ import { Button, Flex, Input, Text, Textarea } from "@chakra-ui/react";
 
 export default function WorkspaceTab() {
   return (
-    <Flex direction="column" w="100%" maxW="654px">
+    <Flex direction="column" maxW="654px">
       <Text
         fontFamily="secondary"
-        fontSize="48px"
-        lineHeight="120%"
-        fontWeight="400"
+        fontSize="5xl"
+        lineHeight="shorter"
+        fontWeight="normal"
       >
         Workspace
       </Text>
@@ -40,7 +40,7 @@ export default function WorkspaceTab() {
         under the hood.
       </Text>
       <Flex mt="56px" gap="24px">
-        <Button colorScheme="red"> Add Project</Button>
+        <Button colorScheme="red">Add Project</Button>
         <Button color="grey.400">Remove Project</Button>
       </Flex>
     </Flex>

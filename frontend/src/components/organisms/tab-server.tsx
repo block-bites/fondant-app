@@ -53,7 +53,7 @@ export default function ServerTab() {
             >
               Automine
             </Text>
-            <Switch colorScheme="blue" size="lg" isChecked />
+            <Switch colorScheme="blue" size="lg" />
           </Flex>
           <Text fontSize="12px" color="grey.400" lineHeight="120%">
             Process transactions instantaneously.
@@ -69,7 +69,7 @@ export default function ServerTab() {
             >
               Error on transaction failure
             </Text>
-            <Switch colorScheme="blue" size="lg" isChecked />
+            <Switch colorScheme="blue" size="lg" />
           </Flex>
           <Text fontSize="12px" color="grey.400" lineHeight="120%" maxW="210px">
             failures wact only all detectable era the statubled, a in action

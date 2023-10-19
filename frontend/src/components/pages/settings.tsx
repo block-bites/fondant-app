@@ -27,8 +27,8 @@ export default function Settings() {
         alignItems="center"
         m="32px 0"
       >
-        <Flex w="100%" justifyContent="space-between" maxW="1440px">
-          <Flex width="100%" p="0 32px">
+        <Flex w="100%" justifyContent="space-between" maxW="1440px" p="0 32px">
+          <Flex width="100%">
             <TabList border="1px solid grey.200">
               <Tab>Workspace</Tab>
               <Tab>Server</Tab>

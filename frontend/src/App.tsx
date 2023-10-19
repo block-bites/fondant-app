@@ -6,6 +6,7 @@ import {
   Routes,
   Route,
   Navigate,
+
 } from "react-router-dom";
 import { fondantTheme } from "./styles/theme";
 
@@ -47,7 +48,7 @@ export const App = () => {
   return (
     <ChakraProvider theme={fondantTheme}>
       <Router>
-        <Navbar />
+        {window.location.pathname !== "/settings" && <Navbar />}
         <Routes>
           <Route path="/" element={<Accounts />} />
           <Route path="/blocks" element={<Blocks />} />

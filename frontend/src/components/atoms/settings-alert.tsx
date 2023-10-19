@@ -12,7 +12,7 @@ interface ISettingsAlert {
 
 export default function SettingsAlert({ alertDesc }: ISettingsAlert) {
   return (
-    <Alert w="400px" variant="subtle" status="error">
+    <Alert maxW="400px" variant="subtle" status="error">
       <AlertIcon />
       <Flex direction="column">
         <AlertTitle>Alert</AlertTitle>

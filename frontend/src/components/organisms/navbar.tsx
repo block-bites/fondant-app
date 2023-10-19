@@ -1,3 +1,5 @@
+import { useSearchContext } from "../../context/SearchContext";
+
 import {
   Box,
   HStack,
@@ -17,6 +19,12 @@ import { FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const { searchValue, setSearchValue } = useSearchContext();
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
   return (
     <Flex w="100%" direction="column">
       <HStack w="100%" bg="pri.dark" minH="108px" justify="center">
@@ -64,8 +72,10 @@ const Navbar = () => {
             </InputLeftElement>
             <Input
               variant="outline"
-              placeholder="Search by block-hash or blockh-eight"
+              placeholder="Search by block-hash or block-height"
               size="md"
+              value={searchValue}
+              onChange={handleSearchChange}
             />
           </InputGroup>
         </HStack>

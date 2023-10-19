@@ -9,9 +9,6 @@ export const fondantTheme = extendTheme({
         mx: "0",
         marginInlineStart: "0",
         fontFamily: "primary",
-      },
-      html: {
-        overflowX: "hidden",
         marginRight: "calc(-1 * (100vw - 100%))",
       },
     },

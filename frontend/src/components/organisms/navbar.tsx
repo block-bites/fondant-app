@@ -30,7 +30,10 @@ const Navbar = () => {
       <HStack w="100%" bg="pri.dark" minH="108px" justify="center">
         <HStack maxW="1440px" w="100%" p="32px" justify="space-between">
           <Tabs variant="line" color="grey.100" size="lg">
-            <TabList border="none" gap="32px">
+            <TabList
+              border="none"
+              gap={{ "2xl": "32px", xl: "20px", lg: "10px" }}
+            >
               <Link to="/">
                 <Tab>
                   <Icon as={FaBell} size="24px" />
@@ -85,11 +88,15 @@ const Navbar = () => {
         color="grey.50"
       >
         <HStack maxW="1440px" w="100%" p="6px 32px" justify="space-between">
-          <HStack>
+          <HStack gap="0">
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p="8px 24px 8px 0"
+              p={{
+                "2xl": "8px 24px 8px 0",
+                xl: "8px 20px 8px 0",
+                lg: "8px 12px 8px 0",
+              }}
             >
               <Text fontSize="10px" color="grey.400">
                 CURRENT BLOCK
@@ -99,7 +106,7 @@ const Navbar = () => {
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p="8px 24px"
+              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
             >
               <Text fontSize="10px" color="grey.400">
                 GAS PRICE
@@ -109,7 +116,7 @@ const Navbar = () => {
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p="8px 24px"
+              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
             >
               <Text fontSize="10px" color="grey.400">
                 GAS LIMIT
@@ -119,7 +126,7 @@ const Navbar = () => {
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p="8px 24px"
+              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
             >
               <Text fontSize="10px" color="grey.400">
                 HARDFORK MERGE
@@ -129,7 +136,7 @@ const Navbar = () => {
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p="8px 24px"
+              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
             >
               <Text fontSize="10px" color="grey.400">
                 NETWORK ID
@@ -139,7 +146,7 @@ const Navbar = () => {
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p="8px 24px"
+              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
             >
               <Text fontSize="10px" color="grey.400">
                 MINING STATUS
@@ -147,18 +154,18 @@ const Navbar = () => {
               <Text fontSize="14px">AUTOMINING</Text>
             </Box>
           </HStack>
-          <HStack>
+          <HStack gap="0">
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p="8px 24px"
+              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
             >
               <Text fontSize="10px" color="grey.400">
                 CONFIGURATION
               </Text>
               <Text fontSize="14px">QUICKSTART</Text>
             </Box>
-            <HStack gap="16px" pl="24px">
+            <HStack gap="16px" pl={{ "2xl": "24px", xl: "20px", lg: "12px" }}>
               <Button size="sm" bg="pri.orange" color="white">
                 Save
               </Button>

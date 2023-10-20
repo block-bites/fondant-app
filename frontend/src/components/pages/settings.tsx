@@ -52,7 +52,7 @@ export default function Settings() {
             Exit
           </Button>
         </Flex>
-        <Divider m="20px 0" borderTop="1px grey.100 solid" />
+        <Divider m="20px 0" />
         <Flex width="100%" maxW="1440px" justifyContent="flex-start" p="0 32px">
           <TabPanels>
             <TabPanel p="0">

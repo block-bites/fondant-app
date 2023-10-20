@@ -66,5 +66,10 @@ export const fondantTheme = extendTheme({
         },
       },
     },
+    Divider: {
+      baseStyle: {
+        borderColor: "grey.100",
+      },
+    },
   },
 });

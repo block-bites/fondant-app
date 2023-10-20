@@ -48,7 +48,7 @@ const Navbar = () => {
                   Blocks
                 </Tab>
               </Link>
-              <Link to="/deplys">
+              <Link to="/deploys">
                 <Tab>
                   <Icon as={MdCloudUpload} size="24px" />
                   Deploys

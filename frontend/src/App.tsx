@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { SearchProvider } from "./context/SearchContext";
+import { HelmetProvider } from "react-helmet-async";
 
 import { ChakraProvider, HStack, Text } from "@chakra-ui/react";
 import {
@@ -38,14 +39,24 @@ export const App = () => {
     );
   }, [screenWidth]);
 
+  if (isMobile) {
+    return (
+      <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
+        <Text align="center">Used device and resolution not supported</Text>
+      </HStack>
+    );
+  }
+
   return (
-    <ChakraProvider theme={fondantTheme}>
-      <SearchProvider>
-        <Router>
-          <AppContent />
-        </Router>
-      </SearchProvider>
-    </ChakraProvider>
+    <HelmetProvider>
+      <ChakraProvider theme={fondantTheme}>
+        <SearchProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </SearchProvider>
+      </ChakraProvider>
+    </HelmetProvider>
   );
 };
 

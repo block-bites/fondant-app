@@ -35,26 +35,22 @@ const AccountRowElement = ({
         borderBottomColor="grey.100"
       >
         <VStack align="left" w="100%" maxW="500px">
-          <Text fontSize="16px">Address</Text>
-          <Text fontSize="18px">{hash}</Text>
+          <Text fontSize="md">Address</Text>
+          <Text fontSize="lg">{hash}</Text>
         </VStack>
         <VStack align="left">
-          <Text fontSize="16px">Balance</Text>
-          <Text fontSize="18px">{balance}</Text>
+          <Text fontSize="md">Balance</Text>
+          <Text fontSize="lg">{balance}</Text>
         </VStack>
         <HStack>
           <VStack align="left">
-            <Text fontSize="16px">TX Count</Text>
-            <Text fontSize="18px">{txCount}</Text>
+            <Text fontSize="md">TX Count</Text>
+            <Text fontSize="lg">{txCount}</Text>
           </VStack>
           <VStack align="left">
-            <Text fontSize="16px">Index</Text>
-            <Text fontSize="18px">{txCount}</Text>
+            <Text fontSize="md">Index</Text>
+            <Text fontSize="lg">{txCount}</Text>
           </VStack>
-          {/* <VStack align="left">
-            <Text fontSize="16px">Balance</Text>
-            <Text fontSize="18px">{balance}</Text>
-          </VStack> */}
         </HStack>
         <HStack>
           <VStack

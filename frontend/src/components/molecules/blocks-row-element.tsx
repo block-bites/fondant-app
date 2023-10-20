@@ -14,40 +14,40 @@ export default function BlockRowElement() {
     >
       <VStack background="#00800033" p="8px 32px" h="100%" justify="center">
         <Text
-          fontSize="18px"
-          lineHeight="170%"
-          fontWeight="400"
+          fontSize="lg"
+          lineHeight="tall"
+          fontWeight="normal"
           color="grey.border"
         >
           BLOCK
         </Text>
         <Text
-          fontSize="18px"
-          lineHeight="170%"
-          fontWeight="400"
+          fontSize="lg"
+          lineHeight="tall"
+          fontWeight="normal"
           color="grey.border"
         >
           0
         </Text>
       </VStack>
       <VStack align="left">
-        <Text fontSize="18px" fontWeight="400">
+        <Text fontSize="lg" fontWeight="normal">
           MINED ON
         </Text>
-        <Text fontSize="18px" fontWeight="600">
+        <Text fontSize="lg" fontWeight="semibold">
           2023-09-20 12:37:25
         </Text>
       </VStack>
       <VStack align="left">
-        <Text fontSize="18px" fontWeight="400">
+        <Text fontSize="lg" fontWeight="normal">
           GAS USED
         </Text>
-        <Text fontSize="18px" fontWeight="600">
+        <Text fontSize="lg" fontWeight="semibold">
           0
         </Text>
       </VStack>
       <VStack align="left">
-        <Text fontSize="18px" fontWeight="400" color="grey.400">
+        <Text fontSize="lg" fontWeight="normal" color="grey.400">
           NO TRANSACTION
         </Text>
       </VStack>

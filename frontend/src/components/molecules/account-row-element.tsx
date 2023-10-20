@@ -5,8 +5,18 @@ import { BiKey } from "react-icons/bi";
 
 import AccountModal from "./account-modal";
 
-const AccountRowElement = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface IAccountRowElemProps {
+  hash: string;
+  txCount: number;
+  balance: number;
+}
+
+const AccountRowElement = ({
+  hash,
+  txCount,
+  balance,
+}: IAccountRowElemProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleOpenModal = () => {
     setIsOpen(true);
@@ -24,26 +34,22 @@ const AccountRowElement = () => {
         borderBottom="1px solid"
         borderBottomColor="grey.100"
       >
-        <VStack align="left">
+        <VStack align="left" w="100%" maxW="500px">
           <Text fontSize="md">Address</Text>
-          <Text fontSize="lg">0xAf3A84BACF2B705ea05a1197Cf87EF679eB7Ed3F</Text>
+          <Text fontSize="lg">{hash}</Text>
         </VStack>
         <VStack align="left">
           <Text fontSize="md">Balance</Text>
-          <Text fontSize="lg">100.00</Text>
+          <Text fontSize="lg">{balance}</Text>
         </VStack>
         <HStack>
           <VStack align="left">
             <Text fontSize="md">TX Count</Text>
-            <Text fontSize="lg">0</Text>
+            <Text fontSize="lg">{txCount}</Text>
           </VStack>
           <VStack align="left">
             <Text fontSize="md">Index</Text>
-            <Text fontSize="lg">5</Text>
-          </VStack>
-          <VStack align="left">
-            <Text fontSize="md">Balance</Text>
-            <Text fontSize="lg">100.00</Text>
+            <Text fontSize="lg">{txCount}</Text>
           </VStack>
         </HStack>
         <HStack>
@@ -63,7 +69,7 @@ const AccountRowElement = () => {
           </VStack>
         </HStack>
       </Flex>
-      <AccountModal isOpen={isOpen} onClose={handleCloseModal} />
+      <AccountModal isOpen={isOpen} onClose={handleCloseModal} hash={hash} />
     </>
   );
 };

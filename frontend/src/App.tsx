@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { SearchProvider } from "./context/SearchContext";
 
 import { ChakraProvider, HStack, Text } from "@chakra-ui/react";
 import {
@@ -6,7 +7,6 @@ import {
   Routes,
   Route,
   Navigate,
-
 } from "react-router-dom";
 import { fondantTheme } from "./styles/theme";
 
@@ -47,18 +47,20 @@ export const App = () => {
 
   return (
     <ChakraProvider theme={fondantTheme}>
-      <Router>
-        {window.location.pathname !== "/settings" && <Navbar />}
-        <Routes>
-          <Route path="/" element={<Accounts />} />
-          <Route path="/blocks" element={<Blocks />} />
-          <Route path="/deploys" element={<div>Dploys</div>} />
-          <Route path="/events" element={<div>Events</div>} />
-          <Route path="/logs" element={<Logs />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Router>
+      <SearchProvider>
+        <Router>
+          {window.location.pathname !== "/settings" && <Navbar />}
+          <Routes>
+            <Route path="/" element={<Accounts />} />
+            <Route path="/blocks" element={<Blocks />} />
+            <Route path="/deploys" element={<div>Dploys</div>} />
+            <Route path="/events" element={<div>Events</div>} />
+            <Route path="/logs" element={<div>Logs</div>} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Router>
+      </SearchProvider>
     </ChakraProvider>
   );
 };

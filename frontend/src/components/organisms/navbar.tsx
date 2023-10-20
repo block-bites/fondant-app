@@ -160,14 +160,28 @@ const Navbar = () => {
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
+              p={{
+                "2xl": "8px 24px",
+                xl: "8px 20px",
+                lg: "8px 12px",
+                md: "8px 5px",
+              }}
             >
               <Text fontSize="10px" color="grey.400">
                 CONFIGURATION
               </Text>
               <Text fontSize="14px">QUICKSTART</Text>
             </Box>
-            <HStack gap="16px" pl={{ "2xl": "24px", xl: "20px", lg: "12px" }}>
+            <HStack
+              gap="16px"
+              ml={{
+                "2xl": "24px",
+                xl: "20px",
+                lg: "12px",
+                md: "5px",
+                sm: "5px",
+              }}
+            >
               <Button size="sm" bg="pri.orange" color="white">
                 Save
               </Button>

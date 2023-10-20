@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   Flex,
   TabList,
@@ -19,6 +21,12 @@ import LoggingTab from "../organisms/tab-logging";
 import GasTab from "../organisms/tab-gas";
 
 export default function Settings() {
+  const navigate = useNavigate();
+
+  const handleExit = () => {
+    navigate("/");
+  };
+
   return (
     <Tabs variant="enclosed">
       <Flex
@@ -40,7 +48,9 @@ export default function Settings() {
               <Tab>About</Tab>
             </TabList>
           </Flex>
-          <Button colorScheme="red">Exit</Button>
+          <Button onClick={handleExit} colorScheme="red">
+            Exit
+          </Button>
         </Flex>
         <Divider m="20px 0" borderTop="1px grey.100 solid" />
         <Flex width="100%" maxW="1440px" justifyContent="flex-start" p="0 32px">

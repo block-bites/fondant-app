@@ -7,6 +7,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { fondantTheme } from "./styles/theme";
 
@@ -20,7 +21,7 @@ export const App = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [screenWidth, setScreenWidth] = useState<number>(0);
 
-  //Set screen width state
+  // Set screen width state
   useEffect(() => {
     function handleResize() {
       setScreenWidth(window.innerWidth);
@@ -29,7 +30,7 @@ export const App = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  //Check device and screen width
+  // Check device and screen width
   useEffect(() => {
     setIsMobile(
       /android|iphone|kindle|ipad/i.test(navigator.userAgent) ||
@@ -37,30 +38,34 @@ export const App = () => {
     );
   }, [screenWidth]);
 
-  if (isMobile) {
-    return (
-      <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
-        <Text align="center">Used device and resolution not supported</Text>
-      </HStack>
-    );
-  }
-
   return (
     <ChakraProvider theme={fondantTheme}>
       <SearchProvider>
         <Router>
-          {window.location.pathname !== "/settings" && <Navbar />}
-          <Routes>
-            <Route path="/" element={<Accounts />} />
-            <Route path="/blocks" element={<Blocks />} />
-            <Route path="/deploys" element={<div>Deploys</div>} />
-            <Route path="/events" element={<div>Events</div>} />
-            <Route path="/logs" element={<Logs />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
+          <AppContent />
         </Router>
       </SearchProvider>
     </ChakraProvider>
   );
 };
+
+function AppContent() {
+  // we can move it to separate components
+  const location = useLocation();
+  const isSettingsPage = location.pathname === "/settings";
+
+  return (
+    <>
+      {!isSettingsPage && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Accounts />} />
+        <Route path="/blocks" element={<Blocks />} />
+        <Route path="/deploys" element={<div>Deploys</div>} />
+        <Route path="/events" element={<div>Events</div>} />
+        <Route path="/logs" element={<Logs />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
+  );
+}

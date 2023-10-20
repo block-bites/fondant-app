@@ -14,6 +14,7 @@ import Navbar from "./components/organisms/navbar";
 import Accounts from "./components/pages/accounts";
 import Blocks from "./components/pages/blocks";
 import Logs from "./components/pages/logs";
+import Settings from "./components/pages/settings";
 
 export const App = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -48,13 +49,14 @@ export const App = () => {
     <ChakraProvider theme={fondantTheme}>
       <SearchProvider>
         <Router>
-          <Navbar />
+          {window.location.pathname !== "/settings" && <Navbar />}
           <Routes>
             <Route path="/" element={<Accounts />} />
             <Route path="/blocks" element={<Blocks />} />
             <Route path="/deploys" element={<div>Dploys</div>} />
             <Route path="/events" element={<div>Events</div>} />
             <Route path="/logs" element={<div>Logs</div>} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Router>

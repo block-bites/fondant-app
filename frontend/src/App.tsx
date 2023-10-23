@@ -17,6 +17,7 @@ import Accounts from "./components/pages/accounts";
 import Blocks from "./components/pages/blocks";
 import Logs from "./components/pages/logs";
 import Settings from "./components/pages/settings";
+import Events from "./components/pages/events";
 
 export const App = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -72,7 +73,7 @@ function AppContent() {
         <Route path="/" element={<Accounts />} />
         <Route path="/blocks" element={<Blocks />} />
         <Route path="/deploys" element={<div>Deploys</div>} />
-        <Route path="/events" element={<div>Events</div>} />
+        <Route path="/events" element={<Events />} />
         <Route path="/logs" element={<Logs />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<Navigate to="/" />} />

@@ -1,4 +1,5 @@
 import { useSearchContext } from "../../context/SearchContext";
+import { Helmet } from "react-helmet-async";
 
 import { Flex, VStack, Text } from "@chakra-ui/react";
 import AccountRowElement from "../molecules/account-row-element";
@@ -73,24 +74,29 @@ const Accounts = () => {
     item.hash.toLowerCase().includes(searchValue.toLowerCase().trim())
   );
   return (
-    <Flex w="100%" justify="center">
-      <VStack w="100%" maxW="1440px" gap="0" mt="16px">
-        {filteredAccounts.length > 0 ? (
-          filteredAccounts.map((item, index) => {
-            return (
-              <AccountRowElement
-                key={index}
-                hash={item.hash}
-                txCount={item.txCount}
-                balance={item.balance}
-              />
-            );
-          })
-        ) : (
-          <Text>No results</Text>
-        )}
-      </VStack>
-    </Flex>
+    <>
+      <Helmet>
+        <title>Fondant | Accounts</title>
+      </Helmet>
+      <Flex w="100%" justify="center">
+        <VStack w="100%" maxW="1440px" gap="0" mt="16px">
+          {filteredAccounts.length > 0 ? (
+            filteredAccounts.map((item, index) => {
+              return (
+                <AccountRowElement
+                  key={index}
+                  hash={item.hash}
+                  txCount={item.txCount}
+                  balance={item.balance}
+                />
+              );
+            })
+          ) : (
+            <Text>No results</Text>
+          )}
+        </VStack>
+      </Flex>
+    </>
   );
 };
 

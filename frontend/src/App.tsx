@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { SearchProvider } from "./context/SearchContext";
+import { HelmetProvider } from "react-helmet-async";
 
 import { ChakraProvider, HStack, Text } from "@chakra-ui/react";
 import {
@@ -7,6 +8,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { fondantTheme } from "./styles/theme";
 
@@ -15,12 +17,14 @@ import Accounts from "./components/pages/accounts";
 import Blocks from "./components/pages/blocks";
 import Logs from "./components/pages/logs";
 import Settings from "./components/pages/settings";
+import Events from "./components/pages/events";
+import Deploys from "./components/pages/deploys";
 
 export const App = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [screenWidth, setScreenWidth] = useState<number>(0);
 
-  //Set screen width state
+  // Set screen width state
   useEffect(() => {
     function handleResize() {
       setScreenWidth(window.innerWidth);
@@ -29,7 +33,7 @@ export const App = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  //Check device and screen width
+  // Check device and screen width
   useEffect(() => {
     setIsMobile(
       /android|iphone|kindle|ipad/i.test(navigator.userAgent) ||
@@ -46,21 +50,35 @@ export const App = () => {
   }
 
   return (
-    <ChakraProvider theme={fondantTheme}>
-      <SearchProvider>
-        <Router>
-          {window.location.pathname !== "/settings" && <Navbar />}
-          <Routes>
-            <Route path="/" element={<Accounts />} />
-            <Route path="/blocks" element={<Blocks />} />
-            <Route path="/deploys" element={<div>Dploys</div>} />
-            <Route path="/events" element={<div>Events</div>} />
-            <Route path="/logs" element={<div>Logs</div>} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </Router>
-      </SearchProvider>
-    </ChakraProvider>
+    <HelmetProvider>
+      <ChakraProvider theme={fondantTheme}>
+        <SearchProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </SearchProvider>
+      </ChakraProvider>
+    </HelmetProvider>
   );
 };
+
+function AppContent() {
+  // we can move it to separate components
+  const location = useLocation();
+  const isSettingsPage = location.pathname === "/settings";
+
+  return (
+    <>
+      {!isSettingsPage && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Accounts />} />
+        <Route path="/blocks" element={<Blocks />} />
+        <Route path="/deploys" element={<Deploys />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/logs" element={<Logs />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
+  );
+}

@@ -9,6 +9,8 @@ export const fondantTheme = extendTheme({
         mx: "0",
         marginInlineStart: "0",
         fontFamily: "primary",
+        marginRight: "calc(-1 * (100vw - 100%))",
+        overflowX: "hidden",
       },
     },
   },
@@ -48,6 +50,10 @@ export const fondantTheme = extendTheme({
         },
       },
     },
+    Modal: {
+      marginRight: "calc(-1 * (100vw - 100%))",
+      overflowX: "hidden",
+    },
     Input: {
       variants: {
         outline: {
@@ -58,6 +64,11 @@ export const fondantTheme = extendTheme({
             borderWidth: "1px",
           },
         },
+      },
+    },
+    Divider: {
+      baseStyle: {
+        borderColor: "grey.100",
       },
     },
   },

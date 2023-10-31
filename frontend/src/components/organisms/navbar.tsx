@@ -14,8 +14,10 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaRegFileCode } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
+import { BiGridAlt } from "react-icons/bi";
+import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -36,19 +38,19 @@ const Navbar = () => {
             >
               <Link to="/">
                 <Tab>
-                  <Icon as={FaBell} size="24px" />
+                  <Icon as={MdSupervisorAccount} size="24px" />
                   Accounts
                 </Tab>
               </Link>
               <Link to="/blocks">
                 <Tab>
-                  <Icon as={FaBell} size="24px" />
+                  <Icon as={BiGridAlt} size="24px" />
                   Blocks
                 </Tab>
               </Link>
-              <Link to="/deplys">
+              <Link to="/deploys">
                 <Tab>
-                  <Icon as={FaBell} size="24px" />
+                  <Icon as={MdCloudUpload} size="24px" />
                   Deploys
                 </Tab>
               </Link>
@@ -60,7 +62,7 @@ const Navbar = () => {
               </Link>
               <Link to="/logs">
                 <Tab>
-                  <Icon as={FaBell} size="24px" />
+                  <Icon as={FaRegFileCode} size="24px" />
                   Logs
                 </Tab>
               </Link>
@@ -158,14 +160,28 @@ const Navbar = () => {
             <Box
               borderRight="1px solid"
               borderRightColor="pri.dark"
-              p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px" }}
+              p={{
+                "2xl": "8px 24px",
+                xl: "8px 20px",
+                lg: "8px 12px",
+                md: "8px 5px",
+              }}
             >
               <Text fontSize="10px" color="grey.400">
                 CONFIGURATION
               </Text>
               <Text fontSize="14px">QUICKSTART</Text>
             </Box>
-            <HStack gap="16px" pl={{ "2xl": "24px", xl: "20px", lg: "12px" }}>
+            <HStack
+              gap="16px"
+              ml={{
+                "2xl": "24px",
+                xl: "20px",
+                lg: "12px",
+                md: "5px",
+                sm: "5px",
+              }}
+            >
               <Button size="sm" bg="pri.orange" color="white">
                 Save
               </Button>

@@ -47,10 +47,6 @@ const AccountRowElement = ({
             <Text fontSize="md">TX Count</Text>
             <Text fontSize="lg">{txCount}</Text>
           </VStack>
-          <VStack align="left">
-            <Text fontSize="md">Index</Text>
-            <Text fontSize="lg">{txCount}</Text>
-          </VStack>
         </HStack>
         <HStack>
           <VStack

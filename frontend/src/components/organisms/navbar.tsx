@@ -16,8 +16,10 @@ import {
 } from "@chakra-ui/react";
 import { FaBell, FaRegFileCode } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { BiGridAlt } from "react-icons/bi";
+import { BiGridAlt, BiRefresh } from "react-icons/bi";
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md";
+import { BsFillGearFill } from "react-icons/bs";
+import { GoSync } from "react-icons/go";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -185,11 +187,13 @@ const Navbar = () => {
               <Button size="sm" bg="pri.orange" color="white">
                 Save
               </Button>
-              <Button size="sm" leftIcon={<Icon as={FaBell} size="24px" />}>
+              <Button size="sm" leftIcon={<Icon as={GoSync} size="24px" />}>
                 Switch
               </Button>
               <Button size="sm" variant="outline" color="white">
-                <Icon as={FaBell} size="24px" />
+                <Link to="/settings">
+                  <Icon as={BsFillGearFill} size="24px" />
+                </Link>
               </Button>
             </HStack>
           </HStack>

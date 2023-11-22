@@ -85,3 +85,27 @@ app.get("/get-status", async (req, res) => {
 app.listen(port, () => {
   console.log(`Node.js Express API listening at http://localhost:${port}`);
 });
+
+app.get("/nctl-view-faucet-secret-key", async (req, res) => {
+  try {
+    // Call the nctl_view_faucet_secret_key command
+    const key = (
+      await axios.post(
+        "http://nctl-container:4000/commands/nctl_view_faucet_secret_key"
+      )
+    ).data.key;
+
+    // Retrieve the result of the command
+    const data = (
+      await axios.get(
+        `http://nctl-container:4000/commands/nctl_view_faucet_secret_key?key=${key}&wait=true`
+      )
+    ).data;
+
+    // Send the faucet secret key as the response
+    res.status(200).send(data.report);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});

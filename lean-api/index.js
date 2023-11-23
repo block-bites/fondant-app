@@ -186,3 +186,52 @@ app.get("/nctl-view-faucet-secret-key", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+app.get("/nctl-view-user-accounts", async (req, res) => {
+  try {
+    // Call nctl-status command
+    const key = (
+      await axios.post(
+        "http://nctl-container:4000/commands/nctl_view_user_accounts"
+      )
+    ).data.key;
+    const data = (
+      await axios.get(
+        `http://nctl-container:4000/commands/nctl_view_user_accounts?key=${key}&wait=true`
+      )
+    ).data;
+    res.status(200).send(data.report);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+
+app.get('/user-keys/:userNumber', async (req, res) => {
+  const userNumber = req.params.userNumber;
+
+  const flask_endpoint = `http://nctl-container:4000/print_file`;
+  const private_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/secret_key.pem`;
+  const public_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/public_key.pem`;
+
+  const keyRegex = /-----BEGIN PRIVATE KEY-----\n([\s\S]*?)\n-----END PRIVATE KEY-----/;
+  const publicKeyRegex = /-----BEGIN PUBLIC KEY-----\n([\s\S]*?)\n-----END PUBLIC KEY-----/; 
+
+  try {
+      const response_private = await axios.get(flask_endpoint, { params: { path: private_key_path} });
+      const response_public = await axios.get(flask_endpoint, { params: { path: public_key_path } });
+
+      const privateMatch = keyRegex.exec(response_private.data.content);
+      const publicMatch = publicKeyRegex.exec(response_public.data.content);
+
+      const final_response = {
+          private_key: privateMatch ? privateMatch[1] : null,
+          public_key: publicMatch ? publicMatch[1] : null
+      }
+
+      res.send(final_response);
+  } catch (error) {
+      res.status(500).send('Error fetching the file: ' + error);
+  }
+});

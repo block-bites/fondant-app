@@ -5,11 +5,6 @@ services:
     build:
       context: ./nctl-container
       dockerfile: Dockerfile
-    #ports:
-    #  - 11101-11105:11101-11105
-    #  - 14101-14105:14101-14105
-    #  - 18101-18105:18101-18105
-    #  - 4000:4000
     networks:
       - fondant-network
     environment:
@@ -21,9 +16,17 @@ services:
       context: ./lean-api
       dockerfile:
         Dockerfile
-        #- fondant-network:3000/node/1/rpc -> http://nctl-container:11101/rpc
     ports:
       - "3000:3000" # Expose the lean API on port 3000
+    networks:
+      - fondant-network
+
+  react-app: 
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
     networks:
       - fondant-network
 

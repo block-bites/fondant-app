@@ -3,7 +3,7 @@ FROM makesoftware/casper-nctl:latest
 RUN sudo pip install flask flask_shell2http
 
 COPY app.py .
-copy run.sh .
+COPY run.sh .
 
 EXPOSE 4000
 

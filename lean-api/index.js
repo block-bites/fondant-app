@@ -138,7 +138,7 @@ app.post("/nctl-status", async (req, res) => {
   }
 });
 
-app.post("/nctl-view-faucet", async (req, res) => {
+app.get("/nctl-view-faucet", async (req, res) => {
   try {
     // Call nctl-status command
     const key = (

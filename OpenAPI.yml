@@ -1,0 +1,100 @@
+openapi: 3.0.0
+
+info:
+  version: 0.1.0
+  title: NCTL-API 
+  description: NCTL-API is a RESTful API for interacting with NCTL network. 
+
+servers:
+  - url: https://localhost:3000
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+security: []
+
+paths:
+  /nctl-start:
+    post:
+      summary: Start NCTL process
+      responses:
+        '200':
+          description: NCTL process started successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  parsedResponse:
+                    type: object
+
+  /nctl-status:
+    post:
+      summary: Get NCTL status
+      responses:
+        '200':
+          description: NCTL running status
+          content:
+            text/plain:
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable
+
+  /nctl-view-faucet:
+    get:
+      summary: View NCTL faucet account
+      responses:
+        '200':
+          description: Faucet account details
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /nctl-view-faucet-secret-key:
+    get:
+      summary: Get faucet secret key
+      responses:
+        '200':
+          description: Returns contentetnts of faucet secret key file 
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /nctl-view-user-accounts:
+    get:
+      summary: View user accounts
+      responses:
+        '200':
+          description: Returns all registered user accounts
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /user-keys/{userNumber}:
+    get:
+      summary: Get user private and public keys
+      parameters:
+        - name: userNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: It is used to retrieve private and public keys for a specific user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  private_key:
+                    type: string
+                  public_key:
+                    type: string

@@ -9,7 +9,7 @@ COPY index.js .
 COPY server.js .
 COPY sseListener.js .
 
-
+#
 # Expose the port the lean API will listen on
 EXPOSE 3000
 

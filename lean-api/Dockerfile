@@ -9,8 +9,6 @@ COPY index.js .
 COPY server.js .
 COPY sseListener.js .
 
-# COPY restart.sh .
-# RUN chmod +x restart.sh
 
 # Expose the port the lean API will listen on
 EXPOSE 3000

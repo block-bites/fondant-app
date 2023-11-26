@@ -5,12 +5,15 @@ const {
   createProxyMiddleware,
   fixRequestBody,
 } = require("http-proxy-middleware");
+const EventSource = require('eventsource');
+
 
 const app = express();
 app.setMaxListeners(0);
 const port = 3000;
 
 app.use(express.json());
+
 
 app.post("/health-check", (req, res) => {
   res.json({ message: "OK" });
@@ -235,3 +238,54 @@ app.get('/user-keys/:userNumber', async (req, res) => {
       res.status(500).send('Error fetching the file: ' + error);
   }
 });
+
+class SSEListener {
+  constructor() {
+    this.streams = {};
+  }
+
+  startListening(streamUrl, capacity = 10) {
+    if (this.streams[streamUrl]) {
+      throw new Error('Already listening to this stream');
+    }
+
+    this.streams[streamUrl] = {
+      eventSource: new EventSource(streamUrl),
+      events: [],
+      capacity
+    };
+
+    this.streams[streamUrl].eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      this.streams[streamUrl].events.unshift(data);
+
+      if (this.streams[streamUrl].events.length > this.streams[streamUrl].capacity) {
+        this.streams[streamUrl].events.pop();
+      }
+    };
+  }
+
+  getEvents(streamUrl) {
+    if (!this.streams[streamUrl]) {
+      throw new Error('Stream not found or not being listened to');
+    }
+
+    return this.streams[streamUrl].events;
+  }
+}
+
+const sseListener = new SSEListener();
+
+sseListener.startListening('http://localhost:3000/net/1/see/events/main', 100);
+
+app.get('/event-cache', async (req, res) => {
+  try {
+      const response = await axios.get('http://localhost:3000/net/1/sse/events/main');
+      res.send(response.data);
+  }
+  catch (error) {
+      res.status(500).send('Error fetching the events: ' + error);
+  }
+
+});
+

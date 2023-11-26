@@ -13,5 +13,5 @@ COPY sseListener.js .
 # Expose the port the lean API will listen on
 EXPOSE 3000
 
-# Start the lean API
+
 CMD ["node", "index.js"]

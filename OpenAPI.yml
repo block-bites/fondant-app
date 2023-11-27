@@ -98,3 +98,25 @@ paths:
                     type: string
                   public_key:
                     type: string
+  /cache/events{nodeNumber}:
+    get:
+      summary: Endpoint to retrieve events from cache
+      parameters:
+        - name: nodeNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: It is used to retrieve events from cache for a specific node.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  confirmation:
+                    type: string
+                  cached_events:
+                    type: object
+                  

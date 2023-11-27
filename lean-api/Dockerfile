@@ -7,7 +7,7 @@ ARG version=latest
 RUN npm install -g express@$version  dockerode@$version axios@$version http-proxy-middleware@$version eventsource@$version
 COPY index.js .
 COPY server.js .
-COPY sseListener.js .
+COPY sseCache.js .
 
 
 # Expose the port the lean API will listen on

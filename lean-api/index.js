@@ -7,12 +7,15 @@ const {
 } = require("http-proxy-middleware");
 const EventSource = require('eventsource');
 
-
+const sseCache = require('./sseCache');
 const app = express();
 app.setMaxListeners(0);
 const port = 3000;
+let ssePorts = []; // If anyone has a better idea for this please let me know ~Karol
 
 app.use(express.json());
+const cache = new sseCache();
+
 
 
 app.post("/health-check", (req, res) => {
@@ -55,6 +58,8 @@ app.post("/nctl-start", async (req, res) => {
     const parsedResponse = parseResponse(data3.report);
     res.status(200).send(parsedResponse);
 
+    cacheAllNodes(parsedResponse);
+
     //Create proxy Middlewares
     const middlewares = createProxyMiddlewares(parsedResponse);
     //Add middlewares to the app
@@ -89,6 +94,8 @@ function parseResponse(response) {
 
   return data;
 }
+
+
 function createProxyMiddlewares(response) {
   const middlewares = [];
   for (const node in response) {
@@ -115,9 +122,28 @@ function createProxyMiddlewares(response) {
       middlewares.push(middleware);
     }
   }
-
   return middlewares;
 }
+
+function cacheAllNodes(parsedResponse){
+  for (const node in parsedResponse) {
+    const ports = parsedResponse[node];
+    const port = ports['SSE'];
+    ssePorts.push(port);
+    const streamUrl = `http://nctl-container:${port}/events/main`;
+    cache.startListening(streamUrl);
+  }
+}
+
+
+
+app.get('cache/events/:nodeNumber', (req, res) => {
+  let number = req.params.nodeNumber;
+  const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
+  const events = cache.getEvents(streamUrl);
+  res.send(events);
+});
+
 
 app.post("/nctl-status", async (req, res) => {
   try {
@@ -239,53 +265,4 @@ app.get('/user-keys/:userNumber', async (req, res) => {
   }
 });
 
-class SSEListener {
-  constructor() {
-    this.streams = {};
-  }
-
-  startListening(streamUrl, capacity = 10) {
-    if (this.streams[streamUrl]) {
-      throw new Error('Already listening to this stream');
-    }
-
-    this.streams[streamUrl] = {
-      eventSource: new EventSource(streamUrl),
-      events: [],
-      capacity
-    };
-
-    this.streams[streamUrl].eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      this.streams[streamUrl].events.unshift(data);
-
-      if (this.streams[streamUrl].events.length > this.streams[streamUrl].capacity) {
-        this.streams[streamUrl].events.pop();
-      }
-    };
-  }
-
-  getEvents(streamUrl) {
-    if (!this.streams[streamUrl]) {
-      throw new Error('Stream not found or not being listened to');
-    }
-
-    return this.streams[streamUrl].events;
-  }
-}
-
-const sseListener = new SSEListener();
-
-sseListener.startListening('http://localhost:3000/net/1/see/events/main', 100);
-
-app.get('/event-cache', async (req, res) => {
-  try {
-      const response = await axios.get('http://localhost:3000/net/1/sse/events/main');
-      res.send(response.data);
-  }
-  catch (error) {
-      res.status(500).send('Error fetching the events: ' + error);
-  }
-
-});
 

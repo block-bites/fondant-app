@@ -1,6 +1,6 @@
 const EventSource = require('eventsource');
 
-class SSEListener {
+class sseCache {
   constructor() {
     this.streams = {};
   }
@@ -13,9 +13,11 @@ class SSEListener {
     const eventSource = new EventSource(streamUrl);
 
     eventSource.onmessage = (event) => {
-      this.streams[streamUrl].events.unshift(event.data);
-      if (this.streams[streamUrl].events.length > this.streams[streamUrl].capacity) {
-        this.streams[streamUrl].events.pop();
+      if (!this.streams[streamUrl].events.includes(event.data)) {
+        this.streams[streamUrl].events.unshift(event.data);
+        if (this.streams[streamUrl].events.length > this.streams[streamUrl].capacity) {
+          this.streams[streamUrl].events.pop();
+        }
       }
     };
 
@@ -44,4 +46,4 @@ class SSEListener {
 }
 
 
-module.exports = SSEListener;
+module.exports = sseCache;

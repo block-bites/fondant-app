@@ -5,12 +5,18 @@ const {
   createProxyMiddleware,
   fixRequestBody,
 } = require("http-proxy-middleware");
+const EventSource = require('eventsource');
 
+const sseCache = require('./sseCache');
 const app = express();
 app.setMaxListeners(0);
 const port = 3000;
+let ssePorts = []; // If anyone has a better idea for this please let me know ~Karol
 
 app.use(express.json());
+const cache = new sseCache();
+
+
 
 app.post("/health-check", (req, res) => {
   res.json({ message: "OK" });
@@ -52,6 +58,8 @@ app.post("/nctl-start", async (req, res) => {
     const parsedResponse = parseResponse(data3.report);
     res.status(200).send(parsedResponse);
 
+    cacheAllNodes(parsedResponse);
+
     //Create proxy Middlewares
     const middlewares = createProxyMiddlewares(parsedResponse);
     //Add middlewares to the app
@@ -86,6 +94,8 @@ function parseResponse(response) {
 
   return data;
 }
+
+
 function createProxyMiddlewares(response) {
   const middlewares = [];
   for (const node in response) {
@@ -112,9 +122,28 @@ function createProxyMiddlewares(response) {
       middlewares.push(middleware);
     }
   }
-
   return middlewares;
 }
+
+function cacheAllNodes(parsedResponse){
+  for (const node in parsedResponse) {
+    const ports = parsedResponse[node];
+    const port = ports['SSE'];
+    ssePorts.push(port);
+    const streamUrl = `http://nctl-container:${port}/events/main`;
+    cache.startListening(streamUrl);
+  }
+}
+
+
+
+app.get('cache/events/:nodeNumber', (req, res) => {
+  let number = req.params.nodeNumber;
+  const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
+  const events = cache.getEvents(streamUrl);
+  res.send(events);
+});
+
 
 app.post("/nctl-status", async (req, res) => {
   try {
@@ -138,7 +167,7 @@ app.post("/nctl-status", async (req, res) => {
   }
 });
 
-app.post("/nctl-view-faucet", async (req, res) => {
+app.get("/nctl-view-faucet", async (req, res) => {
   try {
     // Call nctl-status command
     const key = (
@@ -235,3 +264,5 @@ app.get('/user-keys/:userNumber', async (req, res) => {
       res.status(500).send('Error fetching the file: ' + error);
   }
 });
+
+

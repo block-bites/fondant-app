@@ -16,6 +16,12 @@ Currently, the app is being developed. This is just a backend and an nctl contai
     - `casper-client get-state-root-hash -n http://localhost:3000/net/3/rpc` and you should get current state root hash (if the first block got emited)
     By default we support nodes from `1` to `5` but in future this will be configurable.
 
+
+## Documentation
+
+    All avaliable endpoints are described in the OpenAPI.yml file.
+ 
+
 ## TODO
 - [ ] Add RPC tests
 - [ ] Add SSE tests

@@ -11,11 +11,7 @@ interface IAccountRowElemProps {
   balance: number;
 }
 
-const AccountRowElement = ({
-  hash,
-  txCount,
-  balance,
-}: IAccountRowElemProps) => {
+const AccountRowElement = ({ hash, balance }: IAccountRowElemProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleOpenModal = () => {

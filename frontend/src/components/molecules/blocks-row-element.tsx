@@ -1,4 +1,3 @@
-import React from "react";
 import { Flex, VStack, Text } from "@chakra-ui/react";
 
 export default function BlockRowElement() {

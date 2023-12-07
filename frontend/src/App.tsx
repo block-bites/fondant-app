@@ -11,6 +11,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { fondantTheme } from "./styles/theme";
+import { defaultNode } from "./global";
 
 import Navbar from "./components/organisms/navbar";
 import Accounts from "./components/pages/accounts";
@@ -22,6 +23,10 @@ import Deploys from "./components/pages/deploys";
 
 export const App = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [selectedNode, setSelectedNode] = useState<{
+    key: string;
+    title: string;
+  }>(defaultNode);
   const [screenWidth, setScreenWidth] = useState<number>(0);
 
   // Set screen width state
@@ -54,7 +59,10 @@ export const App = () => {
       <ChakraProvider theme={fondantTheme}>
         <SearchProvider>
           <Router>
-            <AppContent />
+            <AppContent
+              selectedNode={selectedNode}
+              setSelectedNode={setSelectedNode}
+            />
           </Router>
         </SearchProvider>
       </ChakraProvider>
@@ -62,14 +70,23 @@ export const App = () => {
   );
 };
 
-function AppContent() {
+interface IAppContentProps {
+  selectedNode: { key: string; title: string };
+  setSelectedNode: React.Dispatch<
+    React.SetStateAction<{ key: string; title: string }>
+  >;
+}
+
+function AppContent({ selectedNode, setSelectedNode }: IAppContentProps) {
   // we can move it to separate components
   const location = useLocation();
   const isSettingsPage = location.pathname === "/settings";
 
   return (
     <>
-      {!isSettingsPage && <Navbar />}
+      {!isSettingsPage && (
+        <Navbar selectedNode={selectedNode} setSelectedNode={setSelectedNode} />
+      )}
       <Routes>
         <Route path="/" element={<Accounts />} />
         <Route path="/blocks" element={<Blocks />} />

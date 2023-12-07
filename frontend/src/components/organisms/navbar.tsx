@@ -21,8 +21,16 @@ import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md";
 import { BsFillGearFill } from "react-icons/bs";
 import { GoSync } from "react-icons/go";
 import { Link } from "react-router-dom";
+import NetworkSwitcher from "../molecules/network-switcher";
 
-const Navbar = () => {
+interface INavbarProps {
+  selectedNode: { key: string; title: string };
+  setSelectedNode: React.Dispatch<
+    React.SetStateAction<{ key: string; title: string }>
+  >;
+}
+
+const Navbar = ({ selectedNode, setSelectedNode }: INavbarProps) => {
   const { searchValue, setSearchValue } = useSearchContext();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +78,7 @@ const Navbar = () => {
               </Link>
             </TabList>
           </Tabs>
+
           <InputGroup w="100%" maxW="340px">
             <InputLeftElement pointerEvents="none">
               <Icon as={FiSearch} size="24px" />
@@ -119,21 +128,6 @@ const Navbar = () => {
             </Box>
           </HStack>
           <HStack gap="0">
-            <Box
-              borderRight="1px solid"
-              borderRightColor="pri.dark"
-              p={{
-                "2xl": "8px 24px",
-                xl: "8px 20px",
-                lg: "8px 12px",
-                md: "8px 5px",
-              }}
-            >
-              <Text fontSize="10px" color="grey.400">
-                CONFIGURATION
-              </Text>
-              <Text fontSize="14px">TEST</Text>
-            </Box>
             <HStack
               gap="16px"
               ml={{
@@ -144,16 +138,10 @@ const Navbar = () => {
                 sm: "5px",
               }}
             >
-              <Button size="sm" bg="pri.orange" color="white" isDisabled>
-                Save
-              </Button>
-              <Button
-                size="sm"
-                leftIcon={<Icon as={GoSync} size="24px" />}
-                isDisabled
-              >
-                Switch
-              </Button>
+              <NetworkSwitcher
+                selectedNode={selectedNode}
+                setSelectedNode={setSelectedNode}
+              />
               <Link to="/settings">
                 <Button size="sm" variant="outline" color="white" isDisabled>
                   <Icon as={BsFillGearFill} size="24px" margin="0 0 0 0px" />

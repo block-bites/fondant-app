@@ -3,9 +3,9 @@ import { Select } from "@chakra-ui/react";
 import { nodesList } from "../../global";
 
 interface INetworkSwitcherProps {
-  selectedNode: { key: string; title: string };
+  selectedNode: { key: string; title: string } | any;
   setSelectedNode: React.Dispatch<
-    React.SetStateAction<{ key: string; title: string }>
+    React.SetStateAction<{ key: string; title: string } | any>
   >;
 }
 
@@ -15,7 +15,7 @@ export default function NetworkSwitcher({
 }: INetworkSwitcherProps) {
   const handleChangeNode = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
-    setSelectedNode(nodesList.filter((item) => item.key === e.target.value)[0]);
+    setSelectedNode(nodesList.find((item) => item.key === e.target.value));
   };
 
   return (

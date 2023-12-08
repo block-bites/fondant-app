@@ -42,6 +42,27 @@ class sseCache {
         events: this.streams[streamUrl].events
     };
   }
+
+  getDeployEvents(streamUrl) {
+    const deployEvents = [];
+    if (this.streams[streamUrl]) {
+      this.streams[streamUrl].events.forEach(event => {
+        try {
+          const eventData = JSON.parse(event);
+          if (eventData && eventData.data && eventData.data.DeployProcessed) {
+            deployEvents.push(eventData.data.DeployProcessed);
+          }
+        } catch (error) {
+          console.error('Error parsing event data:', error);
+        }
+      });
+    }
+    return {
+        status: 'success',
+        deploys: deployEvents
+    };
+  }
+
    
 }
 

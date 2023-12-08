@@ -119,4 +119,30 @@ paths:
                     type: string
                   cached_events:
                     type: object
-                  
+  /cache/deploys/{nodeNumber}:
+      get:
+        summary: Fetch deploy events for a specific node
+        description: Returns a list of deploy events from the SSE stream of a specified node.
+        parameters:
+          - in: path
+            name: nodeNumber
+            required: true
+            schema:
+              type: integer
+            description: The node number to fetch deploy events for.
+        responses:
+          '200':
+            description: A list of deploy events.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: success
+                    deploys:
+                      type: array
+                      items:
+                        type: object
+                      example: [{ "deploy_hash": "606569968bda0944b9a707e27b2c3625456cceefb9df5796ff4057a7d4ec35c8", "account": "01cf32f40f750d7edc178

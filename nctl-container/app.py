@@ -4,6 +4,7 @@ import os
 from flask import Flask,request,jsonify 
 from flask_executor import Executor
 from flask_shell2http import Shell2HTTP
+import subprocess
 
 os.environ['NCTL'] = '/home/casper/casper-node/utils/nctl'
 os.environ['NCTL_CASPER_HOME'] = '/home/casper/casper-node'
@@ -111,7 +112,7 @@ shell2http.register_command(endpoint="nctl_view_faucet_account", command_name='b
 
 # Views #5: user
 shell2http.register_command(endpoint="nctl_view_user_account", command_name='bash /home/casper/casper-node/utils/nctl/sh/views/view_user_account.sh "$@"', callback_fn=callback1, decorators=[])
-shell2http.register_command(endpoint="nctl_view_user_accounts", command_name='ls /home/casper/casper-node/utils/nctl/assets/net-1/users/user-1 > cat', callback_fn=callback1, decorators=[])
+
 
 # Views #6: validator
 shell2http.register_command(endpoint="nctl_view_validator_account", command_name='bash /home/casper/casper-node/utils/nctl/sh/views/view_validator_account.sh "$@"', callback_fn=callback1, decorators=[])

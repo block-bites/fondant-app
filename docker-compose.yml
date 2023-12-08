@@ -5,6 +5,9 @@ services:
     build:
       context: ./nctl-container
       dockerfile: Dockerfile
+    ports:
+    - "5001:11101"
+    - "4000:4000"
     networks:
       - fondant-network
     environment:

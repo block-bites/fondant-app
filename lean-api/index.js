@@ -5,13 +5,17 @@ const {
   createProxyMiddleware,
   fixRequestBody,
 } = require("http-proxy-middleware");
-const EventSource = require('eventsource');
+const { CasperServiceByJsonRPC, CLPublicKey } = require('casper-js-sdk');
 
 const sseCache = require('./sseCache');
 const app = express();
 app.setMaxListeners(0);
 const port = 3000;
 let ssePorts = []; // If anyone has a better idea for this please let me know ~Karol
+
+const nodeCount = 10;
+
+const rpcChannels = [];
 
 app.use(express.json());
 const cache = new sseCache();
@@ -59,6 +63,7 @@ app.post("/nctl-start", async (req, res) => {
     res.status(200).send(parsedResponse);
 
     cacheAllNodes(parsedResponse);
+    setupRPC();
 
     //Create proxy Middlewares
     const middlewares = createProxyMiddlewares(parsedResponse);
@@ -66,6 +71,8 @@ app.post("/nctl-start", async (req, res) => {
     for (const middleware of middlewares) {
       app.use(middleware);
     }
+
+
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -132,6 +139,13 @@ function cacheAllNodes(parsedResponse){
     ssePorts.push(port);
     const streamUrl = `http://nctl-container:${port}/events/main`;
     cache.startListening(streamUrl);
+  }
+}
+
+function setupRPC(){
+  for (let i = 1; i <= nodeCount; i++) {
+    const casperService = new CasperServiceByJsonRPC(`http://localhost:3000/net/${i}/rpc`);
+    rpcChannels.push(casperService);
   }
 }
 
@@ -216,17 +230,16 @@ app.get("/nctl-view-faucet-secret-key", async (req, res) => {
   }
 });
 
-app.get("/nctl-view-user-accounts", async (req, res) => {
+app.get("/nctl-view-user-account", async (req, res) => {
   try {
-    // Call nctl-status command
     const key = (
       await axios.post(
-        "http://nctl-container:4000/commands/nctl_view_user_accounts"
+        "http://nctl-container:4000/commands/nctl_view_user_account?user=1"
       )
     ).data.key;
     const data = (
       await axios.get(
-        `http://nctl-container:4000/commands/nctl_view_user_accounts?key=${key}&wait=true`
+        `http://nctl-container:4000/commands/nctl_view_user_account?key=${key}&wait=true`
       )
     ).data;
     res.status(200).send(data.report);
@@ -262,6 +275,41 @@ app.get('/user-keys/:userNumber', async (req, res) => {
       res.send(final_response);
   } catch (error) {
       res.status(500).send('Error fetching the file: ' + error);
+  }
+});
+
+
+
+app.get('/block-info/:nodeNumber', async (req, res) => {
+  
+  const casperService = rpcChannels[req.params.nodeNumber - 1];
+  
+  try {
+    const latestBlockInfo = await casperService.getLatestBlockInfo();
+    const block = latestBlockInfo.block;
+    const header = block.header;
+    const body = block.body;
+
+    const blockHeight = header.height;
+    const era = header.era_id;
+    const deploys = body.deploy_hashes;
+    const blockHash = block.hash;
+    const timestamp = header.timestamp;
+
+    const age = new Date() - new Date(timestamp);
+
+    const response = {
+      BlockHeight: blockHeight,
+      Era: era,
+      Deploys: deploys.length,
+      Age: age,
+      BlockHash: blockHash
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching block info');
   }
 });
 

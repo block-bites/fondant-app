@@ -120,29 +120,60 @@ paths:
                   cached_events:
                     type: object
   /cache/deploys/{nodeNumber}:
-      get:
-        summary: Fetch deploy events for a specific node
-        description: Returns a list of deploy events from the SSE stream of a specified node.
-        parameters:
-          - in: path
-            name: nodeNumber
-            required: true
-            schema:
-              type: integer
-            description: The node number to fetch deploy events for.
-        responses:
-          '200':
-            description: A list of deploy events.
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: string
-                      example: success
-                    deploys:
-                      type: array
-                      items:
-                        type: object
-                      example: [{ "deploy_hash": "606569968bda0944b9a707e27b2c3625456cceefb9df5796ff4057a7d4ec35c8", "account": "01cf32f40f750d7edc178
+    get:
+      summary: Fetch deploy events for a specific node
+      description: Returns a list of deploy events from the SSE stream of a specified node.
+      parameters:
+        - in: path
+          name: nodeNumber
+          required: true
+          schema:
+            type: integer
+          description: The node number to fetch deploy events for.
+      responses:
+        '200':
+          description: A list of deploy events.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  deploys:
+                    type: array
+                    items:
+                      type: object
+                    example: [{ "deploy_hash": "606569968bda0944b9a707e27b2c3625456cceefb9df5796ff4057a7d4ec35c8", "account": "01cf32f40f750d7edc1785f8b91ee39484ba89453e7e68b26a2845350e2a6b58a0", "timestamp": "2023-12-08T13:12:11.804Z", "ttl": "30m", "dependencies": [], "block_hash": "dcb88ca4038a93e7680074676010993594c694919cc0a0ffab35945084e503a0", "execution_result": { ... } }]
+        '400':
+          description: Invalid node number.
+        '404':
+          description: Deploy events not found for the specified node.
+        '500':
+          description: Internal server error.
+  /logs/{nodeNumber}:
+    get:
+      summary: Fetch logs for a specific node
+      description: Retrieves the log file content for the specified node.
+      parameters:
+        - in: path
+          name: nodeNumber
+          required: true
+          schema:
+            type: integer
+          description: The number of the node for which to fetch logs.
+      responses:
+        '200':
+          description: The content of the log file.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Log content here..."
+        '400':
+          description: Bad request, if the node number is not valid.
+        '404':
+          description: Not found, if no log file is found for the specified node.
+        '500':
+          description: Internal server error, for general errors like network issues or server configuration problems.

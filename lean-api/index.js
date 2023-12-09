@@ -292,3 +292,18 @@ app.get('/user-keys/:userNumber', async (req, res) => {
       res.status(500).send('Error fetching the file: ' + error);
   }
 });
+
+
+app.get('/logs/:nodeNumber', async (req, res) => {
+  const nodeNumber = req.params.nodeNumber;
+  const flask_endpoint = `http://nctl-container:4000/print_file`;
+  const log_path = `/home/casper/casper-node/utils/nctl/assets/net-1/nodes/node-${nodeNumber}/logs/stdout.log`;
+
+  try {
+      const response = await axios.get(flask_endpoint, { params: { path: log_path } });
+      res.send(response.data.content);
+  } catch (error) {
+      console.error(error.message); 
+      res.status(500).send('Error fetching the file: ' + error.message);
+  }
+});

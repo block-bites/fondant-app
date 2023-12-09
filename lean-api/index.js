@@ -18,7 +18,7 @@ const cache = new sseCache();
 
 
 
-app.post("/health-check", (req, res) => {
+app.get("/health-check", (req, res) => {
   res.json({ message: "OK" });
 });
 
@@ -137,12 +137,40 @@ function cacheAllNodes(parsedResponse){
 
 
 
-app.get('cache/events/:nodeNumber', (req, res) => {
-  let number = req.params.nodeNumber;
+app.get('/cache/events/:nodeNumber', (req, res) => {
+  let number = parseInt(req.params.nodeNumber);
+  if (isNaN(number) || number >= ssePorts.length) {
+    return res.status(400).send('Invalid node number');
+  }
+
   const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
+  console.log(`Fetching events from: ${streamUrl}`);
+
   const events = cache.getEvents(streamUrl);
+  if (events.status === 'error') {
+    return res.status(404).send(events.message);
+  }
+
   res.send(events);
 });
+
+app.get('/cache/deploys/:nodeNumber', (req, res) => {
+  let number = parseInt(req.params.nodeNumber);
+  if (isNaN(number) || number >= ssePorts.length) {
+    return res.status(400).send('Invalid node number');
+  }
+
+  const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
+  console.log(`Fetching deploy events from: ${streamUrl}`);
+
+  const deploys = cache.getDeployEvents(streamUrl);
+  if (deploys.status === 'error') {
+    return res.status(404).send(deploys.message);
+  }
+
+  res.send(deploys);
+});
+
 
 
 app.post("/nctl-status", async (req, res) => {
@@ -266,3 +294,16 @@ app.get('/user-keys/:userNumber', async (req, res) => {
 });
 
 
+app.get('/logs/:nodeNumber', async (req, res) => {
+  const nodeNumber = req.params.nodeNumber;
+  const flask_endpoint = `http://nctl-container:4000/print_file`;
+  const log_path = `/home/casper/casper-node/utils/nctl/assets/net-1/nodes/node-${nodeNumber}/logs/stdout.log`;
+
+  try {
+      const response = await axios.get(flask_endpoint, { params: { path: log_path } });
+      res.send(response.data.content);
+  } catch (error) {
+      console.error(error.message); 
+      res.status(500).send('Error fetching the file: ' + error.message);
+  }
+});

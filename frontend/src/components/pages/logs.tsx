@@ -1,22 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { Flex, VStack, Text } from "@chakra-ui/react";
 import { Helmet } from "react-helmet-async";
 
+// Define a type for the log entry
+type LogEntry = {
+  timestamp: string;
+  level: string;
+  fields: {
+    message: string;
+    error?: string;
+    path?: string;
+  };
+  target: string;
+};
+
 export default function Logs() {
-const [logData, setLogData] = useState(null);
+  const [logData, setLogData] = useState<any[]>([]);
 
-    useEffect(() => {
-    fetch('http://localhost:3001/logs/1')
-      .then(response => {
+  const parseMalformedJson = (text: string) => {
+    // Correct the boundaries between JSON objects by inserting commas
+    const correctedText = text.replace(/}\s*{/g, "},{");
+
+    // Add square brackets to make it a valid JSON array
+    const jsonArrayString = `[${correctedText}]`;
+
+    // Parse the JSON array string
+    return JSON.parse(jsonArrayString);
+  };
+
+  useEffect(() => {
+    fetch("http://localhost:3000/logs/1")
+      .then((response) => {
         if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+          throw new Error(`HTTP error: ${response.status}`);
         }
-        return response.json();
+        return response.text();
       })
-      .then(data => setLogData(data))
-      .catch(error => console.error('Error fetching data:', error));
+      .then((text) => {
+        try {
+          const data = parseMalformedJson(text);
+          setLogData(data);
+        } catch (error) {
+          console.error("Error parsing malformed JSON:", error);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
-
 
   return (
     <>
@@ -37,32 +68,11 @@ const [logData, setLogData] = useState(null);
           lineHeight="tall"
           fontFamily="secondary"
         >
-          <Text>[12:37:25] Starting server with initial configuration:</Text>
-          <Text>"gasLimit": 6721975,</Text>
-          <Text>"gasPrice" :20000000000,</Text>
-          <Text>"hardfork": "muirGlacier",</Text>
-          <Text>"hostname": "127.0.0.1",</Text>
-          <Text>"port": 7545,</Text>
-          <Text>"network_id": 5777,</Text>
-          <Text>"default_balance_ether": 100,</Text>
-          <Text>"total accounts": 10,</Text>
-          <Text>"unlocked accounts"</Text>
-          <Text>[ì, "locked" : false,</Text>
-          <Text>"vmErrorsOnPCResponse":true,</Text>
-          <Text>"verbose": false,</Text>
-          <Text>
-            "db_path":"/Users/janhoffmann/Library/Application
-            Support/Fondant/workspaces/Quickstart/chaindata
-          </Text>
-          <Text>[12:37:25] Fondant started successfully!</Text>
-          <Text>[12:37:26] Waiting for requests ...</Text>
-          <Text>[12:37:26] eth_subscribe</Text>
-          <Text>[12:37:26] eth_getLogs</Text>
-          <Text>[12:37:26] eth_subscribe</Text>
-          <Text>[12:37:26] eth_subscribe</Text>
-          <Text>[12:37:26] eth_getLogs</Text>
-          <Text>[12:37:26] eth_subscribe</Text>
-          <Text>[12:37: 26 ]</Text>
+          {logData.slice(0, 100).map((log, index) => (
+            <Text key={index}>
+              {log.timestamp} [{log.level}] {log.fields.message}
+            </Text>
+          ))}
         </VStack>
       </Flex>
     </>

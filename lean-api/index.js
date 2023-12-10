@@ -301,9 +301,13 @@ app.get('/logs/:nodeNumber', async (req, res) => {
 
   try {
       const response = await axios.get(flask_endpoint, { params: { path: log_path } });
-      res.send(response.data.content);
+      
+      const logEntries = response.data.content.trim().split('\n').map(line => JSON.parse(line));
+
+      res.json(logEntries);
   } catch (error) {
       console.error(error.message); 
       res.status(500).send('Error fetching the file: ' + error.message);
   }
 });
+

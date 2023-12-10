@@ -1,22 +1,22 @@
 // index.js
 const express = require("express");
+const cors = require("cors");
 const axios = require("axios");
 const {
   createProxyMiddleware,
   fixRequestBody,
 } = require("http-proxy-middleware");
-const EventSource = require('eventsource');
+const EventSource = require("eventsource");
 
-const sseCache = require('./sseCache');
+const sseCache = require("./sseCache");
 const app = express();
 app.setMaxListeners(0);
 const port = 3000;
 let ssePorts = []; // If anyone has a better idea for this please let me know ~Karol
 
+app.use(cors());
 app.use(express.json());
 const cache = new sseCache();
-
-
 
 app.get("/health-check", (req, res) => {
   res.json({ message: "OK" });
@@ -95,7 +95,6 @@ function parseResponse(response) {
   return data;
 }
 
-
 function createProxyMiddlewares(response) {
   const middlewares = [];
   for (const node in response) {
@@ -125,53 +124,49 @@ function createProxyMiddlewares(response) {
   return middlewares;
 }
 
-function cacheAllNodes(parsedResponse){
+function cacheAllNodes(parsedResponse) {
   for (const node in parsedResponse) {
     const ports = parsedResponse[node];
-    const port = ports['SSE'];
+    const port = ports["SSE"];
     ssePorts.push(port);
     const streamUrl = `http://nctl-container:${port}/events/main`;
     cache.startListening(streamUrl);
   }
 }
 
-
-
-app.get('/cache/events/:nodeNumber', (req, res) => {
+app.get("/cache/events/:nodeNumber", (req, res) => {
   let number = parseInt(req.params.nodeNumber);
   if (isNaN(number) || number >= ssePorts.length) {
-    return res.status(400).send('Invalid node number');
+    return res.status(400).send("Invalid node number");
   }
 
   const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
   console.log(`Fetching events from: ${streamUrl}`);
 
   const events = cache.getEvents(streamUrl);
-  if (events.status === 'error') {
+  if (events.status === "error") {
     return res.status(404).send(events.message);
   }
 
   res.send(events);
 });
 
-app.get('/cache/deploys/:nodeNumber', (req, res) => {
+app.get("/cache/deploys/:nodeNumber", (req, res) => {
   let number = parseInt(req.params.nodeNumber);
   if (isNaN(number) || number >= ssePorts.length) {
-    return res.status(400).send('Invalid node number');
+    return res.status(400).send("Invalid node number");
   }
 
   const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
   console.log(`Fetching deploy events from: ${streamUrl}`);
 
   const deploys = cache.getDeployEvents(streamUrl);
-  if (deploys.status === 'error') {
+  if (deploys.status === "error") {
     return res.status(404).send(deploys.message);
   }
 
   res.send(deploys);
 });
-
-
 
 app.post("/nctl-status", async (req, res) => {
   try {
@@ -219,7 +214,6 @@ app.listen(port, () => {
   console.log(`Lean Node.js Express API listening at http://localhost:${port}`);
 });
 
-
 app.get("/nctl-view-faucet-secret-key", async (req, res) => {
   try {
     // Call the nctl_view_faucet_secret_key command
@@ -264,46 +258,52 @@ app.get("/nctl-view-user-accounts", async (req, res) => {
   }
 });
 
-
-app.get('/user-keys/:userNumber', async (req, res) => {
+app.get("/user-keys/:userNumber", async (req, res) => {
   const userNumber = req.params.userNumber;
 
   const flask_endpoint = `http://nctl-container:4000/print_file`;
   const private_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/secret_key.pem`;
   const public_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/public_key.pem`;
 
-  const keyRegex = /-----BEGIN PRIVATE KEY-----\n([\s\S]*?)\n-----END PRIVATE KEY-----/;
-  const publicKeyRegex = /-----BEGIN PUBLIC KEY-----\n([\s\S]*?)\n-----END PUBLIC KEY-----/; 
+  const keyRegex =
+    /-----BEGIN PRIVATE KEY-----\n([\s\S]*?)\n-----END PRIVATE KEY-----/;
+  const publicKeyRegex =
+    /-----BEGIN PUBLIC KEY-----\n([\s\S]*?)\n-----END PUBLIC KEY-----/;
 
   try {
-      const response_private = await axios.get(flask_endpoint, { params: { path: private_key_path} });
-      const response_public = await axios.get(flask_endpoint, { params: { path: public_key_path } });
+    const response_private = await axios.get(flask_endpoint, {
+      params: { path: private_key_path },
+    });
+    const response_public = await axios.get(flask_endpoint, {
+      params: { path: public_key_path },
+    });
 
-      const privateMatch = keyRegex.exec(response_private.data.content);
-      const publicMatch = publicKeyRegex.exec(response_public.data.content);
+    const privateMatch = keyRegex.exec(response_private.data.content);
+    const publicMatch = publicKeyRegex.exec(response_public.data.content);
 
-      const final_response = {
-          private_key: privateMatch ? privateMatch[1] : null,
-          public_key: publicMatch ? publicMatch[1] : null
-      }
+    const final_response = {
+      private_key: privateMatch ? privateMatch[1] : null,
+      public_key: publicMatch ? publicMatch[1] : null,
+    };
 
-      res.send(final_response);
+    res.send(final_response);
   } catch (error) {
-      res.status(500).send('Error fetching the file: ' + error);
+    res.status(500).send("Error fetching the file: " + error);
   }
 });
 
-
-app.get('/logs/:nodeNumber', async (req, res) => {
+app.get("/logs/:nodeNumber", async (req, res) => {
   const nodeNumber = req.params.nodeNumber;
   const flask_endpoint = `http://nctl-container:4000/print_file`;
   const log_path = `/home/casper/casper-node/utils/nctl/assets/net-1/nodes/node-${nodeNumber}/logs/stdout.log`;
 
   try {
-      const response = await axios.get(flask_endpoint, { params: { path: log_path } });
-      res.send(response.data.content);
+    const response = await axios.get(flask_endpoint, {
+      params: { path: log_path },
+    });
+    res.send(response.data.content);
   } catch (error) {
-      console.error(error.message); 
-      res.status(500).send('Error fetching the file: ' + error.message);
+    console.error(error.message);
+    res.status(500).send("Error fetching the file: " + error.message);
   }
 });

@@ -38,7 +38,7 @@ const Navbar = () => {
               border="none"
               gap={{ "2xl": "32px", xl: "20px", lg: "10px" }}
             >
-              <Link to="/">
+              <Link to="/accounts">
                 <Tab>
                   <Icon as={MdSupervisorAccount} size="24px" />
                   Accounts

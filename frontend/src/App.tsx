@@ -19,6 +19,7 @@ import Logs from "./components/pages/logs";
 import Settings from "./components/pages/settings";
 import Events from "./components/pages/events";
 import Deploys from "./components/pages/deploys";
+import Start from "./components/pages/start";
 
 export const App = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -66,12 +67,14 @@ function AppContent() {
   // we can move it to separate components
   const location = useLocation();
   const isSettingsPage = location.pathname === "/settings";
+  const isStartPage = location.pathname === "/";
 
   return (
     <>
-      {!isSettingsPage && <Navbar />}
+      {!isSettingsPage && !isStartPage && <Navbar />}
       <Routes>
-        <Route path="/" element={<Accounts />} />
+        <Route path="/" element={<Start />} />
+        <Route path="/accounts" element={<Accounts />} />
         <Route path="/blocks" element={<Blocks />} />
         <Route path="/deploys" element={<Deploys />} />
         <Route path="/events" element={<Events />} />

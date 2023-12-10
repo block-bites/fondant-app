@@ -1,7 +1,23 @@
+import { useEffect, useState } from 'react';
 import { Flex, VStack, Text } from "@chakra-ui/react";
 import { Helmet } from "react-helmet-async";
 
 export default function Logs() {
+const [logData, setLogData] = useState(null);
+
+    useEffect(() => {
+    fetch('http://localhost:3001/logs/1')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => setLogData(data))
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+
   return (
     <>
       <Helmet>

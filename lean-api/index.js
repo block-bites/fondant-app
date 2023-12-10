@@ -5,6 +5,8 @@ const {
   createProxyMiddleware,
   fixRequestBody,
 } = require("http-proxy-middleware");
+const cors = require('cors')
+
 const EventSource = require('eventsource');
 
 const sseCache = require('./sseCache');
@@ -14,8 +16,9 @@ const port = 3000;
 let ssePorts = []; // If anyone has a better idea for this please let me know ~Karol
 
 app.use(express.json());
-const cache = new sseCache();
+app.use(cors());
 
+const cache = new sseCache();
 
 
 app.get("/health-check", (req, res) => {

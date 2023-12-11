@@ -49,7 +49,7 @@ class sseCache {
       this.streams[streamUrl].events.forEach(event => {
         try {
           const eventData = JSON.parse(event);
-          if (eventData && eventData.data && eventData.data.DeployProcessed) {
+          if (eventData && eventData.data && eventData.data.DeployProcessed && eventData !== 'null') {
             deployEvents.push(eventData.data.DeployProcessed);
           }
         } catch (error) {

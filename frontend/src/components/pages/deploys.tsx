@@ -9,6 +9,11 @@ export default function Events() {
   const [selectedNode, setSelectedNode] = useState<string>('1');
   const eventCapacity = 100; // Maximum number of events to store
 
+
+  const startDemo = async () => {
+    axios.post(`http://localhost:3001/deploy-demo`);
+  }
+
   // Fetch historical events
   useEffect(() => {
     const fetchEvents = async () => {
@@ -69,7 +74,7 @@ export default function Events() {
       </Select>
       <Box overflowY="auto" maxHeight="80vh" p={3}>
         {events.length === 0 ? (
-          <Text color="grey.100">No events</Text>
+          <Text color="grey.100">No deploys</Text>
         ) : (
           events.map((event, index) => (
             <Grid key={index} templateColumns="repeat(4, 1fr)" gap={6} p={3} borderBottom="1px solid #ddd">

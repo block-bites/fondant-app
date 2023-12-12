@@ -58,9 +58,9 @@ export default function Logs() {
         onChange={handleNodeChange} 
         value={selectedNode} 
         mb="10px"
-        bg="black" // Background color
-        color="white" // Text color
-        borderColor="white" // Border color
+        bg="white" // Background color
+        color="black" // Text color
+        borderColor="lightgrey" // Border color
       >
         {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
           <option key={i} value={i}>Node {i}</option>

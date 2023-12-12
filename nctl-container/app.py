@@ -161,7 +161,7 @@ shell2http.register_command(endpoint="nctl_view_faucet_secret_key", command_name
 
 #############
 shell2http.register_command(endpoint="nctl_view_node_ports", command_name='bash /home/casper/casper-node/utils/nctl/sh/views/view_node_ports.sh "$@"', callback_fn=callback1, decorators=[])
-shell2http.register_command(endpoint="view_log", command_name='ls -a /home/casper/casper-node/utils/nctl/assets/net-1/nodes/node-2/logs > cat', callback_fn=callback1, decorators=[])
+shell2http.register_command(endpoint="view", command_name='ls -a /home/casper/casper-node/utils/nctl/assets/net-1/users/user-1 > cat', callback_fn=callback1, decorators=[])
 
 @app.route('/print_file', methods=['GET'])
 def print_file():

@@ -1,17 +1,13 @@
 FROM node:18
 
-ENV NODE_ENV=production
-ENV NODE_PATH=/usr/local/lib/node_modules
-ARG version=latest
+WORKDIR /usr/src/app
 
-RUN npm install -g express@$version  dockerode@$version axios@$version http-proxy-middleware@$version eventsource@$version cors@$version
-COPY index.js .
-COPY server.js .
-COPY sseCache.js .
+COPY package*.json ./
 
+RUN npm install --only=production
 
-# Expose the port the lean API will listen on
+COPY . .
+
 EXPOSE 3000
-
 
 CMD ["node", "index.js"]

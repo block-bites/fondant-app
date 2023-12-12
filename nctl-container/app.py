@@ -172,8 +172,13 @@ def print_file():
 
     try:
         with open(file_path, 'r') as file:
-            content = file.read()
+            content_lines = []
+            for _ in range(1000):
+                line = file.readline()
+                if not line:
+                    break
+                content_lines.append(line)
+            content = ''.join(content_lines)
         return jsonify({"content": content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    

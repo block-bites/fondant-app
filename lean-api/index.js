@@ -350,5 +350,19 @@ app.get("/get-demo-deploys", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+app.get("/get-demo", async (req, res) => {
+  try{
+    const deploys = cache.getEvents('http://52.35.59.254:9999/events/main');
+    if (deploys.status === 'error') {
+      return res.status(404).send(deploys.message);
+    }
+    res.send(deploys);
+  }
+  catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
   
 

@@ -45,23 +45,24 @@ class sseCache {
 
   getDeployEvents(streamUrl) {
     const deployEvents = [];
-    if (this.streams[streamUrl]) {
-      this.streams[streamUrl].events.forEach(event => {
-        try {
-          const eventData = JSON.parse(event);
-          if (eventData && eventData.data && eventData.data.DeployProcessed && eventData !== 'null') {
-            deployEvents.push(eventData.data.DeployProcessed);
-          }
-        } catch (error) {
-          console.error('Error parsing event data:', error);
-        }
-      });
+    if (!this.streams[streamUrl]) {
+      return {
+        status: 'error',
+        message: 'Stream not found or not being listened to'
+      };
     }
+    this.streams[streamUrl].events.forEach((event) => {
+      if (event.includes('DeployProcessed')) {
+        deployEvents.push(event);
+      }
+    });
     return {
-        status: 'success',
-        deploys: deployEvents
+      status: 'success',
+      events: deployEvents
     };
   }
+  
+  
 
    
 }

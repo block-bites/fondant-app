@@ -12,7 +12,7 @@ const Start = () => {
   const handleClick = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/nctl-start", {
+      const response = await fetch("http://localhost:3001/nctl-start", {
         method: "POST",
       });
       if (response.ok) {
@@ -31,7 +31,7 @@ const Start = () => {
     const checkStatus = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("http://localhost:3000/nctl-status", {
+        const response = await fetch("http://localhost:3001/nctl-status", {
           method: "POST",
         });
         if (response.ok) {

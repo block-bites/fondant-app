@@ -18,7 +18,7 @@ export default function Blocks() {
 
   useEffect(() => {
     const client = new CasperServiceByJsonRPC(
-      "http://localhost:3000/net/1/rpc"
+      "http://localhost:3001/net/1/rpc"
     );
 
     const fetchBlocks = async () => {

@@ -1,11 +1,12 @@
 // index.js
 const express = require("express");
-const cors = require("cors");
 const axios = require("axios");
 const {
   createProxyMiddleware,
   fixRequestBody,
 } = require("http-proxy-middleware");
+const cors = require("cors");
+
 const EventSource = require("eventsource");
 
 const sseCache = require("./sseCache");
@@ -14,8 +15,9 @@ app.setMaxListeners(0);
 const port = 3000;
 let ssePorts = []; // If anyone has a better idea for this please let me know ~Karol
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+
 const cache = new sseCache();
 
 app.get("/health-check", (req, res) => {
@@ -301,7 +303,13 @@ app.get("/logs/:nodeNumber", async (req, res) => {
     const response = await axios.get(flask_endpoint, {
       params: { path: log_path },
     });
-    res.send(response.data.content);
+
+    const logEntries = response.data.content
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line));
+
+    res.json(logEntries);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Error fetching the file: " + error.message);

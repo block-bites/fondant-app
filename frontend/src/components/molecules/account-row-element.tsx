@@ -1,30 +1,24 @@
-import { useState } from "react";
-
-import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Flex, HStack, Text, VStack, Box } from "@chakra-ui/react";
 import { BiKey } from "react-icons/bi";
-
-import AccountModal from "./account-modal";
+import AccountModal from "./account-modal"; // Assuming this is the modal component
 
 interface IAccountRowElemProps {
-  hash: string;
-  txCount: number;
-  balance: number;
+  publicKey: string;
+  privateKey: string;
 }
 
-const AccountRowElement = ({
-  hash,
-  txCount,
-  balance,
-}: IAccountRowElemProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleOpenModal = () => {
-    setIsOpen(true);
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsOpen(false);
+    setIsModalOpen(false);
   };
+
   return (
     <>
       <Flex
@@ -35,12 +29,8 @@ const AccountRowElement = ({
         borderBottomColor="grey.100"
       >
         <VStack align="left" w="100%" maxW="500px">
-          <Text fontSize="md">Address</Text>
-          <Text fontSize="lg">{hash}</Text>
-        </VStack>
-        <VStack align="left">
-          <Text fontSize="md">Balance</Text>
-          <Text fontSize="lg">{balance}</Text>
+          <Text fontSize="md">Public Key</Text>
+          <Text fontSize="lg">{publicKey}</Text>
         </VStack>
         <HStack>
           <VStack
@@ -54,13 +44,17 @@ const AccountRowElement = ({
               width: "60px",
               transform: "scaleX(-1)",
               cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <BiKey style={{ width: "19px", height: "19px" }} />
+            <BiKey style={{ width: "25px", height: "25px" }} />
           </VStack>
         </HStack>
       </Flex>
-      <AccountModal isOpen={isOpen} onClose={handleCloseModal} hash={hash} />
+      {/* Modal will display the private key */}
+      <AccountModal isOpen={isModalOpen} onClose={handleCloseModal} publicKey={publicKey} privateKey={privateKey} />
     </>
   );
 };

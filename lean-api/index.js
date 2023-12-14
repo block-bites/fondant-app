@@ -26,7 +26,6 @@ app.get("/health-check", (req, res) => {
 
 app.post("/nctl-start", async (req, res) => {
   try {
-    // Call assets-setup command
     const key = (
       await axios.post("http://nctl-container:4000/commands/nctl_assets_setup")
     ).data.key;
@@ -36,7 +35,6 @@ app.post("/nctl-start", async (req, res) => {
       )
     ).data;
 
-    // Call assets-start command
     const key2 = (
       await axios.post("http://nctl-container:4000/commands/nctl_start")
     ).data.key;
@@ -46,7 +44,6 @@ app.post("/nctl-start", async (req, res) => {
       )
     ).data;
 
-    // Call view-node-ports command
     const key3 = (
       await axios.post(
         "http://nctl-container:4000/commands/nctl_view_node_ports"
@@ -265,12 +262,11 @@ app.get("/user-keys/:userNumber", async (req, res) => {
 
   const flask_endpoint = `http://nctl-container:4000/print_file`;
   const private_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/secret_key.pem`;
-  const public_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/public_key.pem`;
+  const public_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/public_key_hex`;
 
   const keyRegex =
     /-----BEGIN PRIVATE KEY-----\n([\s\S]*?)\n-----END PRIVATE KEY-----/;
-  const publicKeyRegex =
-    /-----BEGIN PUBLIC KEY-----\n([\s\S]*?)\n-----END PUBLIC KEY-----/;
+  //const publicKeyRegex = /-----BEGIN PUBLIC KEY-----\n([\s\S]*?)\n-----END PUBLIC KEY-----/;
 
   try {
     const response_private = await axios.get(flask_endpoint, {
@@ -281,11 +277,11 @@ app.get("/user-keys/:userNumber", async (req, res) => {
     });
 
     const privateMatch = keyRegex.exec(response_private.data.content);
-    const publicMatch = publicKeyRegex.exec(response_public.data.content);
+    //const publicMatch = publicKeyRegex.exec(response_public.data.content);
 
     const final_response = {
       private_key: privateMatch ? privateMatch[1] : null,
-      public_key: publicMatch ? publicMatch[1] : null,
+      public_key: response_public.data.content,
     };
 
     res.send(final_response);
@@ -313,5 +309,55 @@ app.get("/logs/:nodeNumber", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Error fetching the file: " + error.message);
+  }
+});
+
+app.get("/view", async (req, res) => {
+  try {
+    // Call nctl-status command
+    const key = (await axios.post("http://nctl-container:4000/commands/view"))
+      .data.key;
+    const data = (
+      await axios.get(
+        `http://nctl-container:4000/commands/view?key=${key}&wait=true`
+      )
+    ).data;
+    res.status(200).send(data.report);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/deploy-demo", async (req, res) => {
+  cache.startListening("http://52.35.59.254:9999/events/main");
+  res.status(200).send("Deploy demo started");
+});
+
+app.get("/get-demo-deploys", async (req, res) => {
+  try {
+    const deploys = cache.getDeployEvents(
+      "http://52.35.59.254:9999/events/main"
+    );
+    if (deploys.status === "error") {
+      return res.status(404).send(deploys.message);
+    }
+    res.send(deploys);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/get-demo", async (req, res) => {
+  try {
+    const deploys = cache.getEvents("http://52.35.59.254:9999/events/main");
+    if (deploys.status === "error") {
+      return res.status(404).send(deploys.message);
+    }
+    res.send(deploys);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
 });

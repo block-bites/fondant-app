@@ -1,7 +1,21 @@
 import React from "react";
 import { Flex, VStack, Text } from "@chakra-ui/react";
 
-export default function BlockRowElement() {
+interface BlockRowElementProps {
+  height: number;
+  era: number;
+  deploys: number;
+  age: string;
+  blockHash: string;
+}
+
+export default function BlockRowElement({
+  height,
+  era,
+  deploys,
+  age,
+  blockHash,
+}: BlockRowElementProps) {
   return (
     <Flex
       w="100%"
@@ -19,7 +33,7 @@ export default function BlockRowElement() {
           fontWeight="normal"
           color="grey.border"
         >
-          BLOCK
+          HEIGHT
         </Text>
         <Text
           fontSize="lg"
@@ -27,28 +41,39 @@ export default function BlockRowElement() {
           fontWeight="normal"
           color="grey.border"
         >
-          0
+          {height.toString()}
         </Text>
       </VStack>
       <VStack align="left">
         <Text fontSize="lg" fontWeight="normal">
-          MINED ON
+          ERA
         </Text>
         <Text fontSize="lg" fontWeight="semibold">
-          2023-09-20 12:37:25
+          {era.toString()}
         </Text>
       </VStack>
       <VStack align="left">
         <Text fontSize="lg" fontWeight="normal">
-          GAS USED
+          DEPLOYS
         </Text>
         <Text fontSize="lg" fontWeight="semibold">
-          0
+          {deploys.toString()}
         </Text>
       </VStack>
       <VStack align="left">
-        <Text fontSize="lg" fontWeight="normal" color="grey.400">
-          NO TRANSACTION
+        <Text fontSize="lg" fontWeight="normal">
+          AGE
+        </Text>
+        <Text fontSize="lg" fontWeight="semibold">
+          {age}
+        </Text>
+      </VStack>
+      <VStack align="left">
+        <Text fontSize="lg" fontWeight="normal">
+          BLOCK HASH
+        </Text>
+        <Text fontSize="lg" fontWeight="semibold">
+          {blockHash}
         </Text>
       </VStack>
     </Flex>

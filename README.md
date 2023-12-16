@@ -35,6 +35,6 @@ Sample Commands:
 
 Currently, nodes 1 to 5 are supported, with plans to make this configurable in future updates.
 
-Endpoint Documentation:
+### Endpoint Documentation:
 
 For comprehensive information on all available endpoints, refer to the OpenAPI.yml file included in the package

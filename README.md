@@ -1,22 +1,26 @@
 # Fondant: A Blockchain Application Suite
 ## Current Status
 
-Welcome to the Fondant app, version 1.0! This guide will walk you through setting up both the frontend and backend components. Get ready to explore and test the capabilities of our blockchain application.
-Setup and Execution
+Welcome to the Fondant app, version 1.0! This guide will walk you through setting up both the frontend and backend components. Get ready to explore and test the capabilities of this blockchain application.
+
+## Prerequisites:
+
+You will need *docker* installed and running on your machine for this application to work.
+
 
 ## Running the Application:
 
-   *Script Selection:* Choose the appropriate script for your operating system (Windows or Linux) and execute it.
-    *Initialization* Feedback: Monitor the initial output from nctl (Note: This feedback mechanism will be updated in future releases).
-    *Launch:* Once the setup is complete, your Fondant app is ready for use!
+*Script Selection:* Choose the appropriate script for your operating system (Windows or Linux) and execute it.
+*Initialization* Feedback: Monitor the initial output from nctl (Note: This feedback mechanism will be updated in future releases).
+*Launch:* Once the setup is complete, your Fondant app is ready for use!
 
 ## Frontend Features
 
 Explore the user-friendly interface of Fondant's frontend:
 
-    Accounts Page: This section displays all user accounts, complete with their private and public keys.
-    Blocks Section: View all blockchain blocks arranged in chronological order.
-    Deploys, Events, Logs: Access detailed information about deploys, events, and logs for in-depth analysis.
+*Accounts Page:* This section displays all user accounts, complete with their private and public keys.
+*Blocks Section:* View all blockchain blocks arranged in chronological order.
+*Deploys, Events, Logs:* Access detailed information about deploys, events, and logs for in-depth analysis.
 
 ## Backend Capabilities
 

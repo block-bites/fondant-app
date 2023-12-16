@@ -29,7 +29,6 @@ export default function Blocks() {
           latestBlockInfo = await client.getLatestBlockInfo();
         } catch (error) {
           console.error("Error fetching latest block info:", error);
-          // Handle the case where the blockchain might be empty
           setBlocks([]); // No blocks to display
           setIsLastPage(true); // No more pages to navigate
           return;

@@ -1,34 +1,34 @@
-# Fondant app
+# Fondant: A Blockchain Application Suite
+## Current Status
 
-## Curent stage
+Welcome to the Fondant app, version 1.0! This guide will walk you through setting up both the frontend and backend components. Get ready to explore and test the capabilities of our blockchain application.
+Setup and Execution
 
-Currently, the app is being developed. This is just a backend and an nctl container running altogether. 
+## Running the Application:
 
-## Running
+   *Script Selection:* Choose the appropriate script for your operating system (Windows or Linux) and execute it.
+    *Initialization* Feedback: Monitor the initial output from nctl (Note: This feedback mechanism will be updated in future releases).
+    *Launch:* Once the setup is complete, your Fondant app is ready for use!
 
-1. `docker compose build --`
-2. `docker compose up --`
-3. Run `curl -X POST "http://localhost:3001/nctl-start"` to start nctl-network with default configuration.
-4. You will see the output from nctl as a response (this will be changed).
-5. Now you can use `http://localhost:3001/net/1/rpc` as an RPC endpoint. For example you can do:
-    - `casper-client get-node-status -n http://localhost:3001/net/1/rpc` to get status of `node-1` 
-    - `casper-client get-block -n http://localhost:3001/net/2/rpc` and you should get a latest block info.
-    - `casper-client get-state-root-hash -n http://localhost:3001/net/3/rpc` and you should get current state root hash (if the first block got emited)
-    By default we support nodes from `1` to `5` but in future this will be configurable.
+## Frontend Features
 
+Explore the user-friendly interface of Fondant's frontend:
 
-## Documentation
+    Accounts Page: This section displays all user accounts, complete with their private and public keys.
+    Blocks Section: View all blockchain blocks arranged in chronological order.
+    Deploys, Events, Logs: Access detailed information about deploys, events, and logs for in-depth analysis.
 
-    All avaliable endpoints are described in the OpenAPI.yml file.
- 
+## Backend Capabilities
 
-## TODO
-- [ ] Add RPC tests
-- [ ] Add SSE tests
-- [ ] Add configurable options
-- [ ] Add UI on top of it
+The backend of Fondant is designed for seamless integration and accessibility:
 
+    Port Proxying: We've set up proxies for essential ports as backend endpoints. Example: http://localhost:3001/net/1/rpc. These endpoints allow direct connection to the respective node's RPC port.
+    Sample Commands:
+        To check the status of node 1: casper-client get-node-status -n http://localhost:3001/net/1/rpc
+        To retrieve the latest block info from node 2: casper-client get-block -n http://localhost:3001/net/2/rpc
+        To get the current state root hash from node 3: casper-client get-state-root-hash -n http://localhost:3001/net/3/rpc (applicable after the first block emission)
+        Currently, nodes 1 to 5 are supported, with plans to make this configurable in future updates.
 
+Endpoint Documentation:
 
-
-
+For comprehensive information on all available endpoints, refer to the OpenAPI.yml file included in the package

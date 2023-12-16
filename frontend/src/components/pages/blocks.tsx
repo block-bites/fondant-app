@@ -24,38 +24,53 @@ export default function Blocks() {
       setLoading(true);
       setError(null);
       try {
-        const latestBlockInfo = await client.getLatestBlockInfo();
-        if (latestBlockInfo && latestBlockInfo.block) {
-          const currentHeight = latestBlockInfo.block.header.height;
-
-          const blockHeights = [];
-          for (let i = 0; i < DISPLAY_PER_PAGE; i++) {
-            const height = currentHeight - i - (currentPage - 1) * DISPLAY_PER_PAGE;
-            if (height >= 0) {
-              blockHeights.push(height);
-            }
-          }
-
-          if (blockHeights.length === 0) {
-            setBlocks([]);
-            setIsLastPage(true);
-            return;
-          } else {
-            setIsLastPage(false);
-          }
-
-          const blockInfoPromises = blockHeights.map((height) =>
-            client.getBlockInfoByHeight(height)
-          );
-          const blockInfos: GetBlockResult[] = await Promise.all(blockInfoPromises);
-          const newBlocks = blockInfos
-            .map((blockInfo) => blockInfo.block)
-            .filter((block): block is JsonBlock => block !== null);
-
-          setBlocks(newBlocks);
-          setIsLastPage(newBlocks.length < DISPLAY_PER_PAGE);
+        let latestBlockInfo;
+        try {
+          latestBlockInfo = await client.getLatestBlockInfo();
+        } catch (error) {
+          console.error("Error fetching latest block info:", error);
+          // Handle the case where the blockchain might be empty
+          setBlocks([]); // No blocks to display
+          setIsLastPage(true); // No more pages to navigate
+          return;
         }
+
+        if (!latestBlockInfo || !latestBlockInfo.block) {
+          setBlocks([]);
+          setIsLastPage(true);
+          return;
+        }
+
+        const currentHeight = latestBlockInfo.block.header.height;
+
+        const blockHeights = [];
+        for (let i = 0; i < DISPLAY_PER_PAGE; i++) {
+          const height = currentHeight - i - (currentPage - 1) * DISPLAY_PER_PAGE;
+          if (height >= 0) {
+            blockHeights.push(height);
+          }
+        }
+
+        if (blockHeights.length === 0) {
+          setBlocks([]);
+          setIsLastPage(true);
+          return;
+        } else {
+          setIsLastPage(false);
+        }
+
+        const blockInfoPromises = blockHeights.map((height) =>
+          client.getBlockInfoByHeight(height)
+        );
+        const blockInfos: GetBlockResult[] = await Promise.all(blockInfoPromises);
+        const newBlocks = blockInfos
+          .map((blockInfo) => blockInfo.block)
+          .filter((block): block is JsonBlock => block !== null);
+
+        setBlocks(newBlocks);
+        setIsLastPage(newBlocks.length < DISPLAY_PER_PAGE);
       } catch (err) {
+        console.error("Error in fetchBlocks:", err);
         setError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);

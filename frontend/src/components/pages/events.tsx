@@ -91,7 +91,12 @@ export default function Events() {
         ) : (
           events.map((event, index) => (
             <Box key={index} p={3} borderBottom="1px solid grey" cursor="pointer" onClick={() => toggleEvent(index)}>
-              {expandedEventIndex === index ? formatJson(event, 0, true) : formatJson(event)}
+              <Flex alignItems="center">
+                <Text transform={expandedEventIndex === index ? 'rotate(90deg)' : 'rotate(0deg)'}>▶</Text>
+                <Box ml={2} overflowX="auto">
+                  {expandedEventIndex === index ? formatJson(event, 0, true) : formatJson(event, 0, false)}
+                </Box>
+              </Flex>
             </Box>
           ))
         )}

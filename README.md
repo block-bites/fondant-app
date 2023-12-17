@@ -20,7 +20,9 @@ Explore the user-friendly interface of Fondant's frontend:
 
 - **Accounts Page:** This section displays all user accounts, complete with their private and public keys.
 - **Blocks Section:** View all blockchain blocks arranged in chronological order.
-- **Deploys, Events, Logs:** Access detailed information about deploys, events, and logs for in-depth analysis.
+- **Deploys, Events, Logs:** Access detailed information about deploys, events, and logs for in-depth analysis. 
+
+If you don't want to use any tools but want to see how deploy data looks like you can use `http://localhost:3000/transfer` endpoint. It will transfer some funds from the faucet account and generate some traffic.
 
 ## Backend Capabilities
 

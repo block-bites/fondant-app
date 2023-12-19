@@ -213,24 +213,24 @@ app.listen(port, () => {
   console.log(`Lean Node.js Express API listening at http://localhost:${port}`);
 });
 
-app.get("/nctl-view-faucet-secret-key", async (req, res) => {
+app.get("/faucet-private-key", async (req, res) => {
   try {
-    // Call the nctl_view_faucet_secret_key command
-    const key = (
-      await axios.post(
-        "http://nctl-container:4000/commands/nctl_view_faucet_secret_key"
-      )
-    ).data.key;
+   const flask_endpoint = `http://nctl-container:4000/print_file`;
+   const key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/faucet/secret_key.pem`;
+   
+   const response_private = await axios.get(flask_endpoint, {
+      params: { path: key_path },
+    });
 
-    // Retrieve the result of the command
-    const data = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_view_faucet_secret_key?key=${key}&wait=true`
-      )
-    ).data;
+    const keyRegex =
+    /-----BEGIN PRIVATE KEY-----\n([\s\S]*?)\n-----END PRIVATE KEY-----/;
+    
+    const private_match = keyRegex.exec(response_private.data.content);
 
-    // Send the faucet secret key as the response
-    res.status(200).send(data.report);
+    const private_key = private_match ? private_match[1] : null;
+
+    res.status(200).send(private_key);
+
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -266,7 +266,6 @@ app.get("/user-keys/:userNumber", async (req, res) => {
 
   const keyRegex =
     /-----BEGIN PRIVATE KEY-----\n([\s\S]*?)\n-----END PRIVATE KEY-----/;
-  //const publicKeyRegex = /-----BEGIN PUBLIC KEY-----\n([\s\S]*?)\n-----END PUBLIC KEY-----/;
 
   try {
     const response_private = await axios.get(flask_endpoint, {
@@ -277,7 +276,6 @@ app.get("/user-keys/:userNumber", async (req, res) => {
     });
 
     const privateMatch = keyRegex.exec(response_private.data.content);
-    //const publicMatch = publicKeyRegex.exec(response_public.data.content);
 
     const final_response = {
       private_key: privateMatch ? privateMatch[1] : null,
@@ -356,6 +354,26 @@ app.get("/get-demo", async (req, res) => {
       return res.status(404).send(deploys.message);
     }
     res.send(deploys);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+app.get("/transfer", async (req, res) => {
+  try {
+    // Call nctl-status command
+    const key = (
+      await axios.post(
+        "http://nctl-container:4000/commands/nctl_transfer"
+      )
+    ).data.key;
+    const data = (
+      await axios.get(
+        `http://nctl-container:4000/commands/nctl_transfer?key=${key}&wait=true`
+      )
+    ).data;
+    res.status(200).send(data.report);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);

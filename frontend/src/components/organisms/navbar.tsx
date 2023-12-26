@@ -12,22 +12,18 @@ import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md";
 import { BsFillGearFill } from "react-icons/bs";
 import { GoSync } from "react-icons/go";
 import { useSearchContext } from "../../context/SearchContext";
-import {
-  CasperServiceByJsonRPC,
-  GetBlockResult,
-  JsonBlock,
-} from "casper-js-sdk";
+import { useNodeContext } from '../../context/NodeContext';
+import { CasperServiceByJsonRPC } from "casper-js-sdk";
 
 const Navbar = () => {
   const { searchValue, setSearchValue } = useSearchContext();
+  const { nodeNumber, setNodeNumber } = useNodeContext();
   const [currentBlock, setCurrentBlock] = useState<number>(0);
-  const [currentNode, setCurrentNode] = useState<number>(1);
-  const totalNodes = 10;
-  const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${currentNode}/rpc`);
+  const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`);
 
   const fetchBlocks = async () => {
     try {
-      const latestBlockInfo = await client.getLatestBlockInfo(); // Replace with actual method
+      const latestBlockInfo = await client.getLatestBlockInfo();
       if (latestBlockInfo && latestBlockInfo.block) {
         setCurrentBlock(latestBlockInfo.block.header.height);
       }
@@ -38,14 +34,15 @@ const Navbar = () => {
 
   useEffect(() => {
     fetchBlocks();
-  }, [currentNode]);
+  }, [nodeNumber]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
-  const handleNodeChange = (nodeNumber: number) => {
-    setCurrentNode(nodeNumber);
+  const handleNodeChange = () => {
+    const newNodeNumber = (nodeNumber % 10) + 1;
+    setNodeNumber(newNodeNumber);
   };
 
   return (
@@ -86,11 +83,11 @@ const Navbar = () => {
             </Box>
             <Box borderRight="1px solid" borderRightColor="pri.dark" p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px", md: "8px 5px" }}>
               <Text fontSize="10px" color="grey.400">CURRENT NODE</Text>
-              <Text fontSize="14px">{currentNode}</Text>
+              <Text fontSize="14px">{nodeNumber}</Text>
             </Box>
           </HStack>
           <HStack gap="0">
-            <Button size="sm" leftIcon={<Icon as={GoSync} size="24px" />} onClick={() => handleNodeChange((currentNode % totalNodes) + 1)}>
+            <Button size="sm" leftIcon={<Icon as={GoSync} size="24px" />} onClick={() => handleNodeChange()}>
               Switch
             </Button>
             <Link to="/settings">

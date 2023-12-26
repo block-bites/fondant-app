@@ -45,59 +45,56 @@ const Navbar = () => {
     setNodeNumber(newNodeNumber);
   };
 
-  return (
-    <Flex w="100%" direction="column">
-      <HStack w="100%" bg="pri.dark" minH="108px" justify="center">
-        <HStack maxW="1440px" w="100%" p="32px" justify="space-between">
-          <Tabs variant="line" color="grey.100" size="lg">
-            <TabList border="none" gap={{ "2xl": "32px", xl: "20px", lg: "10px" }}>
-              <Link to="/accounts">
-                <Tab><Icon as={MdSupervisorAccount} size="24px" />Accounts</Tab>
-              </Link>
-              <Link to="/blocks">
-                <Tab><Icon as={BiGridAlt} size="24px" />Blocks</Tab>
-              </Link>
-              <Link to="/deploys">
-                <Tab><Icon as={MdCloudUpload} size="24px" />Deploys</Tab>
-              </Link>
-              <Link to="/events">
-                <Tab><Icon as={FaBell} size="24px" />Events</Tab>
-              </Link>
-              <Link to="/logs">
-                <Tab><Icon as={FaRegFileCode} size="24px" />Logs</Tab>
-              </Link>
-            </TabList>
-          </Tabs>
-          <InputGroup w="100%" maxW="340px">
-            <InputLeftElement pointerEvents="none"><Icon as={FiSearch} size="24px" /></InputLeftElement>
-            <Input variant="outline" placeholder="Search by block-hash or block-height" size="md" value={searchValue} onChange={handleSearchChange} />
-          </InputGroup>
-        </HStack>
-      </HStack>
-      <HStack minH="64px" w="100%" bg="grey.border" justify="center" color="grey.50">
-        <HStack maxW="1440px" w="100%" p="6px 32px" justify="space-between">
-          <HStack gap="0">
-            <Box borderRight="1px solid" borderRightColor="pri.dark" p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px", md: "8px 5px" }}>
-              <Text fontSize="10px" color="grey.400">CURRENT BLOCK</Text>
-              <Text fontSize="14px">{currentBlock}</Text>
-            </Box>
-            <Box borderRight="1px solid" borderRightColor="pri.dark" p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 12px", md: "8px 5px" }}>
-              <Text fontSize="10px" color="grey.400">CURRENT NODE</Text>
-              <Text fontSize="14px">{nodeNumber}</Text>
-            </Box>
-          </HStack>
-          <HStack gap="0">
-            <Button size="sm" leftIcon={<Icon as={GoSync} size="24px" />} onClick={() => handleNodeChange()}>
-              Switch
-            </Button>
-            <Link to="/settings">
-              <Button size="sm" variant="outline" color="white"><Icon as={BsFillGearFill} size="24px" /></Button>
+return (
+  <Flex w="100%" direction="column">
+    <HStack w="100%" bg="#181D40" minH="108px" justify="center">
+      <HStack maxW="1440px" w="100%" p="32px" justify="center">
+        <Tabs variant="line" color="#ff0012" size="lg">
+          <TabList border="none" gap={{ "2xl": "32px", xl: "20px", lg: "16px", md: "12px" }}>
+            <Link to="/accounts">
+              <Tab><Icon as={MdSupervisorAccount} size="24px" color="white" />Accounts</Tab>
             </Link>
-          </HStack>
+            <Link to="/blocks">
+              <Tab><Icon as={BiGridAlt} size="24px" color="white" />Blocks</Tab>
+            </Link>
+            <Link to="/deploys">
+              <Tab><Icon as={MdCloudUpload} size="24px" color="white" />Deploys</Tab>
+            </Link>
+            <Link to="/events">
+              <Tab><Icon as={FaBell} size="24px" color="white" />Events</Tab>
+            </Link>
+            <Link to="/logs">
+              <Tab><Icon as={FaRegFileCode} size="24px" color="white" />Logs</Tab>
+            </Link>
+          </TabList>
+        </Tabs>
+      </HStack>
+    </HStack>
+    <HStack minH="64px" w="100%" bg="#5C6D70" justify="center" color="#ff0012">
+      <HStack maxW="1440px" w="100%" p="16px 32px" justify="space-between">
+        <HStack gap="16px">
+          <Box borderRight="1px solid" borderColor="#2a3050" p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 16px", md: "8px 12px" }}>
+            <Text fontSize="10px" color="white">CURRENT BLOCK</Text>
+            <Text fontSize="14px" color="white">{currentBlock}</Text>
+          </Box>
+          <Box borderRight="1px solid" borderColor="#2a3050" p={{ "2xl": "8px 24px", xl: "8px 20px", lg: "8px 16px", md: "8px 12px" }}>
+            <Text fontSize="10px" color="white">CURRENT NODE</Text>
+            <Text fontSize="14px" color="white">{nodeNumber}</Text>
+          </Box>
+        </HStack>
+        <HStack gap="16px">
+          <Button size="sm" colorScheme="red" leftIcon={<Icon as={GoSync} size="24px" color="white" />} onClick={() => handleNodeChange()}>
+            Switch
+          </Button>
+          <Link to="/settings">
+            <Button size="sm" variant="outline" colorScheme="white"><Icon as={BsFillGearFill} size="24px" color="white" /></Button>
+          </Link>
         </HStack>
       </HStack>
-    </Flex>
-  );
+    </HStack>
+  </Flex>
+);
+
 };
 
 export default Navbar;

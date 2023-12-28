@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { SearchProvider } from "./context/SearchContext";
+import { NodeProvider } from "./context/NodeContext";
 import { HelmetProvider } from "react-helmet-async";
 
 import { ChakraProvider, HStack, Text } from "@chakra-ui/react";
@@ -51,6 +52,7 @@ export const App = () => {
   }
 
   return (
+    <NodeProvider>
     <HelmetProvider>
       <ChakraProvider theme={fondantTheme}>
         <SearchProvider>
@@ -60,6 +62,7 @@ export const App = () => {
         </SearchProvider>
       </ChakraProvider>
     </HelmetProvider>
+    </NodeProvider>
   );
 };
 

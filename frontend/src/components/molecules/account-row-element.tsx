@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Flex, HStack, Text, VStack, Box } from "@chakra-ui/react";
 import { BiKey } from "react-icons/bi";
 import AccountModal from "./account-modal"; // Assuming this is the modal component
@@ -28,9 +28,13 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
         borderBottom="1px solid"
         borderBottomColor="grey.100"
       >
-        <VStack align="left" w="100%" maxW="500px">
-          <Text fontSize="md">Public Key</Text>
-          <Text fontSize="lg">{publicKey}</Text>
+        <VStack align="left" w="100%">
+          <Text fontSize="md" color="grey.300" fontWeight={500}>
+            Public Key
+          </Text>
+          <Text fontSize="lg" color="grey.800">
+            {publicKey}
+          </Text>
         </VStack>
         <HStack>
           <VStack
@@ -54,7 +58,12 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
         </HStack>
       </Flex>
       {/* Modal will display the private key */}
-      <AccountModal isOpen={isModalOpen} onClose={handleCloseModal} publicKey={publicKey} privateKey={privateKey} />
+      <AccountModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        publicKey={publicKey}
+        privateKey={privateKey}
+      />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchContext } from "../../context/SearchContext";
 import { Helmet } from "react-helmet-async";
 import { Flex, VStack, Text } from "@chakra-ui/react";
@@ -19,7 +19,9 @@ const Accounts = () => {
       let fetchedAccounts: AccountData[] = [];
       for (let i = 1; i <= 10; i++) {
         try {
-          const response = await axios.get(`http://localhost:3001/user-keys/${i}`);
+          const response = await axios.get(
+            `http://localhost:3001/user-keys/${i}`
+          );
           fetchedAccounts.push({
             publicKey: response.data.public_key,
             privateKey: response.data.private_key,
@@ -34,9 +36,14 @@ const Accounts = () => {
     fetchAccountsData();
   }, []);
 
-  const filteredAccounts = accountsData.filter((account) =>
-    account.publicKey.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
-    account.privateKey.toLowerCase().includes(searchValue.toLowerCase().trim())
+  const filteredAccounts = accountsData.filter(
+    (account) =>
+      account.publicKey
+        .toLowerCase()
+        .includes(searchValue.toLowerCase().trim()) ||
+      account.privateKey
+        .toLowerCase()
+        .includes(searchValue.toLowerCase().trim())
   );
 
   return (
@@ -55,7 +62,9 @@ const Accounts = () => {
               />
             ))
           ) : (
-            <Text>No results</Text>
+            <Flex w="100%" justify="center" pt="100px">
+              <Text color="grey.400">No results</Text>
+            </Flex>
           )}
         </VStack>
       </Flex>

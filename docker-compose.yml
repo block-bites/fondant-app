@@ -1,27 +1,26 @@
-version: "2"
+version: "3.8"
 
 services:
   nctl-container:
     build:
       context: ./nctl-container
       dockerfile: Dockerfile
-    networks:
-      - fondant-network
     environment:
       PREDEFINED_ACCOUNTS: "true"
       DEPLOY_DELAY: "5sec"
+    networks:
+      - fondant-network
 
   lean-api:
     build:
       context: ./lean-api
-      dockerfile:
-        Dockerfile
+      dockerfile: Dockerfile
     ports:
-      - "3001:3000" # Expose the lean API on port 3001
+      - "3001:3000" 
     networks:
       - fondant-network
 
-  react-app: 
+  react-app:
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -30,6 +29,12 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    networks:
+      - fondant-network
 
 networks:
   fondant-network:
+    driver: bridge
+
+volumes:
+  app-volume:

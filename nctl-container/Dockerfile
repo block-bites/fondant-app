@@ -1,7 +1,6 @@
-FROM makesoftware/casper-nctl:latest
+FROM --platform=linux/amd64 makesoftware/casper-nctl:v155
 
 RUN sudo pip install flask flask_shell2http
-
 COPY app.py .
 COPY run.sh .
 

@@ -1,6 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
 import "@fontsource-variable/inter";
 import "@fontsource/poppins";
+import "@fontsource-variable/reem-kufi";
 
 export const fondantTheme = extendTheme({
   styles: {
@@ -17,11 +18,13 @@ export const fondantTheme = extendTheme({
   fonts: {
     primary: "Inter Variable",
     secondary: "Poppins",
+    logo: "Reem Kufi Variable",
   },
   colors: {
     pri: {
       orange: "#D23403",
       dark: "#11141D",
+      beige: "#FFF3E4",
     },
     grey: {
       50: "#EEEEF0",

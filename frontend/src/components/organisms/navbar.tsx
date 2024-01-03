@@ -52,12 +52,17 @@ const Navbar = () => {
 
   return (
     <Flex w="100%" direction="column">
-      <HStack w="100%" bg="pri.dark" minH="108px" justify="center">
-        <HStack maxW="1440px" w="100%" p="32px" justify="space-between">
+      <HStack w="100%" bg="pri.dark" justify="center">
+        <HStack maxW="1440px" w="100%" p="12px 32px" justify="space-between">
           <Link to="/accounts">
-            <Image src={Logo} width="52px" />
+            <Flex alignItems="center" gap="8px">
+              <Image src={Logo} width="56px" />
+              <Text fontFamily="logo" fontSize={"3xl"} color={"pri.orange"}>
+                Fondant
+              </Text>
+            </Flex>
           </Link>
-          <Tabs variant="line" color="#ff0012" size="lg">
+          <Tabs variant="line" color="pri.orange" size="lg">
             <TabList
               border="none"
               gap={{ "2xl": "32px", xl: "20px", lg: "16px", md: "12px" }}
@@ -96,14 +101,8 @@ const Navbar = () => {
           </Tabs>
         </HStack>
       </HStack>
-      <HStack
-        minH="64px"
-        w="100%"
-        bg="#FFF3E4"
-        justify="center"
-        color="#ff0012"
-      >
-        <HStack maxW="1440px" w="100%" p="16px 32px" justify="space-between">
+      <HStack minH="56px" w="100%" bg="pri.beige" justify="center">
+        <HStack maxW="1440px" w="100%" p="8px 32px" justify="space-between">
           <HStack>
             <Box
               borderRight="1px solid"

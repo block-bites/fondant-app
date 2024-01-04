@@ -1,31 +1,56 @@
 #! /usr/bin/env python
 
+from flask import Flask, request, jsonify
+import subprocess
 import os
-from flask import Flask,request,jsonify 
-from flask_executor import Executor
-from flask_shell2http import Shell2HTTP
 
-os.environ['NCTL'] = '/home/casper/casper-node/utils/nctl'
-os.environ['NCTL_CASPER_HOME'] = '/home/casper/casper-node'
-os.environ['NCTL_CASPER_NODE_LAUNCHER_HOME'] = '/home/casper/casper-node-launcher'
-os.environ['NCTL_CASPER_CLIENT_HOME'] = '/home/casper/casper-client-rs'
-
-
-
-
-
-
-# Flask application instance
 app = Flask(__name__)
 
-executor = Executor(app)
-shell2http = Shell2HTTP(app=app, executor=executor, base_url_prefix="/commands/")
+BASE_SCRIPT_PATH = "/home/casper/casper-node/utils/nctl/sh"
 
-def callback1(context, future):
-    # Callback function for command1
-    print("Command 1:", context, future.result())
+# This is for short execution scripts. Hardcoded 5 minutes timeout.
+@app.route('/run_script', methods=['POST'])
+def run_script():
+    data = request.json
+    script_name = data.get('name')
+    args = data.get('args', [])
+    
+    if not script_name:
+        return jsonify({"error": "No script name provided"}), 400
+
+    full_path = os.path.join(BASE_SCRIPT_PATH, script_name)
+    command = ['/bin/bash', full_path] + args
+
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True, timeout=300)
+        return jsonify({'status': 'success', 'output': result.stdout})
+    except subprocess.CalledProcessError as e:
+        return jsonify({'status': 'failure', 'output': e.output, 'error': str(e)})
 
 
+@app.route('/print_file', methods=['GET'])
+def print_file():
+    file_path = request.args.get('path')
+
+    if not file_path:
+        return jsonify({"error": "No file path provided"}), 400
+
+    try:
+        with open(file_path, 'r') as file:
+            content_lines = []
+            for _ in range(1000):
+                line = file.readline()
+                if not line:
+                    break
+                content_lines.append(line)
+            content = ''.join(content_lines)
+        return jsonify({"content": content})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+'''
 # Assets
 shell2http.register_command(endpoint="nctl_assets_dump", command_name='bash /home/casper/casper-node/utils/nctl/sh/assets/dump.sh "$@"', callback_fn=callback1, decorators=[])
 shell2http.register_command(endpoint="nctl_assets_ls", command_name='bash /home/casper/casper-node/utils/nctl/sh/assets/list.sh "$@"', callback_fn=callback1, decorators=[])
@@ -162,23 +187,4 @@ shell2http.register_command(endpoint="nctl_view_faucet_secret_key", command_name
 #############
 shell2http.register_command(endpoint="nctl_view_node_ports", command_name='bash /home/casper/casper-node/utils/nctl/sh/views/view_node_ports.sh "$@"', callback_fn=callback1, decorators=[])
 shell2http.register_command(endpoint="view", command_name='ls -a /home/casper/casper-node/utils/nctl/assets/net-1/users/user-1 > cat', callback_fn=callback1, decorators=[])
-
-@app.route('/print_file', methods=['GET'])
-def print_file():
-    file_path = request.args.get('path')
-
-    if not file_path:
-        return jsonify({"error": "No file path provided"}), 400
-
-    try:
-        with open(file_path, 'r') as file:
-            content_lines = []
-            for _ in range(1000):
-                line = file.readline()
-                if not line:
-                    break
-                content_lines.append(line)
-            content = ''.join(content_lines)
-        return jsonify({"content": content})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+'''

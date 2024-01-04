@@ -26,42 +26,29 @@ app.get("/health-check", (req, res) => {
 
 app.post("/nctl-start", async (req, res) => {
   try {
-    const key = (
-      await axios.post("http://nctl-container:4000/commands/nctl_assets_setup")
-    ).data.key;
-    const data = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_assets_setup?key=${key}&wait=true`
-      )
-    ).data;
+    const response1 = await axios.post("http://nctl-container:4000/run_script", {
+      name: "assets/setup.sh",
+      args: []
+    });
 
-    const key2 = (
-      await axios.post("http://nctl-container:4000/commands/nctl_start")
-    ).data.key;
-    const data2 = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_start?key=${key2}&wait=true`
-      )
-    ).data;
+    const response2 = await axios.post("http://nctl-container:4000/run_script", {
+      name: "node/start.sh",
+      args: []
+    });
 
-    const key3 = (
-      await axios.post(
-        "http://nctl-container:4000/commands/nctl_view_node_ports"
-      )
-    ).data.key;
-    const data3 = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_view_node_ports?key=${key3}&wait=true`
-      )
-    ).data;
-    const parsedResponse = parseResponse(data3.report);
+    const response3 = await axios.post("http://nctl-container:4000/run_script", {
+      name: "views/view_node_ports.sh",
+      args: []
+    });
+    const nodePorts = response3.data;
+
+    const parsedResponse = parseResponse(nodePorts.output);
     res.status(200).send(parsedResponse);
 
     cacheAllNodes(parsedResponse);
 
-    //Create proxy Middlewares
     const middlewares = createProxyMiddlewares(parsedResponse);
-    //Add middlewares to the app
+
     for (const middleware of middlewares) {
       app.use(middleware);
     }
@@ -70,6 +57,7 @@ app.post("/nctl-start", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 
 function parseResponse(response) {
   const lines = response.split("\n");
@@ -169,15 +157,11 @@ app.get("/cache/deploys/:nodeNumber", (req, res) => {
 
 app.post("/nctl-status", async (req, res) => {
   try {
-    // Call nctl-status command
-    const key = (
-      await axios.post("http://nctl-container:4000/commands/nctl_status")
-    ).data.key;
-    const data = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_status?key=${key}&wait=true`
-      )
-    ).data;
+    const data = await axios.post("http://nctl-container:4000/run_script", {
+      name: "node/status.sh",
+      args: []
+    }).data;
+
     if (data.report.includes("RUNNING")) {
       res.status(200).send(data.report);
     } else {
@@ -191,17 +175,12 @@ app.post("/nctl-status", async (req, res) => {
 
 app.get("/nctl-view-faucet", async (req, res) => {
   try {
-    // Call nctl-status command
-    const key = (
-      await axios.post(
-        "http://nctl-container:4000/commands/nctl_view_faucet_account"
-      )
-    ).data.key;
-    const data = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_view_faucet_account?key=${key}&wait=true`
-      )
-    ).data;
+    
+    const data = await axios.post("http://nctl-container:4000/run_script", {
+      name: "views/view_faucet_account.sh",
+      args: []
+    }).data;
+
     res.status(200).send(data.report);
   } catch (error) {
     console.error(error);
@@ -237,19 +216,14 @@ app.get("/faucet-private-key", async (req, res) => {
   }
 });
 
-app.get("/nctl-view-user-accounts", async (req, res) => {
+app.get("/nctl-view-user-account/:userNumber", async (req, res) => {
+  const userNumber = req.params.userNumber;
   try {
-    // Call nctl-status command
-    const key = (
-      await axios.post(
-        "http://nctl-container:4000/commands/nctl_view_user_accounts"
-      )
-    ).data.key;
-    const data = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_view_user_accounts?key=${key}&wait=true`
-      )
-    ).data;
+    const data = await axios.post("http://nctl-container:4000/run_script", {
+      name: "views/view_user_account.sh",
+      args: [userNumber]
+    }).data;
+
     res.status(200).send(data.report);
   } catch (error) {
     console.error(error);
@@ -310,70 +284,16 @@ app.get("/logs/:nodeNumber", async (req, res) => {
   }
 });
 
-app.get("/view", async (req, res) => {
-  try {
-    // Call nctl-status command
-    const key = (await axios.post("http://nctl-container:4000/commands/view"))
-      .data.key;
-    const data = (
-      await axios.get(
-        `http://nctl-container:4000/commands/view?key=${key}&wait=true`
-      )
-    ).data;
-    res.status(200).send(data.report);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-});
-
-app.get("/deploy-demo", async (req, res) => {
-  cache.startListening("http://52.35.59.254:9999/events/main");
-  res.status(200).send("Deploy demo started");
-});
-
-app.get("/get-demo-deploys", async (req, res) => {
-  try {
-    const deploys = cache.getDeployEvents(
-      "http://52.35.59.254:9999/events/main"
-    );
-    if (deploys.status === "error") {
-      return res.status(404).send(deploys.message);
-    }
-    res.send(deploys);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-});
-
-app.get("/get-demo", async (req, res) => {
-  try {
-    const deploys = cache.getEvents("http://52.35.59.254:9999/events/main");
-    if (deploys.status === "error") {
-      return res.status(404).send(deploys.message);
-    }
-    res.send(deploys);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-});
 
 app.get("/transfer", async (req, res) => {
   try {
-    // Call nctl-status command
-    const key = (
-      await axios.post(
-        "http://nctl-container:4000/commands/nctl_transfer"
-      )
-    ).data.key;
-    const data = (
-      await axios.get(
-        `http://nctl-container:4000/commands/nctl_transfer?key=${key}&wait=true`
-      )
-    ).data;
+      const response = await axios.post("http://nctl-container:4000/run_script", {
+      name: "contracts-transfers/do_dispatch_native.sh",
+      args: []
+    });
+    const data = response.data;
     res.status(200).send(data.report);
+    
   } catch (error) {
     console.error(error);
     res.sendStatus(500);

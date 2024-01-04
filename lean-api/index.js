@@ -157,10 +157,12 @@ app.get("/cache/deploys/:nodeNumber", (req, res) => {
 
 app.post("/nctl-status", async (req, res) => {
   try {
-    const data = await axios.post("http://nctl-container:4000/run_script", {
+    const response = await axios.post("http://nctl-container:4000/run_script", {
       name: "node/status.sh",
       args: []
-    }).data;
+    });
+
+    const data = response.data;
 
     if (data.report.includes("RUNNING")) {
       res.status(200).send(data.report);
@@ -176,10 +178,12 @@ app.post("/nctl-status", async (req, res) => {
 app.get("/nctl-view-faucet", async (req, res) => {
   try {
     
-    const data = await axios.post("http://nctl-container:4000/run_script", {
+    const response = await axios.post("http://nctl-container:4000/run_script", {
       name: "views/view_faucet_account.sh",
       args: []
-    }).data;
+    });
+
+    const data = response.data;
 
     res.status(200).send(data.report);
   } catch (error) {
@@ -219,10 +223,12 @@ app.get("/faucet-private-key", async (req, res) => {
 app.get("/nctl-view-user-account/:userNumber", async (req, res) => {
   const userNumber = req.params.userNumber;
   try {
-    const data = await axios.post("http://nctl-container:4000/run_script", {
+    const response = await axios.post("http://nctl-container:4000/run_script", {
       name: "views/view_user_account.sh",
       args: [userNumber]
-    }).data;
+    });
+
+    const data = response.data;
 
     res.status(200).send(data.report);
   } catch (error) {
@@ -293,7 +299,7 @@ app.get("/transfer", async (req, res) => {
     });
     const data = response.data;
     res.status(200).send(data.report);
-    
+
   } catch (error) {
     console.error(error);
     res.sendStatus(500);

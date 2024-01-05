@@ -6,9 +6,6 @@ const {
   fixRequestBody,
 } = require("http-proxy-middleware");
 const cors = require("cors");
-
-const EventSource = require("eventsource");
-
 const sseCache = require("./sseCache");
 const app = express();
 app.setMaxListeners(0);
@@ -26,21 +23,13 @@ app.get("/health-check", (req, res) => {
 
 app.post("/nctl-start", async (req, res) => {
   try {
-    const response1 = await axios.post("http://nctl-container:4000/run_script", {
-      name: "assets/setup.sh",
-      args: []
-    });
+    const response1 = await axios.post("http://nctl-container:4000/start");
 
     const response2 = await axios.post("http://nctl-container:4000/run_script", {
-      name: "node/start.sh",
-      args: []
-    });
-
-    const response3 = await axios.post("http://nctl-container:4000/run_script", {
       name: "views/view_node_ports.sh",
       args: []
     });
-    const nodePorts = response3.data;
+    const nodePorts = response2.data;
 
     const parsedResponse = parseResponse(nodePorts.output);
     res.status(200).send(parsedResponse);
@@ -164,8 +153,8 @@ app.post("/nctl-status", async (req, res) => {
 
     const data = response.data;
 
-    if (data.report.includes("RUNNING")) {
-      res.status(200).send(data.report);
+    if (data.output && data.output.includes("RUNNING")) {
+      res.status(200).send(data.output);
     } else {
       res.status(503).send("Service Unavailable");
     }

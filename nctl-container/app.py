@@ -4,6 +4,8 @@ from flask import Flask, request, jsonify
 import subprocess
 import os
 
+
+
 app = Flask(__name__)
 
 BASE_SCRIPT_PATH = "/home/casper/casper-node/utils/nctl/sh"
@@ -47,6 +49,43 @@ def print_file():
         return jsonify({"content": content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/set_toml_file', methods=['POST'])
+def set_toml_file():
+    data = request.json
+    file_path = "/home/confing.toml"
+    content = data.get('content')
+
+    try:
+        with open(file_path, 'w') as file:
+            file.write(content)
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/start', methods=['POST'])
+def start():
+    default_file_path = "/home/chainspec.toml.in"
+    alternate_file_path = "/home/casper/casper-node/resources/local/chainspec.toml.in"
+    file_path = default_file_path if os.path.exists(default_file_path) else alternate_file_path
+    output = []
+
+    try:
+        output.append(subprocess.run(['/bin/bash', '/home/casper/casper-node/utils/nctl/sh/assets/teardown.sh'], capture_output=True, text=True, check=True))
+        output.append(subprocess.run(['/bin/bash', '/home/casper/casper-node/utils/nctl/sh/assets/setup.sh', file_path], capture_output=True, text=True, check=True))
+        output.append(subprocess.run(['/bin/bash', '/home/casper/casper-node/utils/nctl/sh/node/start.sh'], capture_output=True, text=True, check=True))
+        return jsonify({"status": "success"})
+    
+    except subprocess.CalledProcessError as e:
+        print(output)
+        return jsonify({"error": "Subprocess error", "details": str(e)}), 500
+    
+    except Exception as e:
+        print(output)
+        return jsonify({"error": "General error", "details": str(e)}), 500
+
+    
+
 
 
 

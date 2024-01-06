@@ -324,7 +324,7 @@ app.get("/get-default-chainspec", async (req, res) => {
 
 app.post('/set-chainspec', async (req, res) => {
   const chainspecData = req.body; 
-  const flaskApiUrl = 'http://your-flask-api-url/set_toml_file'; 
+  const flaskApiUrl = 'http://nctl-container:4000/set_chainspec'; 
 
   try {
     const response = await axios.post(flaskApiUrl, {
@@ -336,3 +336,23 @@ app.post('/set-chainspec', async (req, res) => {
     res.status(500).send({ status: 'error', message: 'Error setting chainspec data', error: error.message });
   }
 });
+
+app.get("/get-custom-chainspec", async (req, res) => {
+  
+    const flask_endpoint = `http://nctl-container:4000/print_file`;
+    const chainspec_path = `/home/chainspec.toml.in`;
+  
+    try {
+      const response = await axios.get(flask_endpoint, {
+        params: { path: chainspec_path },
+      });
+  
+      chainspec_file = response.data.content;
+  
+      res.status(200).send(chainspec_file);
+  
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(500);
+    }
+  });

@@ -10,7 +10,7 @@ import toml
 app = Flask(__name__)
 
 BASE_SCRIPT_PATH = "/home/casper/casper-node/utils/nctl/sh"
-COSTUM_CHAINSPEC_PATH = "home/chainspec.toml.in"
+CUSTOM_CHAINSPEC_PATH = "home/chainspec.toml.in"
 DEFAULT_CHAINSPEC_PATH = "/home/casper/casper-node/resources/local/chainspec.toml.in"
 
 # This is for short execution scripts. Hardcoded 5 minutes timeout.
@@ -76,8 +76,8 @@ def start():
         return jsonify({"error": "General error", "details": str(e)}), 500
 
     
-@app.route('/set_toml_file', methods=['POST'])
-def set_toml_file():
+@app.route('/set_chainspec', methods=['POST'])
+def set_chainspec():
     content = request.data.decode('utf-8')  
 
     try:
@@ -95,9 +95,9 @@ def set_toml_file():
         return jsonify({"error": str(e)}), 500
 
     try:
-        with open(COSTUM_CHAINSPEC_PATH, 'w') as file:
+        with open(CUSTOM_CHAINSPEC_PATH, 'w') as file:
             toml.dump(incoming_data, file)
-        return jsonify({"status": "success", "file_path": COSTUM_CHAINSPEC_PATH})
+        return jsonify({"status": "success", "file_path": CUSTOM_CHAINSPEC_PATH})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

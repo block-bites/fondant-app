@@ -44,7 +44,7 @@ paths:
         '503':
           description: Service Unavailable
 
-  /nctl-view-faucet:
+  /faucet:
     get:
       summary: View NCTL faucet account
       responses:
@@ -55,7 +55,7 @@ paths:
               schema:
                 type: string
 
-  /nctl-view-faucet-secret-key:
+  /faucet-secret-key:
     get:
       summary: Get faucet secret key
       responses:

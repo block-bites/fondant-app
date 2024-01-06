@@ -22,13 +22,19 @@ app.get("/health-check", (req, res) => {
 });
 
 app.post("/nctl-start", async (req, res) => {
+  
+  cache.clear();
+
   try {
     const response1 = await axios.post("http://nctl-container:4000/start");
+
+    console.log(response1.data)
 
     const response2 = await axios.post("http://nctl-container:4000/run_script", {
       name: "views/view_node_ports.sh",
       args: []
     });
+
     const nodePorts = response2.data;
 
     const parsedResponse = parseResponse(nodePorts.output);
@@ -37,10 +43,11 @@ app.post("/nctl-start", async (req, res) => {
     cacheAllNodes(parsedResponse);
 
     const middlewares = createProxyMiddlewares(parsedResponse);
-
     for (const middleware of middlewares) {
       app.use(middleware);
     }
+
+
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -164,7 +171,7 @@ app.post("/nctl-status", async (req, res) => {
   }
 });
 
-app.get("/nctl-view-faucet", async (req, res) => {
+app.get("/faucet", async (req, res) => {
   try {
     
     const response = await axios.post("http://nctl-container:4000/run_script", {
@@ -280,7 +287,7 @@ app.get("/logs/:nodeNumber", async (req, res) => {
 });
 
 
-app.get("/transfer", async (req, res) => {
+app.post("/transfer", async (req, res) => {
   try {
       const response = await axios.post("http://nctl-container:4000/run_script", {
       name: "contracts-transfers/do_dispatch_native.sh",
@@ -292,5 +299,40 @@ app.get("/transfer", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
+  }
+});
+
+app.get("/get-default-chainspec", async (req, res) => {
+
+  const flask_endpoint = `http://nctl-container:4000/print_file`;
+  const chainspec_path = `/home/casper/casper-node/resources/local/chainspec.toml.in`;
+
+  try {
+    const response = await axios.get(flask_endpoint, {
+      params: { path: chainspec_path },
+    });
+
+    chainspec_file = response.data.content;
+
+    res.status(200).send(chainspec_file);
+
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+});
+
+app.post('/set-chainspec', async (req, res) => {
+  const chainspecData = req.body; 
+  const flaskApiUrl = 'http://your-flask-api-url/set_toml_file'; 
+
+  try {
+    const response = await axios.post(flaskApiUrl, {
+      content: chainspecData 
+    });
+
+    res.send({ status: 'success', message: 'Chainspec data set successfully', flaskApiResponse: response.data });
+  } catch (error) {
+    res.status(500).send({ status: 'error', message: 'Error setting chainspec data', error: error.message });
   }
 });

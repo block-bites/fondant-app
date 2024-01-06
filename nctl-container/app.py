@@ -3,12 +3,15 @@
 from flask import Flask, request, jsonify
 import subprocess
 import os
+import toml
 
 
 
 app = Flask(__name__)
 
 BASE_SCRIPT_PATH = "/home/casper/casper-node/utils/nctl/sh"
+COSTUM_CHAINSPEC_PATH = "home/chainspec.toml.in"
+DEFAULT_CHAINSPEC_PATH = "/home/casper/casper-node/resources/local/chainspec.toml.in"
 
 # This is for short execution scripts. Hardcoded 5 minutes timeout.
 @app.route('/run_script', methods=['POST'])
@@ -50,18 +53,6 @@ def print_file():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-@app.route('/set_toml_file', methods=['POST'])
-def set_toml_file():
-    data = request.json
-    file_path = "/home/confing.toml"
-    content = data.get('content')
-
-    try:
-        with open(file_path, 'w') as file:
-            file.write(content)
-        return jsonify({"status": "success"})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
     
 @app.route('/start', methods=['POST'])
 def start():
@@ -83,6 +74,32 @@ def start():
     except Exception as e:
         print(output)
         return jsonify({"error": "General error", "details": str(e)}), 500
+
+    
+@app.route('/set_toml_file', methods=['POST'])
+def set_toml_file():
+    content = request.data.decode('utf-8')  
+
+    try:
+        with open(DEFAULT_CHAINSPEC_PATH, 'r') as file:
+            template_content = file.read()
+        template_data = toml.loads(template_content)
+        incoming_data = toml.loads(content)
+
+        if incoming_data.keys() != template_data.keys():
+            return jsonify({"error": "Structure of incoming data does not match the template"}), 400
+
+    except toml.TomlDecodeError as e:
+        return jsonify({"error": "Invalid TOML content"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    try:
+        with open(COSTUM_CHAINSPEC_PATH, 'w') as file:
+            toml.dump(incoming_data, file)
+        return jsonify({"status": "success", "file_path": COSTUM_CHAINSPEC_PATH})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
     
 

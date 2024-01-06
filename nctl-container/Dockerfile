@@ -1,6 +1,6 @@
 FROM makesoftware/casper-nctl:v155
 
-RUN sudo pip install flask 
+RUN sudo pip install flask toml 
 
 COPY app.py .
 COPY run.sh .

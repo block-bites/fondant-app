@@ -18,7 +18,9 @@ export default function Blocks() {
   const DISPLAY_PER_PAGE = 10;
 
   useEffect(() => {
-    const client = new CasperServiceByJsonRPC("http://localhost:3001/net/1/rpc");
+    const client = new CasperServiceByJsonRPC(
+      "http://localhost:3001/net/1/rpc"
+    );
 
     const fetchBlocks = async () => {
       setLoading(true);
@@ -44,7 +46,8 @@ export default function Blocks() {
 
         const blockHeights = [];
         for (let i = 0; i < DISPLAY_PER_PAGE; i++) {
-          const height = currentHeight - i - (currentPage - 1) * DISPLAY_PER_PAGE;
+          const height =
+            currentHeight - i - (currentPage - 1) * DISPLAY_PER_PAGE;
           if (height >= 0) {
             blockHeights.push(height);
           }
@@ -61,7 +64,9 @@ export default function Blocks() {
         const blockInfoPromises = blockHeights.map((height) =>
           client.getBlockInfoByHeight(height)
         );
-        const blockInfos: GetBlockResult[] = await Promise.all(blockInfoPromises);
+        const blockInfos: GetBlockResult[] = await Promise.all(
+          blockInfoPromises
+        );
         const newBlocks = blockInfos
           .map((blockInfo) => blockInfo.block)
           .filter((block): block is JsonBlock => block !== null);
@@ -90,15 +95,27 @@ export default function Blocks() {
   };
 
   if (loading) {
-    return <Text>Loading blocks...</Text>;
+    return (
+      <Flex w="100%" justify="center" color="grey.400" pt="100px">
+        <Text color="grey">Loading blocks...</Text>
+      </Flex>
+    );
   }
 
   if (error) {
-    return <Text>Error fetching blocks: {error}</Text>;
+    return (
+      <Flex w="100%" justify="center" color="grey.400" pt="100px">
+        <Text>Error fetching blocks: {error}</Text>
+      </Flex>
+    );
   }
 
   if (blocks.length === 0 && !loading) {
-    return <Text>No blocks available to display.</Text>;
+    return (
+      <Flex w="100%" justify="center" color="grey.400" pt="100px">
+        <Text>No blocks available to display.</Text>
+      </Flex>
+    );
   }
 
   return (

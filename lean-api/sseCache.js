@@ -61,6 +61,13 @@ class sseCache {
       events: deployEvents
     };
   }
+
+  clear() {
+    for (const streamUrl in this.streams) {
+      this.streams[streamUrl].eventSource.close();
+    }
+    this.streams = {};
+  }
   
   
 

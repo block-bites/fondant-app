@@ -1,22 +1,27 @@
-openapi: 3.0.0
-
+openapi: 3.0.3
 info:
-  version: 0.1.0
-  title: NCTL-API 
-  description: NCTL-API is a RESTful API for interacting with NCTL network. 
+  version: 1.0.1
+  title: NCTL-API
+  description: NCTL-API is a RESTful API for interacting with NCTL network.
 
 servers:
-  - url: https://localhost:3000
-
-components:
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
-
-security: []
+  - url: http://localhost:3000
 
 paths:
+  /health-check:
+    get:
+      summary: Check API Health
+      responses:
+        '200':
+          description: API is running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
   /nctl-start:
     post:
       summary: Start NCTL process
@@ -30,6 +35,8 @@ paths:
                 properties:
                   parsedResponse:
                     type: object
+        '500':
+          description: Internal Server Error
 
   /nctl-status:
     post:
@@ -43,8 +50,10 @@ paths:
                 type: string
         '503':
           description: Service Unavailable
+        '500':
+          description: Internal Server Error
 
-  /nctl-view-faucet:
+  /faucet:
     get:
       summary: View NCTL faucet account
       responses:
@@ -54,41 +63,53 @@ paths:
             text/plain:
               schema:
                 type: string
+        '500':
+          description: Internal Server Error
 
-  /nctl-view-faucet-secret-key:
+  /faucet-private-key:
     get:
       summary: Get faucet secret key
       responses:
         '200':
-          description: Returns contentetnts of faucet secret key file 
+          description: Returns content of faucet secret key file
           content:
             text/plain:
               schema:
                 type: string
+        '500':
+          description: Internal Server Error
 
-  /nctl-view-user-accounts:
+  /nctl-view-user-account/{userNumber}:
     get:
       summary: View user accounts
-      responses:
-        '200':
-          description: Returns all registered user accounts
-          content:
-            text/plain:
-              schema:
-                type: string
-
-  /user-keys/{userNumber}:
-    get:
-      summary: Get user private and public keys
       parameters:
-        - name: userNumber
-          in: path
+        - in: path
+          name: userNumber
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: It is used to retrieve private and public keys for a specific user.
+          description: User account details
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Internal Server Error
+
+  /user-keys/{userNumber}:
+    get:
+      summary: Get user private and public keys
+      parameters:
+        - in: path
+          name: userNumber
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Private and public keys of the user
           content:
             application/json:
               schema:
@@ -98,82 +119,117 @@ paths:
                     type: string
                   public_key:
                     type: string
-  /cache/events{nodeNumber}:
+        '500':
+          description: Internal Server Error
+
+  /cache/events/{nodeNumber}:
     get:
-      summary: Endpoint to retrieve events from cache
+      summary: Fetch cached events for a specific node
       parameters:
-        - name: nodeNumber
-          in: path
+        - in: path
+          name: nodeNumber
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
-          description: It is used to retrieve events from cache for a specific node.
+          description: Cached events for the node
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  confirmation:
-                    type: string
-                  cached_events:
-                    type: object
+        '400':
+          description: Invalid node number
+        '404':
+          description: No events found
+        '500':
+          description: Internal Server Error
+
   /cache/deploys/{nodeNumber}:
     get:
       summary: Fetch deploy events for a specific node
-      description: Returns a list of deploy events from the SSE stream of a specified node.
       parameters:
         - in: path
           name: nodeNumber
           required: true
           schema:
             type: integer
-          description: The node number to fetch deploy events for.
       responses:
         '200':
-          description: A list of deploy events.
+          description: Deploy events for the node
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  deploys:
-                    type: array
-                    items:
-                      type: object
-                    example: [{ "deploy_hash": "606569968bda0944b9a707e27b2c3625456cceefb9df5796ff4057a7d4ec35c8", "account": "01cf32f40f750d7edc1785f8b91ee39484ba89453e7e68b26a2845350e2a6b58a0", "timestamp": "2023-12-08T13:12:11.804Z", "ttl": "30m", "dependencies": [], "block_hash": "dcb88ca4038a93e7680074676010993594c694919cc0a0ffab35945084e503a0", "execution_result": { ... } }]
         '400':
-          description: Invalid node number.
+          description: Invalid node number
         '404':
-          description: Deploy events not found for the specified node.
+          description: No deploy events found
         '500':
-          description: Internal server error.
+          description: Internal Server Error
+
   /logs/{nodeNumber}:
     get:
       summary: Fetch logs for a specific node
-      description: Retrieves the log file content for the specified node.
       parameters:
         - in: path
           name: nodeNumber
           required: true
           schema:
             type: integer
-          description: The number of the node for which to fetch logs.
       responses:
         '200':
-          description: The content of the log file.
+          description: Logs of the node
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          description: Internal Server Error
+
+  /transfer:
+    post:
+      summary: Perform a transfer
+      responses:
+        '200':
+          description: Transfer completed
           content:
             text/plain:
               schema:
                 type: string
-                example: "Log content here..."
-        '400':
-          description: Bad request, if the node number is not valid.
-        '404':
-          description: Not found, if no log file is found for the specified node.
         '500':
-          description: Internal server error, for general errors like network issues or server configuration problems.
+          description: Internal Server Error
+
+  /get-default-chainspec:
+    get:
+      summary: Get default chainspec
+      responses:
+        '200':
+          description: Default chainspec data
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Internal Server Error
+
+  /set-chainspec:
+    post:
+      summary: Set chainspec data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Chainspec set successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: Internal Server Error

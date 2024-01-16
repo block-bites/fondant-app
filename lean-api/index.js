@@ -11,7 +11,7 @@ const app = express();
 app.setMaxListeners(0);
 const port = 3000;
 let ssePorts = []; // If anyone has a better idea for this please let me know ~Karol
-
+let startupTime;
 app.use(express.json());
 app.use(cors());
 
@@ -39,6 +39,7 @@ app.post("/nctl-start", async (req, res) => {
 
     const parsedResponse = parseResponse(nodePorts.output);
     res.status(200).send(parsedResponse);
+    startupTime = Date.now();
 
     cacheAllNodes(parsedResponse);
 
@@ -322,20 +323,19 @@ app.get("/get-default-chainspec", async (req, res) => {
   }
 });
 
-app.post('/set-chainspec', async (req, res) => {
+app.post('/set-chainspec-from-json', async (req, res) => {
   const chainspecData = req.body; 
   const flaskApiUrl = 'http://nctl-container:4000/set_chainspec'; 
 
   try {
-    const response = await axios.post(flaskApiUrl, {
-      content: chainspecData 
-    });
+    const response = await axios.post(flaskApiUrl, chainspecData); 
 
     res.send({ status: 'success', message: 'Chainspec data set successfully', flaskApiResponse: response.data });
   } catch (error) {
     res.status(500).send({ status: 'error', message: 'Error setting chainspec data', error: error.message });
   }
 });
+
 
 app.get("/get-custom-chainspec", async (req, res) => {
   
@@ -355,4 +355,24 @@ app.get("/get-custom-chainspec", async (req, res) => {
       console.error(error);
       res.sendStatus(500);
     }
+  });
+
+
+  app.post("/user-view/:userNumber", async (req, res) => {
+    try {
+        const response = await axios.post("http://nctl-container:4000/run_script", {
+        name: "views/view_user_account.sh",
+        args: []
+      });
+      const data = response.data;
+      res.status(200).send(data.report);
+  
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(500);
+    }
+  });
+
+  app.get("/get-start-time", async (req, res) => {
+    res.send({ startupTime });
   });

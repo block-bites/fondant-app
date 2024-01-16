@@ -10,7 +10,7 @@ import toml
 app = Flask(__name__)
 
 BASE_SCRIPT_PATH = "/home/casper/casper-node/utils/nctl/sh"
-CUSTOM_CHAINSPEC_PATH = "home/chainspec.toml.in"
+CUSTOM_CHAINSPEC_PATH = "/home/chainspec.toml.in"
 DEFAULT_CHAINSPEC_PATH = "/home/casper/casper-node/resources/local/chainspec.toml.in"
 
 # This is for short execution scripts. Hardcoded 5 minutes timeout.
@@ -78,15 +78,18 @@ def start():
     
 @app.route('/set_chainspec', methods=['POST'])
 def set_chainspec():
-    content = request.data.decode('utf-8')  
+    content = request.json 
 
     try:
+        toml_content = toml.dumps(content)
+
         with open(DEFAULT_CHAINSPEC_PATH, 'r') as file:
             template_content = file.read()
+        
         template_data = toml.loads(template_content)
-        incoming_data = toml.loads(content)
+        incoming_data = toml.loads(toml_content)
 
-        if incoming_data.keys() != template_data.keys():
+        if set(incoming_data.keys()) != set(template_data.keys()):
             return jsonify({"error": "Structure of incoming data does not match the template"}), 400
 
     except toml.TomlDecodeError as e:
@@ -100,6 +103,7 @@ def set_chainspec():
         return jsonify({"status": "success", "file_path": CUSTOM_CHAINSPEC_PATH})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
     
 

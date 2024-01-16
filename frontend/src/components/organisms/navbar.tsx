@@ -25,7 +25,39 @@ const Navbar = () => {
   const client = new CasperServiceByJsonRPC(
     `http://localhost:3001/net/${nodeNumber}/rpc`
   );
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [uptime, setUptime] = useState<string>("");
 
+  const fetchStartTime = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/get-start-time');
+      const data = await response.json(); 
+      setStartTime(new Date(data.startupTime)); 
+    } catch (error) {
+      console.error("Error fetching start time:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStartTime();
+  }, []);
+
+  useEffect(() => {
+    const updateUptime = () => {
+      if (startTime) {
+        const now = new Date();
+        const elapsed = new Date(now.getTime() - startTime.getTime());
+        const hours = elapsed.getUTCHours();
+        const minutes = elapsed.getUTCMinutes();
+        const seconds = elapsed.getUTCSeconds();
+        setUptime(`${hours}h ${minutes}m ${seconds}s`);
+      }
+    };
+
+    const intervalId = setInterval(updateUptime, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [startTime]);
   const fetchBlocks = async () => {
     try {
       const latestBlockInfo = await client.getLatestBlockInfo();
@@ -40,6 +72,15 @@ const Navbar = () => {
   useEffect(() => {
     fetchBlocks();
   }, [nodeNumber]);
+
+  const handleResetClick = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/nctl-start', { method: 'POST' });
+      console.log('Reset successful:', response.status);
+    } catch (error) {
+      console.error("Error sending reset request:", error);
+    }
+  };
 
   const nodeOptions = [];
   for (let i = 1; i <= 10; i++) {
@@ -133,8 +174,31 @@ const Navbar = () => {
                 {nodeNumber}
               </Text>
             </Box>
+            <Box p={"8px 20px"}>
+              <Text fontSize="10px" color="grey.400" fontWeight="semibold">
+                UPTIME
+              </Text>
+              <Text fontSize="14px" color="black">
+                {uptime}
+              </Text>
+            </Box>
           </HStack>
           <HStack gap="16px">
+            
+            <Box
+              bg="pri.orange"
+              color="white"
+              borderRadius="4px"
+              p="4px 12px"
+              fontWeight="semibold"
+              fontSize="14px"
+              cursor="pointer"
+              onClick={handleResetClick}
+            >
+              Reset
+            </Box>
+
+
             <Select
               size="sm"
               onChange={(e) => setNodeNumber(Number(e.target.value))}

@@ -1,23 +1,23 @@
 version: "3.8"
 
 services:
-  nctl-container:
-    image: blockbites/nctl-container
+  fondant-nctl-container:
+    image: blockbites/fondant-nctl-container
     environment:
       PREDEFINED_ACCOUNTS: "true"
       DEPLOY_DELAY: "5sec"
     networks:
       - fondant-network
 
-  lean-api:
-    image: blockbites/lean-api
+  fondant-lean-api:
+    image: blockbites/fondant-lean-api
     ports:
       - "3001:3000" 
     networks:
       - fondant-network
 
-  react-app:
-    image: blockbites/react-app
+  fondant-frontend:
+    image: blockbites/fondant-frontend
     ports:
       - "3000:3000"
     volumes:

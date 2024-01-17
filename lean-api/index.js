@@ -26,11 +26,11 @@ app.post("/nctl-start", async (req, res) => {
   cache.clear();
 
   try {
-    const response1 = await axios.post("http://nctl-container:4000/start");
+    const response1 = await axios.post("http://fondant-nctl-container:4000/start");
 
     console.log(response1.data)
 
-    const response2 = await axios.post("http://nctl-container:4000/run_script", {
+    const response2 = await axios.post("http://fondant-nctl-container:4000/run_script", {
       name: "views/view_node_ports.sh",
       args: []
     });
@@ -96,7 +96,7 @@ function createProxyMiddlewares(response) {
       }
 
       const middleware = createProxyMiddleware(pathPrefix, {
-        target: `http://nctl-container:${port}/`,
+        target: `http://fondant-nctl-container:${port}/`,
         changeOrigin: true,
         pathRewrite,
         onProxyReq: fixRequestBody,
@@ -113,7 +113,7 @@ function cacheAllNodes(parsedResponse) {
     const ports = parsedResponse[node];
     const port = ports["SSE"];
     ssePorts.push(port);
-    const streamUrl = `http://nctl-container:${port}/events/main`;
+    const streamUrl = `http://fondant-nctl-container:${port}/events/main`;
     cache.startListening(streamUrl);
   }
 }
@@ -124,7 +124,7 @@ app.get("/cache/events/:nodeNumber", (req, res) => {
     return res.status(400).send("Invalid node number");
   }
 
-  const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
+  const streamUrl = `http://fondant-nctl-container:${ssePorts[number]}/events/main`;
   console.log(`Fetching events from: ${streamUrl}`);
 
   const events = cache.getEvents(streamUrl);
@@ -141,7 +141,7 @@ app.get("/cache/deploys/:nodeNumber", (req, res) => {
     return res.status(400).send("Invalid node number");
   }
 
-  const streamUrl = `http://nctl-container:${ssePorts[number]}/events/main`;
+  const streamUrl = `http://fondant-nctl-container:${ssePorts[number]}/events/main`;
   console.log(`Fetching deploy events from: ${streamUrl}`);
 
   const deploys = cache.getDeployEvents(streamUrl);
@@ -154,7 +154,7 @@ app.get("/cache/deploys/:nodeNumber", (req, res) => {
 
 app.post("/nctl-status", async (req, res) => {
   try {
-    const response = await axios.post("http://nctl-container:4000/run_script", {
+    const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
       name: "node/status.sh",
       args: []
     });
@@ -175,7 +175,7 @@ app.post("/nctl-status", async (req, res) => {
 app.get("/faucet", async (req, res) => {
   try {
     
-    const response = await axios.post("http://nctl-container:4000/run_script", {
+    const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
       name: "views/view_faucet_account.sh",
       args: []
     });
@@ -195,7 +195,7 @@ app.listen(port, () => {
 
 app.get("/faucet-private-key", async (req, res) => {
   try {
-   const flask_endpoint = `http://nctl-container:4000/print_file`;
+   const flask_endpoint = `http://fondant-nctl-container:4000/print_file`;
    const key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/faucet/secret_key.pem`;
    
    const response_private = await axios.get(flask_endpoint, {
@@ -220,7 +220,7 @@ app.get("/faucet-private-key", async (req, res) => {
 app.get("/nctl-view-user-account/:userNumber", async (req, res) => {
   const userNumber = req.params.userNumber;
   try {
-    const response = await axios.post("http://nctl-container:4000/run_script", {
+    const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
       name: "views/view_user_account.sh",
       args: [userNumber]
     });
@@ -237,7 +237,7 @@ app.get("/nctl-view-user-account/:userNumber", async (req, res) => {
 app.get("/user-keys/:userNumber", async (req, res) => {
   const userNumber = req.params.userNumber;
 
-  const flask_endpoint = `http://nctl-container:4000/print_file`;
+  const flask_endpoint = `http://fondant-nctl-container:4000/print_file`;
   const private_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/secret_key.pem`;
   const public_key_path = `/home/casper/casper-node/utils/nctl/assets/net-1/users/user-${userNumber}/public_key_hex`;
 
@@ -267,7 +267,7 @@ app.get("/user-keys/:userNumber", async (req, res) => {
 
 app.get("/logs/:nodeNumber", async (req, res) => {
   const nodeNumber = req.params.nodeNumber;
-  const flask_endpoint = `http://nctl-container:4000/print_file`;
+  const flask_endpoint = `http://fondant-nctl-container:4000/print_file`;
   const log_path = `/home/casper/casper-node/utils/nctl/assets/net-1/nodes/node-${nodeNumber}/logs/stdout.log`;
 
   try {
@@ -290,7 +290,7 @@ app.get("/logs/:nodeNumber", async (req, res) => {
 
 app.post("/transfer", async (req, res) => {
   try {
-      const response = await axios.post("http://nctl-container:4000/run_script", {
+      const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
       name: "contracts-transfers/do_dispatch_native.sh",
       args: []
     });
@@ -305,7 +305,7 @@ app.post("/transfer", async (req, res) => {
 
 app.get("/get-default-chainspec", async (req, res) => {
 
-  const flask_endpoint = `http://nctl-container:4000/print_file`;
+  const flask_endpoint = `http://fondant-nctl-container:4000/print_file`;
   const chainspec_path = `/home/casper/casper-node/resources/local/chainspec.toml.in`;
 
   try {
@@ -325,7 +325,7 @@ app.get("/get-default-chainspec", async (req, res) => {
 
 app.post('/set-chainspec-from-json', async (req, res) => {
   const chainspecData = req.body; 
-  const flaskApiUrl = 'http://nctl-container:4000/set_chainspec'; 
+  const flaskApiUrl = 'http://fondant-nctl-container:4000/set_chainspec'; 
 
   try {
     const response = await axios.post(flaskApiUrl, chainspecData); 
@@ -339,7 +339,7 @@ app.post('/set-chainspec-from-json', async (req, res) => {
 
 app.get("/get-custom-chainspec", async (req, res) => {
   
-    const flask_endpoint = `http://nctl-container:4000/print_file`;
+    const flask_endpoint = `http://fondant-nctl-container:4000/print_file`;
     const chainspec_path = `/home/chainspec.toml.in`;
   
     try {
@@ -360,7 +360,7 @@ app.get("/get-custom-chainspec", async (req, res) => {
 
   app.post("/user-view/:userNumber", async (req, res) => {
     try {
-        const response = await axios.post("http://nctl-container:4000/run_script", {
+        const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
         name: "views/view_user_account.sh",
         args: []
       });

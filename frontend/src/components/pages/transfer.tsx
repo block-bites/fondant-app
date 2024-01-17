@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+/*import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Flex, VStack, Box, Text, Input, Button } from '@chakra-ui/react';
 import { CasperClient, CLPublicKey, DeployUtil, Keys } from 'casper-js-sdk';
@@ -87,3 +87,4 @@ Send Transfer
 </>
 );
 };
+*/

@@ -11,7 +11,7 @@ You will need **docker** installed and running on your machine for this applicat
 ## Running the Application:
 
 Paste this command into your terminal
-    curl -sL https://raw.githubusercontent.com/block-bites/fondant-app/master/setup/docker-compose.yml | docker-compose -f - up
+    ```curl -sL https://raw.githubusercontent.com/block-bites/fondant-app/master/setup/docker-compose.yml | docker-compose -f - up```
 
 Or:
 

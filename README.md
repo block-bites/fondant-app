@@ -10,9 +10,15 @@ You will need **docker** installed and running on your machine for this applicat
 
 ## Running the Application:
 
-1. **Script Selection:** Choose the appropriate script for your operating system (Windows or Linux) and execute it.
-2. **Initialization** Feedback: Monitor the initial output from nctl (Note: This feedback mechanism will be updated in future releases).
-3. **Launch:** Once the setup is complete, your Fondant app is ready for use!
+Paste this command into your terminal
+    curl -sL https://raw.githubusercontent.com/block-bites/fondant-app/master/setup/docker-compose.yml | docker-compose -f - up
+
+Or:
+
+1. **Clone the repo**.
+2. **Script Selection:** Choose the appropriate script for your operating system (Windows or Linux) and execute it.
+3. **Initialization** Feedback: Monitor the initial output from nctl (Note: This feedback mechanism will be updated in future releases).
+4. **Launch:** Once the setup is complete, your Fondant app is ready for use!
 
 ## Frontend Features
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import { Box, Text, Flex, Button } from "@chakra-ui/react";
+import { Box, Text, Flex, Button, Select, VStack, Heading } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
 import formatJson from "../atoms/format-json";
@@ -9,9 +9,12 @@ interface LogEntry {
 }
 
 const LogsPerPage = 10;
+const LogLevels = ["All", "DEBUG", "INFO", "WARN", "ERROR"]; 
 
 export default function Logs() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [filteredLogs, setFilteredLogs] = useState<LogEntry[]>([]);
+  const [currentLevel, setCurrentLevel] = useState<string>("All");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [expandedLogIndex, setExpandedLogIndex] = useState<number | null>(null);
   const { nodeNumber } = useNodeContext();
@@ -23,13 +26,26 @@ export default function Logs() {
           `http://localhost:3001/logs/${nodeNumber}`
         );
         setLogs(response.data);
+        filterLogs(response.data, currentLevel);
       } catch (error) {
         console.error("Error fetching logs:", error);
       }
     };
 
     fetchLogs();
-  }, [nodeNumber]);
+  }, [nodeNumber, currentLevel]);
+
+
+  const filterLogs = (logs: LogEntry[], level: string) => {
+    const filtered = level === "All" ? logs : logs.filter((log) => log.level === level);
+    setFilteredLogs(filtered);
+  };
+
+  const handleLevelChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setCurrentLevel(event.target.value);
+    filterLogs(logs, event.target.value);
+  };
+
 
   const handlePrevPage = () => {
     setCurrentPage((current) => Math.max(current - 1, 1));
@@ -45,13 +61,23 @@ export default function Logs() {
     setExpandedLogIndex(expandedLogIndex === index ? null : index);
   };
 
+  
   const startIndex = (currentPage - 1) * LogsPerPage;
-  const selectedLogs = logs.slice(startIndex, startIndex + LogsPerPage);
+  const selectedLogs = filteredLogs.slice(startIndex, startIndex + LogsPerPage);
+
 
   return (
-    <Flex width="100%" justify={"center"}>
-      <Flex direction="column" width="100%" maxW={1440}>
-        <Box overflowY="auto">
+    <Flex width="100%" justify="center" fontFamily="monospace">
+      <VStack spacing={4} width="100%" maxW={1440} p={5}>
+        <Select onChange={handleLevelChange} value={currentLevel} w="200px" mb={3}>
+          {LogLevels.map((level) => (
+            <option key={level} value={level}>
+              {level}
+            </option>
+          ))}
+        </Select>
+
+        <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
           {selectedLogs.map((log, index) => (
             <Flex
               key={index}
@@ -62,13 +88,7 @@ export default function Logs() {
               cursor="pointer"
             >
               <Flex alignItems="center">
-                <Text
-                  transform={
-                    expandedLogIndex === startIndex + index
-                      ? "rotate(90deg)"
-                      : "rotate(0deg)"
-                  }
-                >
+                <Text transform={expandedLogIndex === startIndex + index ? "rotate(90deg)" : "rotate(0deg)"}>
                   ▶
                 </Text>
                 <Box ml={2} overflowX="auto">
@@ -80,7 +100,8 @@ export default function Logs() {
             </Flex>
           ))}
         </Box>
-        <Flex justifyContent="space-between" mt="10px">
+
+        <Flex justifyContent="space-between" mt="10px" w="100%">
           <Button onClick={handlePrevPage} disabled={currentPage === 1}>
             Previous
           </Button>
@@ -92,7 +113,7 @@ export default function Logs() {
             Next
           </Button>
         </Flex>
-      </Flex>
+      </VStack>
     </Flex>
   );
 }

@@ -70,8 +70,14 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+  fetchBlocks();
+
+  const intervalId = setInterval(() => {
     fetchBlocks();
-  }, [nodeNumber]);
+  }, 10000); // 10 seconds interval
+
+  return () => clearInterval(intervalId);
+}, [nodeNumber]);
 
   const handleResetClick = async () => {
     try {
@@ -155,23 +161,6 @@ const Navbar = () => {
               </Text>
               <Text fontSize="14px" color="black">
                 {currentBlock}
-              </Text>
-            </Box>
-            <Box
-              borderRight="1px solid"
-              borderColor="#2a3050"
-              p={{
-                "2xl": "8px 24px",
-                xl: "8px 20px",
-                lg: "8px 16px",
-                md: "8px 12px",
-              }}
-            >
-              <Text fontSize="10px" color="grey.400" fontWeight="semibold">
-                CURRENT NODE
-              </Text>
-              <Text fontSize="14px" color="black">
-                {nodeNumber}
               </Text>
             </Box>
             <Box p={"8px 20px"}>

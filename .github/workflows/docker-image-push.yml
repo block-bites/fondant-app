@@ -1,0 +1,39 @@
+name: Docker Image Push
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Out Code
+      uses: actions/checkout@v3
+      
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push fondant-nctl-container Image
+      uses: docker/build-push-action@v3
+      with:
+        context: ./nctl-container
+        push: true
+        tags: blockbites/fondant-nctl-container:latest
+
+    - name: Build and Push fondant-lean-api Image
+      uses: docker/build-push-action@v3
+      with:
+        context: ./lean-api
+        push: true
+        tags: blockbites/fondant-lean-api:latest
+
+    - name: Build and Push fondant-frontend Image
+      uses: docker/build-push-action@v3
+      with:
+        context: ./frontend
+        push: true
+        tags: blockbites/fondant-frontend:latest

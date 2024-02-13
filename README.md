@@ -10,8 +10,10 @@ You will need **docker** installed and running on your machine for this applicat
 
 ## Running the Application:
 
-Paste this command into your terminal
+Paste this command into your terminal 
     ```curl -sL https://raw.githubusercontent.com/block-bites/fondant-app/master/setup/docker-compose.yml | docker-compose -f - up```
+
+In case of a docker-compose error try ```sudo docker-compose -f - up``` instead
 
 Or:
 

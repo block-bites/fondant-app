@@ -27,6 +27,7 @@ const Navbar = () => {
   );
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [uptime, setUptime] = useState<string>("");
+  const [isSystemRunning, setIsSystemRunning] = useState<boolean>(true); // Change this later to get the system status from the backend
 
   const fetchStartTime = async () => {
     try {
@@ -41,6 +42,30 @@ const Navbar = () => {
   useEffect(() => {
     fetchStartTime();
   }, []);
+
+  const handleStart = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/start', { method: 'POST' });
+      if (response.ok) {
+        setIsSystemRunning(true);
+        console.log('System started successfully');
+      }
+    } catch (error) {
+      console.error("Error starting the system:", error);
+    }
+  };
+
+  const handleStop = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/stop', { method: 'POST' });
+      if (response.ok) {
+        setIsSystemRunning(false);
+        console.log('System stopped successfully');
+      }
+    } catch (error) {
+      console.error("Error stopping the system:", error);
+    }
+  };
 
   useEffect(() => {
     const updateUptime = () => {
@@ -173,6 +198,34 @@ const Navbar = () => {
             </Box>
           </HStack>
           <HStack gap="16px">
+            {/* Conditionally render Start/Stop buttons based on isSystemRunning */}
+            {!isSystemRunning ? (
+              <Box
+                bg="green.500"
+                color="white"
+                borderRadius="4px"
+                p="4px 12px"
+                fontWeight="semibold"
+                fontSize="14px"
+                cursor="pointer"
+                onClick={handleStart}
+              >
+                Start
+              </Box>
+            ) : (
+              <Box
+                bg="red.500"
+                color="white"
+                borderRadius="4px"
+                p="4px 12px"
+                fontWeight="semibold"
+                fontSize="14px"
+                cursor="pointer"
+                onClick={handleStop}
+              >
+                Stop
+              </Box>
+            )}
             
             <Box
               bg="pri.orange"

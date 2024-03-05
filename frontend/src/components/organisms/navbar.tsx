@@ -22,26 +22,44 @@ import Logo from "../../assets/logo.svg";
 const Navbar = () => {
   const { nodeNumber, setNodeNumber } = useNodeContext();
   const [currentBlock, setCurrentBlock] = useState<number>(0);
-  const client = new CasperServiceByJsonRPC(
-    `http://localhost:3001/net/${nodeNumber}/rpc`
-  );
+  const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [uptime, setUptime] = useState<string>("");
-  const [isSystemRunning, setIsSystemRunning] = useState<boolean>(true); // Change this later to get the system status from the backend
-
-  const fetchStartTime = async () => {
-    try {
-      const response = await fetch('http://localhost:3001/get-start-time');
-      const data = await response.json(); 
-      setStartTime(new Date(data.startupTime)); 
-    } catch (error) {
-      console.error("Error fetching start time:", error);
-    }
-  };
+  const [isSystemRunning, setIsSystemRunning] = useState<boolean>(JSON.parse(localStorage.getItem('isSystemRunning') || 'true'));
 
   useEffect(() => {
     fetchStartTime();
   }, []);
+
+  useEffect(() => {
+    fetchBlocks();
+    const intervalId = setInterval(() => {
+      fetchBlocks();
+    }, 10000); // 10 seconds interval
+    return () => clearInterval(intervalId);
+  }, [nodeNumber]);
+
+  useEffect(() => {
+    fetchStatus();
+    const intervalId = setInterval(() => {
+      fetchStatus();
+    }, 5000); // 5 seconds interval
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('isSystemRunning', JSON.stringify(isSystemRunning));
+  }, [isSystemRunning]);
+
+  const fetchStartTime = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/get-start-time');
+      const data = await response.json();
+      setStartTime(new Date(data.startupTime));
+    } catch (error) {
+      console.error("Error fetching start time:", error);
+    }
+  };
 
   const handleStart = async () => {
     try {
@@ -67,22 +85,18 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    const updateUptime = () => {
-      if (startTime) {
-        const now = new Date();
-        const elapsed = new Date(now.getTime() - startTime.getTime());
-        const hours = elapsed.getUTCHours();
-        const minutes = elapsed.getUTCMinutes();
-        const seconds = elapsed.getUTCSeconds();
-        setUptime(`${hours}h ${minutes}m ${seconds}s`);
+  const fetchStatus = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/status');
+      if (response.ok) {
+        setIsSystemRunning(true);
       }
-    };
+    } catch (error) {
+      setIsSystemRunning(false);
+      console.error("Error fetching system status:", error);
+    }
+  };
 
-    const intervalId = setInterval(updateUptime, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [startTime]);
   const fetchBlocks = async () => {
     try {
       const latestBlockInfo = await client.getLatestBlockInfo();
@@ -95,16 +109,22 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-  fetchBlocks();
+    const updateUptime = () => {
+      if (startTime) {
+        const now = new Date();
+        const elapsed = new Date(now.getTime() - startTime.getTime());
+        const hours = elapsed.getUTCHours();
+        const minutes = elapsed.getUTCMinutes();
+        const seconds = elapsed.getUTCSeconds();
+        setUptime(`${hours}h ${minutes}m ${seconds}s`);
+      }
+    };
+    const intervalId = setInterval(updateUptime, 1000);
+    return () => clearInterval(intervalId);
+  }, [startTime]);
 
-  const intervalId = setInterval(() => {
-    fetchBlocks();
-  }, 10000); // 10 seconds interval
 
-  return () => clearInterval(intervalId);
-}, [nodeNumber]);
-
-  const handleResetClick = async () => {
+  const handleReset = async () => {
     try {
       const response = await fetch('http://localhost:3001/nctl-start', { method: 'POST' });
       console.log('Reset successful:', response.status);
@@ -235,7 +255,7 @@ const Navbar = () => {
               fontWeight="semibold"
               fontSize="14px"
               cursor="pointer"
-              onClick={handleResetClick}
+              onClick={handleReset}
             >
               Reset
             </Box>

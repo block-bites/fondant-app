@@ -1,4 +1,4 @@
-version: "3.8"
+version: "2.1"
 
 services:
   fondant-nctl-container:
@@ -23,7 +23,7 @@ services:
   fondant-frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     networks:

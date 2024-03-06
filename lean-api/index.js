@@ -376,3 +376,53 @@ app.get("/get-custom-chainspec", async (req, res) => {
   app.get("/get-start-time", async (req, res) => {
     res.send({ startupTime });
   });
+  
+  app.post("/stop", async (req, res) => {
+    try {
+        const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
+        name: "node/stop.sh",
+        args: []
+      });
+      const data = response.data;
+      res.status(200).send(data.report);
+  
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(500);
+    }
+  });
+  
+app.post("/start", async (req, res) => {
+    try {
+        const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
+        name: "node/start.sh",
+        args: []
+      });
+      const data = response.data;
+      res.status(200).send(data.report);
+  
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(500);
+    }
+  });
+
+  app.get("/get-nctl-status", async (req, res) => {
+    try {
+      const response = await axios.post("http://fondant-nctl-container:4000/run_script", {
+        name: "node/status.sh",
+        args: []
+      });
+  
+      const data = response.data;
+  
+      if (data.output && data.output.includes("RUNNING")) {
+        res.status(200).send(data.output);
+      } else {
+        res.status(503).send("Service Unavailable");
+      }
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(500);
+    }
+  });

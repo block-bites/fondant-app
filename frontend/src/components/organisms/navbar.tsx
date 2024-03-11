@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, Location } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -22,10 +23,20 @@ import Logo from "../../assets/logo.svg";
 const Navbar = () => {
   const { nodeNumber, setNodeNumber } = useNodeContext();
   const [currentBlock, setCurrentBlock] = useState<number>(0);
-  const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`);
+  const client = new CasperServiceByJsonRPC(
+    `http://localhost:3001/net/${nodeNumber}/rpc`
+  );
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [uptime, setUptime] = useState<string>("");
-  const [isSystemRunning, setIsSystemRunning] = useState<boolean>(JSON.parse(localStorage.getItem('isSystemRunning') || 'true'));
+  const [isSystemRunning, setIsSystemRunning] = useState<boolean>(
+    JSON.parse(localStorage.getItem("isSystemRunning") || "true")
+  );
+  const location: Location = useLocation();
+  const [activePath, setActivePath] = useState<string>(location.pathname);
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location]);
 
   useEffect(() => {
     fetchStartTime();
@@ -48,12 +59,12 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('isSystemRunning', JSON.stringify(isSystemRunning));
+    localStorage.setItem("isSystemRunning", JSON.stringify(isSystemRunning));
   }, [isSystemRunning]);
 
   const fetchStartTime = async () => {
     try {
-      const response = await fetch('http://localhost:3001/get-start-time');
+      const response = await fetch("http://localhost:3001/get-start-time");
       const data = await response.json();
       setStartTime(new Date(data.startupTime));
     } catch (error) {
@@ -63,10 +74,12 @@ const Navbar = () => {
 
   const handleStart = async () => {
     try {
-      const response = await fetch('http://localhost:3001/start', { method: 'POST' });
+      const response = await fetch("http://localhost:3001/start", {
+        method: "POST",
+      });
       if (response.ok) {
         setIsSystemRunning(true);
-        console.log('System started successfully');
+        console.log("System started successfully");
       }
     } catch (error) {
       console.error("Error starting the system:", error);
@@ -75,10 +88,12 @@ const Navbar = () => {
 
   const handleStop = async () => {
     try {
-      const response = await fetch('http://localhost:3001/stop', { method: 'POST' });
+      const response = await fetch("http://localhost:3001/stop", {
+        method: "POST",
+      });
       if (response.ok) {
         setIsSystemRunning(false);
-        console.log('System stopped successfully');
+        console.log("System stopped successfully");
       }
     } catch (error) {
       console.error("Error stopping the system:", error);
@@ -87,7 +102,7 @@ const Navbar = () => {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch('http://localhost:3001/status');
+      const response = await fetch("http://localhost:3001/status");
       if (response.ok) {
         setIsSystemRunning(true);
       }
@@ -123,11 +138,12 @@ const Navbar = () => {
     return () => clearInterval(intervalId);
   }, [startTime]);
 
-
   const handleReset = async () => {
     try {
-      const response = await fetch('http://localhost:3001/nctl-start', { method: 'POST' });
-      console.log('Reset successful:', response.status);
+      const response = await fetch("http://localhost:3001/nctl-start", {
+        method: "POST",
+      });
+      console.log("Reset successful:", response.status);
     } catch (error) {
       console.error("Error sending reset request:", error);
     }
@@ -160,31 +176,55 @@ const Navbar = () => {
               gap={{ "2xl": "32px", xl: "20px", lg: "16px", md: "12px" }}
             >
               <Link to="/accounts">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/accounts" ? "pri.orange" : "grey.100"}
+                  borderBottom={
+                    activePath === "/accounts" ? "2px solid" : "none"
+                  }
+                >
                   <Icon as={MdSupervisorAccount} size="24px" />
                   Accounts
                 </Tab>
               </Link>
               <Link to="/blocks">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/blocks" ? "pri.orange" : "grey.100"}
+                  borderBottom={activePath === "/blocks" ? "2px solid" : "none"}
+                >
                   <Icon as={BiGridAlt} size="24px" />
                   Blocks
                 </Tab>
               </Link>
               <Link to="/deploys">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/deploys" ? "pri.orange" : "grey.100"}
+                  borderBottom={
+                    activePath === "/deploys" ? "2px solid" : "none"
+                  }
+                >
                   <Icon as={MdCloudUpload} size="24px" />
                   Deploys
                 </Tab>
               </Link>
               <Link to="/events">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/events" ? "pri.orange" : "grey.100"}
+                  borderBottom={activePath === "/events" ? "2px solid" : "none"}
+                >
                   <Icon as={FaBell} size="24px" />
                   Events
                 </Tab>
               </Link>
               <Link to="/logs">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/logs" ? "pri.orange" : "grey.100"}
+                  borderBottom={activePath === "/logs" ? "2px solid" : "none"}
+                >
                   <Icon as={FaRegFileCode} size="24px" />
                   Logs
                 </Tab>
@@ -246,7 +286,7 @@ const Navbar = () => {
                 Stop
               </Box>
             )}
-            
+
             <Box
               bg="pri.orange"
               color="white"
@@ -259,7 +299,6 @@ const Navbar = () => {
             >
               Reset
             </Box>
-
 
             <Select
               size="sm"

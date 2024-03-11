@@ -43,12 +43,12 @@ export const fondantTheme = extendTheme({
           tab: {
             color: "grey.100",
             gap: "8px",
-            _selected: {
-              color: "pri.orange",
-            },
-            _active: {
-              bg: "pri.dark",
-            },
+            // _selected: { // TODO: these settings are in conflict with navbar
+            //   color: "pri.orange",
+            // },
+            // _active: {
+            //   bg: "pri.dark",
+            // },
           },
         },
       },

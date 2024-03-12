@@ -36,11 +36,10 @@ export default function BlockRowElement({
     >
       <VStack
         background="#00800033"
-        p="8px 22px"
+        p="8px 32px"
         h="100%"
         justify="center"
         align="center"
-        minWidth={"9vw"}
       >
         <Text
           fontSize={fontSize}

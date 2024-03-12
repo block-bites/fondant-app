@@ -63,6 +63,7 @@ const Accounts: React.FC<AccountsProps> = ({ isLaptop }) => {
                 key={index}
                 publicKey={account.publicKey}
                 privateKey={account.privateKey}
+                isLaptop={isLaptop}
               />
             ))
           ) : (

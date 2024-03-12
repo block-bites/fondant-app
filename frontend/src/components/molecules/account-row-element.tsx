@@ -6,9 +6,14 @@ import AccountModal from "./account-modal"; // Assuming this is the modal compon
 interface IAccountRowElemProps {
   publicKey: string;
   privateKey: string;
+  isLaptop: boolean;
 }
 
-const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
+const AccountRowElement = ({
+  publicKey,
+  privateKey,
+  isLaptop,
+}: IAccountRowElemProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleOpenModal = () => {
@@ -32,7 +37,7 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
           <Text fontSize="md" color="grey.300" fontWeight={500}>
             Public Key
           </Text>
-          <Text fontSize="lg" color="grey.800">
+          <Text fontSize={isLaptop ? "md" : "lg"} color="grey.800">
             {publicKey}
           </Text>
         </VStack>

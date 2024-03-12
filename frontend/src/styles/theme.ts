@@ -43,7 +43,7 @@ export const fondantTheme = extendTheme({
           tab: {
             color: "grey.100",
             gap: "8px",
-            // _selected: { // TODO: these settings are in conflict with navbar
+            // _selected: { // TODO: these settings are in conflict with navbar, need to decide, leave it or what :)
             //   color: "pri.orange",
             // },
             // _active: {

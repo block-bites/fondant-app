@@ -23,8 +23,8 @@ import Deploys from "./components/pages/deploys";
 import Start from "./components/pages/start";
 
 export const App = () => {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [screenWidth, setScreenWidth] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(0);
 
   // Set screen width state
   useEffect(() => {
@@ -43,25 +43,25 @@ export const App = () => {
     );
   }, [screenWidth]);
 
-  if (isMobile) {
-    return (
-      <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
-        <Text align="center">Used device and resolution not supported</Text>
-      </HStack>
-    );
-  }
+  // if (isMobile) {
+  //   return (
+  //     <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
+  //       <Text align="center">Used device and resolution not supported</Text>
+  //     </HStack>
+  //   );
+  // }
 
   return (
     <NodeProvider>
-    <HelmetProvider>
-      <ChakraProvider theme={fondantTheme}>
-        <SearchProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </SearchProvider>
-      </ChakraProvider>
-    </HelmetProvider>
+      <HelmetProvider>
+        <ChakraProvider theme={fondantTheme}>
+          <SearchProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </SearchProvider>
+        </ChakraProvider>
+      </HelmetProvider>
     </NodeProvider>
   );
 };
@@ -72,13 +72,28 @@ function AppContent() {
   const isSettingsPage = location.pathname === "/settings";
   const isStartPage = location.pathname === "/";
 
+  const [screenWidth, setScreenWidth] = useState(0);
+  const [isLaptop, setIsLaptop] = useState(false);
+
+  useEffect(() => {
+    setIsLaptop(window.innerWidth > 768 && window.innerWidth < 1024);
+  }, [screenWidth]);
+
+  useEffect(() => {
+    function handleResize() {
+      setScreenWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
-      {!isSettingsPage && !isStartPage && <Navbar />}
+      {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} />}
       <Routes>
         <Route path="/" element={<Start />} />
-        <Route path="/accounts" element={<Accounts />} />
-        <Route path="/blocks" element={<Blocks />} />
+        <Route path="/accounts" element={<Accounts isLaptop={isLaptop} />} />
+        <Route path="/blocks" element={<Blocks isLaptop={isLaptop} />} />
         <Route path="/deploys" element={<Deploys />} />
         <Route path="/events" element={<Events />} />
         <Route path="/logs" element={<Logs />} />

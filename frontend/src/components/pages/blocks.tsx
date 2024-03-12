@@ -8,7 +8,11 @@ import {
   JsonBlock,
 } from "casper-js-sdk";
 
-export default function Blocks() {
+interface BlocksProps {
+  isLaptop: boolean;
+}
+
+const Blocks: React.FC<BlocksProps> = ({ isLaptop }) => {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -147,4 +151,6 @@ export default function Blocks() {
       </Flex>
     </>
   );
-}
+};
+
+export default Blocks;

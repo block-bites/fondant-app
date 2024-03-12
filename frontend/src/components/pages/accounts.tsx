@@ -10,7 +10,11 @@ type AccountData = {
   privateKey: string;
 };
 
-const Accounts = () => {
+interface AccountsProps {
+  isLaptop: boolean;
+}
+
+const Accounts: React.FC<AccountsProps> = ({ isLaptop }) => {
   const { searchValue } = useSearchContext();
   const [accountsData, setAccountsData] = useState<AccountData[]>([]);
 

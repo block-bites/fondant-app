@@ -20,7 +20,11 @@ import { useNodeContext } from "../../context/NodeContext";
 import { CasperServiceByJsonRPC } from "casper-js-sdk";
 import Logo from "../../assets/logo.svg";
 
-const Navbar = () => {
+interface NavbarProps {
+  isLaptop: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
   const { nodeNumber, setNodeNumber } = useNodeContext();
   const [currentBlock, setCurrentBlock] = useState<number>(0);
   const client = new CasperServiceByJsonRPC(
@@ -48,6 +52,7 @@ const Navbar = () => {
       fetchBlocks();
     }, 10000); // 10 seconds interval
     return () => clearInterval(intervalId);
+    // eslint-disable-next-line
   }, [nodeNumber]);
 
   useEffect(() => {
@@ -170,10 +175,10 @@ const Navbar = () => {
               </Text>
             </Flex>
           </Link>
-          <Tabs variant="line" color="pri.orange" size="lg">
+          <Tabs variant="line" color="pri.orange" size={isLaptop ? "sm" : "lg"}>
             <TabList
               border="none"
-              gap={{ "2xl": "32px", xl: "20px", lg: "16px", md: "12px" }}
+              justifyContent={isLaptop ? "space-between" : "unset"}
             >
               <Link to="/accounts">
                 <Tab

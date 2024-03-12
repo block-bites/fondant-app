@@ -8,11 +8,9 @@ import {
   JsonBlock,
 } from "casper-js-sdk";
 
-interface BlocksProps {
-  isLaptop: boolean;
-}
 
-const Blocks: React.FC<BlocksProps> = ({ isLaptop }) => {
+
+const Blocks = () => {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

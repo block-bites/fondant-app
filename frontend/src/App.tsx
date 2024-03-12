@@ -43,13 +43,13 @@ export const App = () => {
     );
   }, [screenWidth]);
 
-  // if (isMobile) {
-  //   return (
-  //     <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
-  //       <Text align="center">Used device and resolution not supported</Text>
-  //     </HStack>
-  //   );
-  // }
+  if (isMobile) {
+    return (
+      <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
+        <Text align="center">Used device and resolution not supported</Text>
+      </HStack>
+    );
+  }
 
   return (
     <NodeProvider>
@@ -92,8 +92,8 @@ function AppContent() {
       {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} />}
       <Routes>
         <Route path="/" element={<Start />} />
-        <Route path="/accounts" element={<Accounts isLaptop={isLaptop} />} />
-        <Route path="/blocks" element={<Blocks isLaptop={isLaptop} />} />
+        <Route path="/accounts" element={<Accounts />} />
+        <Route path="/blocks" element={<Blocks />} />
         <Route path="/deploys" element={<Deploys />} />
         <Route path="/events" element={<Events />} />
         <Route path="/logs" element={<Logs />} />

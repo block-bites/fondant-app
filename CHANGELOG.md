@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 
 ### Fixes
+
+#### Frontend
 - [Navbar menu is working correctly](https://github.com/block-bites/fondant-app/pull/64)
+
 
 ## [1.0.0] - 2024-01-15
  

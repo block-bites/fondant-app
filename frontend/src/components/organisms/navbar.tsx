@@ -12,6 +12,7 @@ import {
   Select,
   Image,
 } from "@chakra-ui/react";
+import NavbarModal from "../molecules/navbar-modal";
 import { FaBell, FaRegFileCode } from "react-icons/fa";
 import { BiGridAlt } from "react-icons/bi";
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md";
@@ -22,10 +23,16 @@ import Logo from "../../assets/logo.svg";
 const Navbar = () => {
   const { nodeNumber, setNodeNumber } = useNodeContext();
   const [currentBlock, setCurrentBlock] = useState<number>(0);
-  const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`);
+  const client = new CasperServiceByJsonRPC(
+    `http://localhost:3001/net/${nodeNumber}/rpc`
+  );
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [uptime, setUptime] = useState<string>("");
-  const [isSystemRunning, setIsSystemRunning] = useState<boolean>(JSON.parse(localStorage.getItem('isSystemRunning') || 'true'));
+  const [isSystemRunning, setIsSystemRunning] = useState<boolean>(
+    JSON.parse(localStorage.getItem("isSystemRunning") || "true")
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resetTrigger, setResetTrigger] = useState(false);
 
   useEffect(() => {
     fetchStartTime();
@@ -40,20 +47,23 @@ const Navbar = () => {
   }, [nodeNumber]);
 
   useEffect(() => {
+    fetchStartTime();
     fetchStatus();
+
     const intervalId = setInterval(() => {
       fetchStatus();
     }, 5000); // 5 seconds interval
+
     return () => clearInterval(intervalId);
-  }, []);
+  }, [resetTrigger]);
 
   useEffect(() => {
-    localStorage.setItem('isSystemRunning', JSON.stringify(isSystemRunning));
+    localStorage.setItem("isSystemRunning", JSON.stringify(isSystemRunning));
   }, [isSystemRunning]);
 
   const fetchStartTime = async () => {
     try {
-      const response = await fetch('http://localhost:3001/get-start-time');
+      const response = await fetch("http://localhost:3001/get-start-time");
       const data = await response.json();
       setStartTime(new Date(data.startupTime));
     } catch (error) {
@@ -63,10 +73,12 @@ const Navbar = () => {
 
   const handleStart = async () => {
     try {
-      const response = await fetch('http://localhost:3001/start', { method: 'POST' });
+      const response = await fetch("http://localhost:3001/start", {
+        method: "POST",
+      });
       if (response.ok) {
         setIsSystemRunning(true);
-        console.log('System started successfully');
+        console.log("System started successfully");
       }
     } catch (error) {
       console.error("Error starting the system:", error);
@@ -75,19 +87,29 @@ const Navbar = () => {
 
   const handleStop = async () => {
     try {
-      const response = await fetch('http://localhost:3001/stop', { method: 'POST' });
+      const response = await fetch("http://localhost:3001/stop", {
+        method: "POST",
+      });
       if (response.ok) {
         setIsSystemRunning(false);
-        console.log('System stopped successfully');
+        console.log("System stopped successfully");
       }
     } catch (error) {
       console.error("Error stopping the system:", error);
     }
   };
 
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   const fetchStatus = async () => {
     try {
-      const response = await fetch('http://localhost:3001/status');
+      const response = await fetch("http://localhost:3001/status");
       if (response.ok) {
         setIsSystemRunning(true);
       }
@@ -123,11 +145,13 @@ const Navbar = () => {
     return () => clearInterval(intervalId);
   }, [startTime]);
 
-
   const handleReset = async () => {
     try {
-      const response = await fetch('http://localhost:3001/nctl-start', { method: 'POST' });
-      console.log('Reset successful:', response.status);
+      const response = await fetch("http://localhost:3001/nctl-start", {
+        method: "POST",
+      });
+      console.log("Reset successful:", response.status);
+      setResetTrigger((prev) => !prev);
     } catch (error) {
       console.error("Error sending reset request:", error);
     }
@@ -213,7 +237,7 @@ const Navbar = () => {
                 UPTIME
               </Text>
               <Text fontSize="14px" color="black">
-                {uptime}
+                {uptime ? uptime : "Loading..."}
               </Text>
             </Box>
           </HStack>
@@ -246,7 +270,7 @@ const Navbar = () => {
                 Stop
               </Box>
             )}
-            
+
             <Box
               bg="pri.orange"
               color="white"
@@ -255,11 +279,10 @@ const Navbar = () => {
               fontWeight="semibold"
               fontSize="14px"
               cursor="pointer"
-              onClick={handleReset}
+              onClick={handleModalOpen}
             >
               Reset
             </Box>
-
 
             <Select
               size="sm"
@@ -275,6 +298,11 @@ const Navbar = () => {
           </HStack>
         </HStack>
       </HStack>
+      <NavbarModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        handleReset={handleReset}
+      />
     </Flex>
   );
 };

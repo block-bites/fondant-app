@@ -74,7 +74,7 @@ export default function Blocks() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [client, currentPage, DISPLAY_PER_PAGE]);
 
   useEffect(() => {
     fetchBlocks();

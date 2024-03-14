@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import { Box, Text, Flex, Button, Select, VStack, Heading } from "@chakra-ui/react";
+import { Box, Text, Flex, Button, Select, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
 import LogElement from "../molecules/log-element";
@@ -88,25 +88,6 @@ export default function Logs() {
           p={3}
         >
           {selectedLogs.map((log, index) => (
-            // <Flex
-            //   key={index}
-            //   direction="column"
-            //   p={3}
-            //   borderBottom="1px solid #ddd"
-            //   onClick={() => toggleLog(startIndex + index)}
-            //   cursor="pointer"
-            // >
-            //   <Flex alignItems="center">
-            //     <Text transform={expandedLogIndex === startIndex + index ? "rotate(90deg)" : "rotate(0deg)"}>
-            //       ▶
-            //     </Text>
-            //     <Box ml={2} overflowX="auto">
-            //       {expandedLogIndex === startIndex + index
-            //         ? formatJson(log, 0, true)
-            //         : formatJson(log, 0, false)}
-            //     </Box>
-            //   </Flex>
-            // </Flex>
             <LogElement
               log={log}
               key={index}

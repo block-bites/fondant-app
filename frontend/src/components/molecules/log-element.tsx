@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Flex, Text, Box } from "@chakra-ui/react";
 import formatJson from "../atoms/format-json";
 

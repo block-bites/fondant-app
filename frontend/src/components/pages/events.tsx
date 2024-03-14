@@ -1,8 +1,8 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Flex, Text, Box } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
-import formatJson from "../atoms/format-json";
+import EventElement from "../molecules/event-element";
 
 type Event = any;
 
@@ -71,30 +71,13 @@ export default function Events() {
           </Flex>
         ) : (
           events.map((event, index) => (
-            <Box
+            <EventElement
+              event={event}
+              toggleEvent={toggleEvent}
               key={index}
-              p={3}
-              borderBottom="1px solid grey"
-              cursor="pointer"
-              onClick={() => toggleEvent(index)}
-            >
-              <Flex alignItems="center">
-                <Text
-                  transform={
-                    expandedEventIndex === index
-                      ? "rotate(90deg)"
-                      : "rotate(0deg)"
-                  }
-                >
-                  ▶
-                </Text>
-                <Box ml={2} overflowX="auto">
-                  {expandedEventIndex === index
-                    ? formatJson(event, 0, true)
-                    : formatJson(event, 0, false)}
-                </Box>
-              </Flex>
-            </Box>
+              index={index}
+              expandedEventIndex={expandedEventIndex}
+            />
           ))
         )}
       </Box>

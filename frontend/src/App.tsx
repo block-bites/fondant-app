@@ -43,25 +43,25 @@ export const App = () => {
     );
   }, [screenWidth]);
 
-  if (isMobile) {
-    return (
-      <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
-        <Text align="center">Used device and resolution not supported</Text>
-      </HStack>
-    );
-  }
+  // if (isMobile) {
+  //   return (
+  //     <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
+  //       <Text align="center">Used device and resolution not supported</Text>
+  //     </HStack>
+  //   );
+  // }
 
   return (
     <NodeProvider>
-    <HelmetProvider>
-      <ChakraProvider theme={fondantTheme}>
-        <SearchProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </SearchProvider>
-      </ChakraProvider>
-    </HelmetProvider>
+      <HelmetProvider>
+        <ChakraProvider theme={fondantTheme}>
+          <SearchProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </SearchProvider>
+        </ChakraProvider>
+      </HelmetProvider>
     </NodeProvider>
   );
 };

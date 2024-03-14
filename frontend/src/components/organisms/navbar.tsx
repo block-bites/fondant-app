@@ -237,7 +237,7 @@ const Navbar = () => {
                 UPTIME
               </Text>
               <Text fontSize="14px" color="black">
-                {uptime ? uptime : "Loading..."}
+                {uptime}
               </Text>
             </Box>
           </HStack>

@@ -1,13 +1,18 @@
 version: "2.1"
 
 services:
-  fondant-nctl-container:
+  fondant-cctl-container:
     build:
-      context: ./nctl-container
+      context: ./cctl-container
       dockerfile: Dockerfile
-    environment:
-      PREDEFINED_ACCOUNTS: "true"
-      DEPLOY_DELAY: "5sec"
+      args:
+        NODE_GITBRANCH: release-1.5.6
+        CLIENT_GITBRANCH: release-2.0.0
+    ports:
+      - "25101:25101"
+      - "11101:11101"
+      - "14101:14101"
+      - "18101:18101"
     networks:
       - fondant-network
 
@@ -16,7 +21,7 @@ services:
       context: ./lean-api
       dockerfile: Dockerfile
     ports:
-      - "3001:3000" 
+      - "3001:3000"
     networks:
       - fondant-network
 

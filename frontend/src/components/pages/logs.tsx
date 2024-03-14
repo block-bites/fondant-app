@@ -2,14 +2,15 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { Box, Text, Flex, Button, Select, VStack, Heading } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
-import formatJson from "../atoms/format-json";
+import LogElement from "../molecules/log-element";
+//import formatJson from "../atoms/format-json";
 
 interface LogEntry {
   [key: string]: any;
 }
 
 const LogsPerPage = 10;
-const LogLevels = ["All", "DEBUG", "INFO", "WARN", "ERROR"]; 
+const LogLevels = ["All", "DEBUG", "INFO", "WARN", "ERROR"];
 
 export default function Logs() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -35,9 +36,9 @@ export default function Logs() {
     fetchLogs();
   }, [nodeNumber, currentLevel]);
 
-
   const filterLogs = (logs: LogEntry[], level: string) => {
-    const filtered = level === "All" ? logs : logs.filter((log) => log.level === level);
+    const filtered =
+      level === "All" ? logs : logs.filter((log) => log.level === level);
     setFilteredLogs(filtered);
   };
 
@@ -45,7 +46,6 @@ export default function Logs() {
     setCurrentLevel(event.target.value);
     filterLogs(logs, event.target.value);
   };
-
 
   const handlePrevPage = () => {
     setCurrentPage((current) => Math.max(current - 1, 1));
@@ -61,15 +61,18 @@ export default function Logs() {
     setExpandedLogIndex(expandedLogIndex === index ? null : index);
   };
 
-  
   const startIndex = (currentPage - 1) * LogsPerPage;
   const selectedLogs = filteredLogs.slice(startIndex, startIndex + LogsPerPage);
-
 
   return (
     <Flex width="100%" justify="center" fontFamily="monospace">
       <VStack spacing={4} width="100%" maxW={1440} p={5}>
-        <Select onChange={handleLevelChange} value={currentLevel} w="200px" mb={3}>
+        <Select
+          onChange={handleLevelChange}
+          value={currentLevel}
+          w="200px"
+          mb={3}
+        >
           {LogLevels.map((level) => (
             <option key={level} value={level}>
               {level}
@@ -77,27 +80,42 @@ export default function Logs() {
           ))}
         </Select>
 
-        <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
+        <Box
+          overflowY="auto"
+          w="100%"
+          borderWidth="1px"
+          borderRadius="lg"
+          p={3}
+        >
           {selectedLogs.map((log, index) => (
-            <Flex
+            // <Flex
+            //   key={index}
+            //   direction="column"
+            //   p={3}
+            //   borderBottom="1px solid #ddd"
+            //   onClick={() => toggleLog(startIndex + index)}
+            //   cursor="pointer"
+            // >
+            //   <Flex alignItems="center">
+            //     <Text transform={expandedLogIndex === startIndex + index ? "rotate(90deg)" : "rotate(0deg)"}>
+            //       ▶
+            //     </Text>
+            //     <Box ml={2} overflowX="auto">
+            //       {expandedLogIndex === startIndex + index
+            //         ? formatJson(log, 0, true)
+            //         : formatJson(log, 0, false)}
+            //     </Box>
+            //   </Flex>
+            // </Flex>
+            <LogElement
+              log={log}
               key={index}
-              direction="column"
-              p={3}
-              borderBottom="1px solid #ddd"
-              onClick={() => toggleLog(startIndex + index)}
-              cursor="pointer"
-            >
-              <Flex alignItems="center">
-                <Text transform={expandedLogIndex === startIndex + index ? "rotate(90deg)" : "rotate(0deg)"}>
-                  ▶
-                </Text>
-                <Box ml={2} overflowX="auto">
-                  {expandedLogIndex === startIndex + index
-                    ? formatJson(log, 0, true)
-                    : formatJson(log, 0, false)}
-                </Box>
-              </Flex>
-            </Flex>
+              index={index}
+              toggleLog={toggleLog}
+              startIndex={startIndex}
+              expandedLogIndex={expandedLogIndex}
+              isLastElement={selectedLogs.length === index + 1}
+            />
           ))}
         </Box>
 

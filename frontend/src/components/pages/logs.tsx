@@ -3,7 +3,6 @@ import { Box, Text, Flex, Button, Select, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
 import LogElement from "../molecules/log-element";
-//import formatJson from "../atoms/format-json";
 
 interface LogEntry {
   [key: string]: any;
@@ -89,12 +88,10 @@ export default function Logs() {
         >
           {selectedLogs.map((log, index) => (
             <LogElement
-              log={log}
               key={index}
-              index={index}
-              toggleLog={toggleLog}
-              startIndex={startIndex}
-              expandedLogIndex={expandedLogIndex}
+              log={log}
+              onClick={() => toggleLog(startIndex + index)}
+              sameIndexes={expandedLogIndex === startIndex + index}
               isLastElement={selectedLogs.length === index + 1}
             />
           ))}

@@ -72,11 +72,10 @@ export default function Events() {
         ) : (
           events.map((event, index) => (
             <EventElement
+              onClick={() => toggleEvent(index)}
               event={event}
-              toggleEvent={toggleEvent}
               key={index}
-              index={index}
-              expandedEventIndex={expandedEventIndex}
+              sameIndexes={expandedEventIndex === index}
             />
           ))
         )}

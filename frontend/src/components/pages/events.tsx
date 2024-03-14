@@ -30,6 +30,12 @@ export default function Events() {
     };
 
     fetchEvents();
+
+    const interval = setInterval(() => {
+      fetchEvents();
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, [nodeNumber]);
 
   useEffect(() => {

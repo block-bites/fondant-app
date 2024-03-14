@@ -33,6 +33,12 @@ export default function Logs() {
     };
 
     fetchLogs();
+
+    const interval = setInterval(() => {
+      fetchLogs();
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, [nodeNumber, currentLevel]);
 
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Flex, VStack, Text, Button } from "@chakra-ui/react";
 import { Helmet } from "react-helmet-async";
 import BlockRowElement from "../molecules/blocks-row-element";
-import Refresher from "../atoms/refresher";
 import {
   CasperServiceByJsonRPC,
   GetBlockResult,
@@ -20,64 +19,73 @@ export default function Blocks() {
 
   const client = new CasperServiceByJsonRPC("http://localhost:3001/net/1/rpc");
 
-  const fetchBlocks = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      let latestBlockInfo;
-      try {
-        latestBlockInfo = await client.getLatestBlockInfo();
-      } catch (error) {
-        console.error("Error fetching latest block info:", error);
-        setBlocks([]); // No blocks to display
-        setIsLastPage(true); // No more pages to navigate
-        return;
-      }
-
-      if (!latestBlockInfo || !latestBlockInfo.block) {
-        setBlocks([]);
-        setIsLastPage(true);
-        return;
-      }
-
-      const currentHeight = latestBlockInfo.block.header.height;
-
-      const blockHeights = [];
-      for (let i = 0; i < DISPLAY_PER_PAGE; i++) {
-        const height = currentHeight - i - (currentPage - 1) * DISPLAY_PER_PAGE;
-        if (height >= 0) {
-          blockHeights.push(height);
-        }
-      }
-
-      if (blockHeights.length === 0) {
-        setBlocks([]);
-        setIsLastPage(true);
-        return;
-      } else {
-        setIsLastPage(false);
-      }
-
-      const blockInfoPromises = blockHeights.map((height) =>
-        client.getBlockInfoByHeight(height)
-      );
-      const blockInfos: GetBlockResult[] = await Promise.all(blockInfoPromises);
-      const newBlocks = blockInfos
-        .map((blockInfo) => blockInfo.block)
-        .filter((block): block is JsonBlock => block !== null);
-
-      setBlocks(newBlocks);
-      setIsLastPage(newBlocks.length < DISPLAY_PER_PAGE);
-    } catch (err) {
-      console.error("Error in fetchBlocks:", err);
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setLoading(false);
-    }
-  }, [client, currentPage, DISPLAY_PER_PAGE]);
-
   useEffect(() => {
+    const fetchBlocks = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        let latestBlockInfo;
+        try {
+          latestBlockInfo = await client.getLatestBlockInfo();
+        } catch (error) {
+          console.error("Error fetching latest block info:", error);
+          setBlocks([]); // No blocks to display
+          setIsLastPage(true); // No more pages to navigate
+          return;
+        }
+
+        if (!latestBlockInfo || !latestBlockInfo.block) {
+          setBlocks([]);
+          setIsLastPage(true);
+          return;
+        }
+
+        const currentHeight = latestBlockInfo.block.header.height;
+
+        const blockHeights = [];
+        for (let i = 0; i < DISPLAY_PER_PAGE; i++) {
+          const height =
+            currentHeight - i - (currentPage - 1) * DISPLAY_PER_PAGE;
+          if (height >= 0) {
+            blockHeights.push(height);
+          }
+        }
+
+        if (blockHeights.length === 0) {
+          setBlocks([]);
+          setIsLastPage(true);
+          return;
+        } else {
+          setIsLastPage(false);
+        }
+
+        const blockInfoPromises = blockHeights.map((height) =>
+          client.getBlockInfoByHeight(height)
+        );
+        const blockInfos: GetBlockResult[] = await Promise.all(
+          blockInfoPromises
+        );
+        const newBlocks = blockInfos
+          .map((blockInfo) => blockInfo.block)
+          .filter((block): block is JsonBlock => block !== null);
+
+        setBlocks(newBlocks);
+        setIsLastPage(newBlocks.length < DISPLAY_PER_PAGE);
+      } catch (err) {
+        console.error("Error in fetchBlocks:", err);
+        setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchBlocks();
+
+    const interval = setInterval(() => {
+      fetchBlocks();
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, [currentPage]);
 
   const handlePrevious = () => {
@@ -120,20 +128,18 @@ export default function Blocks() {
         <title>Fondant | Blocks</title>
       </Helmet>
       <Flex w="100%" justify="center">
-        <Refresher interval={30} onRefresh={() => fetchBlocks()}>
-          <VStack w="100%" maxW="1440px" gap="0">
-            {blocks.map((block) => (
-              <BlockRowElement
-                key={block.hash}
-                height={block.header.height}
-                era={block.header.era_id}
-                deploys={block.body.deploy_hashes.length}
-                age={block.header.timestamp}
-                blockHash={block.hash}
-              />
-            ))}
-          </VStack>
-        </Refresher>
+        <VStack w="100%" maxW="1440px" gap="0">
+          {blocks.map((block) => (
+            <BlockRowElement
+              key={block.hash}
+              height={block.header.height}
+              era={block.header.era_id}
+              deploys={block.body.deploy_hashes.length}
+              age={block.header.timestamp}
+              blockHash={block.hash}
+            />
+          ))}
+        </VStack>
       </Flex>
       <Flex justify="center" mt="4">
         <Button onClick={handlePrevious} isDisabled={currentPage === 1}>

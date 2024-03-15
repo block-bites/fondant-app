@@ -7,7 +7,7 @@ COPY api/Cargo.toml ./
 
 RUN cargo build --release || { echo "Compilation failed"; exit 1; }
 
-FROM commondrum/cctl-container:latest
+FROM commondrum/cctl-fondant:latest
 
 WORKDIR /usr/local/bin
 

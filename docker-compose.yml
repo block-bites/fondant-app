@@ -9,19 +9,7 @@ services:
         NODE_GITBRANCH: release-1.5.6
         CLIENT_GITBRANCH: release-2.0.0
     ports:
-      - "25101:25101"
-      - "11101:11101"
-      - "14101:14101"
-      - "18101:18101"
-    networks:
-      - fondant-network
-
-  fondant-lean-api:
-    build:
-      context: ./lean-api
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3000"
+      - "3001:3001"
     networks:
       - fondant-network
 

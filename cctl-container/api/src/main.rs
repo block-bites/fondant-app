@@ -32,6 +32,7 @@ fn rocket() -> _ {
     rocket::build()
         .mount("/", routes![health, run])
         .configure(rocket::Config {
+            address: "0.0.0.0".parse().unwrap(),
             port: 3001,
             ..rocket::Config::default()
         })

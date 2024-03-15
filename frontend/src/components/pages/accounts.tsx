@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchContext } from "../../context/SearchContext";
 import { Helmet } from "react-helmet-async";
-import { Flex, VStack, Text } from "@chakra-ui/react";
+import { Flex, VStack, Text, Progress, Box } from "@chakra-ui/react";
 import AccountRowElement from "../molecules/account-row-element";
 import axios from "axios";
 
@@ -13,9 +13,11 @@ type AccountData = {
 const Accounts = () => {
   const { searchValue } = useSearchContext();
   const [accountsData, setAccountsData] = useState<AccountData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchAccountsData = async () => {
+      setIsLoading(true);
       let fetchedAccounts: AccountData[] = [];
       for (let i = 1; i <= 10; i++) {
         try {
@@ -31,6 +33,7 @@ const Accounts = () => {
         }
       }
       setAccountsData(fetchedAccounts);
+      setIsLoading(false);
     };
 
     fetchAccountsData();
@@ -46,6 +49,27 @@ const Accounts = () => {
         .includes(searchValue.toLowerCase().trim())
   );
 
+  if (isLoading) {
+    return (
+      <Flex
+        justifyContent="center"
+        height="calc(100vh - 148px)"
+        alignItems="center"
+      >
+        <Progress
+          size="lg"
+          rounded={50}
+          isIndeterminate
+          width="100%"
+          maxWidth="1440px"
+          justifySelf="center"
+          alignSelf="center"
+          alignContent="center"
+        />
+      </Flex>
+    );
+  }
+
   return (
     <>
       <Helmet>
@@ -53,7 +77,7 @@ const Accounts = () => {
       </Helmet>
       <Flex w="100%" justify="center">
         <VStack w="100%" maxW="1440px" gap="0" mt="16px">
-          {filteredAccounts.length > 0 ? (
+          {filteredAccounts ? (
             filteredAccounts.map((account, index) => (
               <AccountRowElement
                 key={index}
@@ -63,7 +87,7 @@ const Accounts = () => {
             ))
           ) : (
             <Flex w="100%" justify="center" pt="100px">
-              <Text color="grey.400">No results</Text>
+              <Text color="grey.400">No accounts available to display.</Text>
             </Flex>
           )}
         </VStack>

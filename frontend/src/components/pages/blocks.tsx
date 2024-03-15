@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flex, VStack, Text, Button } from "@chakra-ui/react";
+import { Flex, VStack, Text, Button, Progress } from "@chakra-ui/react";
 import { Helmet } from "react-helmet-async";
 import BlockRowElement from "../molecules/blocks-row-element";
 import {
@@ -96,8 +96,21 @@ export default function Blocks() {
 
   if (loading) {
     return (
-      <Flex w="100%" justify="center" color="grey.400" pt="100px">
-        <Text color="grey">Loading blocks...</Text>
+      <Flex
+        justifyContent="center"
+        height="calc(100vh - 148px)"
+        alignItems="center"
+      >
+        <Progress
+          size="lg"
+          rounded={50}
+          isIndeterminate
+          width="100%"
+          maxWidth="1440px"
+          justifySelf="center"
+          alignSelf="center"
+          alignContent="center"
+        />
       </Flex>
     );
   }

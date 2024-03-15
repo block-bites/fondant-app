@@ -107,9 +107,7 @@ export default function Blocks() {
           isIndeterminate
           width="100%"
           maxWidth="1440px"
-          justifySelf="center"
-          alignSelf="center"
-          alignContent="center"
+          colorScheme="gray"
         />
       </Flex>
     );

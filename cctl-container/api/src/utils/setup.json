@@ -1,4 +1,5 @@
 {
-     "err_logs":"home/cctl/cctl/assets/nodes/node-$/logs/stderr.log",
-     "std_logs":"home/cctl/cctl/assets/nodes/node-$/logs/stdout.log"
+     "err_logs":"$CCTL/cctl/assets/nodes/node-$/logs/stderr.log",
+     "std_logs":"$CCTL/cctl/assets/nodes/node-$/logs/stdout.log",
+     "chainspec":"$CCTL/cctl/assets/genesis/chainspec.toml"
 }

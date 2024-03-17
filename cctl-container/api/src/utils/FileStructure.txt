@@ -1,0 +1,476 @@
+|-- LICENSE
+|-- README.md
+|-- activate
+|-- assets
+|   |-- bin
+|   |   |-- activate_bid.wasm
+|   |   |-- add_bid.wasm
+|   |   |-- casper-client
+|   |   |-- delegate.wasm
+|   |   |-- named_purse_payment.wasm
+|   |   |-- transfer_to_account_u512.wasm
+|   |   |-- undelegate.wasm
+|   |   `-- withdraw_bid.wasm
+|   |-- daemon
+|   |   |-- config
+|   |   |   `-- supervisord.conf
+|   |   |-- logs
+|   |   |   `-- supervisord.log
+|   |   `-- socket
+|   |       `-- supervisord.pid
+|   |-- faucet
+|   |   |-- public_key.pem
+|   |   |-- public_key_hex
+|   |   `-- secret_key.pem
+|   |-- genesis
+|   |   |-- accounts.toml
+|   |   `-- chainspec.toml
+|   |-- nodes
+|   |   |-- node-1
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   |-- accounts.toml
+|   |   |   |   |   |-- chainspec.toml
+|   |   |   |   |   `-- config.toml
+|   |   |   |   `-- casper-node-launcher-state.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   |   |-- stderr.log
+|   |   |   |   `-- stdout.log
+|   |   |   `-- storage
+|   |   |       `-- cspr-dev-cctl
+|   |   |           |-- data.lmdb
+|   |   |           |-- data.lmdb-lock
+|   |   |           |-- storage.lmdb
+|   |   |           |-- storage.lmdb-lock
+|   |   |           `-- unit_files
+|   |   |-- node-10
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   `-- 1_0_0
+|   |   |   |       |-- accounts.toml
+|   |   |   |       |-- chainspec.toml
+|   |   |   |       `-- config.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   `-- storage
+|   |   |-- node-2
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   |-- accounts.toml
+|   |   |   |   |   |-- chainspec.toml
+|   |   |   |   |   `-- config.toml
+|   |   |   |   `-- casper-node-launcher-state.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   |   |-- stderr.log
+|   |   |   |   `-- stdout.log
+|   |   |   `-- storage
+|   |   |       `-- cspr-dev-cctl
+|   |   |           |-- data.lmdb
+|   |   |           |-- data.lmdb-lock
+|   |   |           |-- sse_index
+|   |   |           |-- storage.lmdb
+|   |   |           |-- storage.lmdb-lock
+|   |   |           `-- unit_files
+|   |   |-- node-3
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   |-- accounts.toml
+|   |   |   |   |   |-- chainspec.toml
+|   |   |   |   |   `-- config.toml
+|   |   |   |   `-- casper-node-launcher-state.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   |   |-- stderr.log
+|   |   |   |   `-- stdout.log
+|   |   |   `-- storage
+|   |   |       `-- cspr-dev-cctl
+|   |   |           |-- data.lmdb
+|   |   |           |-- data.lmdb-lock
+|   |   |           |-- sse_index
+|   |   |           |-- storage.lmdb
+|   |   |           |-- storage.lmdb-lock
+|   |   |           `-- unit_files
+|   |   |-- node-4
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   |-- accounts.toml
+|   |   |   |   |   |-- chainspec.toml
+|   |   |   |   |   `-- config.toml
+|   |   |   |   `-- casper-node-launcher-state.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   |   |-- stderr.log
+|   |   |   |   `-- stdout.log
+|   |   |   `-- storage
+|   |   |       `-- cspr-dev-cctl
+|   |   |           |-- data.lmdb
+|   |   |           |-- data.lmdb-lock
+|   |   |           |-- storage.lmdb
+|   |   |           |-- storage.lmdb-lock
+|   |   |           `-- unit_files
+|   |   |-- node-5
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   |-- accounts.toml
+|   |   |   |   |   |-- chainspec.toml
+|   |   |   |   |   `-- config.toml
+|   |   |   |   `-- casper-node-launcher-state.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   |   |-- stderr.log
+|   |   |   |   `-- stdout.log
+|   |   |   `-- storage
+|   |   |       `-- cspr-dev-cctl
+|   |   |           |-- data.lmdb
+|   |   |           |-- data.lmdb-lock
+|   |   |           |-- storage.lmdb
+|   |   |           |-- storage.lmdb-lock
+|   |   |           `-- unit_files
+|   |   |-- node-6
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   `-- 1_0_0
+|   |   |   |       |-- accounts.toml
+|   |   |   |       |-- chainspec.toml
+|   |   |   |       `-- config.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   `-- storage
+|   |   |-- node-7
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   `-- 1_0_0
+|   |   |   |       |-- accounts.toml
+|   |   |   |       |-- chainspec.toml
+|   |   |   |       `-- config.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   `-- storage
+|   |   |-- node-8
+|   |   |   |-- bin
+|   |   |   |   |-- 1_0_0
+|   |   |   |   |   `-- casper-node
+|   |   |   |   `-- casper-node-launcher
+|   |   |   |-- config
+|   |   |   |   `-- 1_0_0
+|   |   |   |       |-- accounts.toml
+|   |   |   |       |-- chainspec.toml
+|   |   |   |       `-- config.toml
+|   |   |   |-- keys
+|   |   |   |   |-- public_key.pem
+|   |   |   |   |-- public_key_hex
+|   |   |   |   `-- secret_key.pem
+|   |   |   |-- logs
+|   |   |   `-- storage
+|   |   `-- node-9
+|   |       |-- bin
+|   |       |   |-- 1_0_0
+|   |       |   |   `-- casper-node
+|   |       |   `-- casper-node-launcher
+|   |       |-- config
+|   |       |   `-- 1_0_0
+|   |       |       |-- accounts.toml
+|   |       |       |-- chainspec.toml
+|   |       |       `-- config.toml
+|   |       |-- keys
+|   |       |   |-- public_key.pem
+|   |       |   |-- public_key_hex
+|   |       |   `-- secret_key.pem
+|   |       |-- logs
+|   |       `-- storage
+|   `-- users
+|       |-- user-1
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-10
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-2
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-3
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-4
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-5
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-6
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-7
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       |-- user-8
+|       |   |-- public_key.pem
+|       |   |-- public_key_hex
+|       |   `-- secret_key.pem
+|       `-- user-9
+|           |-- public_key.pem
+|           |-- public_key_hex
+|           `-- secret_key.pem
+|-- cmds
+|   |-- chain
+|   |   |-- await
+|   |   |   |-- n_blocks.sh
+|   |   |   |-- n_eras.sh
+|   |   |   |-- until_block_n.sh
+|   |   |   `-- until_era_n.sh
+|   |   `-- query
+|   |       |-- view_account.sh
+|   |       |-- view_account_address.sh
+|   |       |-- view_account_balance.sh
+|   |       |-- view_account_balances.sh
+|   |       |-- view_account_of_faucet.sh
+|   |       |-- view_account_of_user.sh
+|   |       |-- view_account_of_validator.sh
+|   |       |-- view_auction_info.sh
+|   |       |-- view_block.sh
+|   |       |-- view_block_transfers.sh
+|   |       |-- view_deploy.sh
+|   |       |-- view_era.sh
+|   |       |-- view_era_summary.sh
+|   |       |-- view_genesis_accounts.sh
+|   |       |-- view_genesis_chainspec.sh
+|   |       |-- view_height.sh
+|   |       |-- view_last_finalized_block.sh
+|   |       |-- view_state_root_hash.sh
+|   |       |-- view_tip_info.sh
+|   |       `-- view_validator_changes.sh
+|   |-- infra
+|   |   |-- bin
+|   |   |   |-- compile.sh
+|   |   |   |-- compile_client.sh
+|   |   |   |-- compile_contracts.sh
+|   |   |   |-- compile_node.sh
+|   |   |   `-- compile_node_launcher.sh
+|   |   |-- net
+|   |   |   |-- setup.sh
+|   |   |   |-- start.sh
+|   |   |   |-- status.sh
+|   |   |   |-- stop.sh
+|   |   |   `-- teardown.sh
+|   |   `-- node
+|   |       |-- clean.sh
+|   |       |-- restart.sh
+|   |       |-- stop.sh
+|   |       |-- view_config.sh
+|   |       |-- view_log_stderr.sh
+|   |       |-- view_log_stdout.sh
+|   |       |-- view_metrics.sh
+|   |       |-- view_peer_count.sh
+|   |       |-- view_peers.sh
+|   |       |-- view_ports.sh
+|   |       |-- view_rpc_endpoint.sh
+|   |       |-- view_rpc_schema.sh
+|   |       |-- view_status.sh
+|   |       |-- view_storage.sh
+|   |       `-- write_rpc_schema.sh
+|   `-- tx
+|       |-- auction
+|       |   |-- activate_bid.sh
+|       |   |-- add_bid.sh
+|       |   |-- delegate.sh
+|       |   |-- undelegate.sh
+|       |   `-- withdraw_bid.sh
+|       `-- mint
+|           |-- dispatch_transfer.sh
+|           |-- dispatch_transfer_batch.sh
+|           `-- write_transfer_batch.sh
+|-- docker
+|   |-- Dockerfile
+|   |-- README.md
+|   |-- build.sh
+|   |-- clean.sh
+|   `-- start.sh
+|-- docs
+|   |-- setup.md
+|   `-- usage.md
+|-- installer
+|-- resources
+|   |-- rpc-schema
+|   |   |-- account_put_deploy.json
+|   |   |-- chain_get_block.json
+|   |   |-- chain_get_block_transfers.json
+|   |   |-- chain_get_era_info_by_switch_block.json
+|   |   |-- chain_get_era_summary.json
+|   |   |-- chain_get_state_root_hash.json
+|   |   |-- info_get_chainspec.json
+|   |   |-- info_get_deploy.json
+|   |   |-- info_get_peers.json
+|   |   |-- info_get_status.json
+|   |   |-- info_get_validator_changes.json
+|   |   |-- query_balance.json
+|   |   |-- query_global_state.json
+|   |   |-- schema.json
+|   |   |-- state_get_account_info.json
+|   |   |-- state_get_auction_info.json
+|   |   |-- state_get_balance.json
+|   |   |-- state_get_dictionary_item.json
+|   |   `-- state_get_item.json
+|   `-- static
+|       `-- accounts
+|           |-- accounts.toml
+|           |-- faucet
+|           |   |-- public_key.pem
+|           |   |-- public_key_hex
+|           |   `-- secret_key.pem
+|           |-- nodes
+|           |   |-- node-1
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-10
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-2
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-3
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-4
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-5
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-6
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-7
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   |-- node-8
+|           |   |   |-- public_key.pem
+|           |   |   |-- public_key_hex
+|           |   |   `-- secret_key.pem
+|           |   `-- node-9
+|           |       |-- public_key.pem
+|           |       |-- public_key_hex
+|           |       `-- secret_key.pem
+|           `-- users
+|               |-- user-1
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-10
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-2
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-3
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-4
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-5
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-6
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-7
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               |-- user-8
+|               |   |-- public_key.pem
+|               |   |-- public_key_hex
+|               |   `-- secret_key.pem
+|               `-- user-9
+|                   |-- public_key.pem
+|                   |-- public_key_hex
+|                   `-- secret_key.pem
+|-- scripts
+|   `-- capture_chain_data.py
+`-- utils
+    |-- accounts.sh
+    |-- blocking.sh
+    |-- cl_args.sh
+    |-- constants.sh
+    |-- infra.sh
+    |-- main.sh
+    |-- os.sh
+    |-- paths.sh
+    `-- queries.sh

@@ -12,6 +12,9 @@ FROM commondrum/cctl-fondant:latest
 WORKDIR /usr/local/bin
 
 COPY --from=builder /usr/src/myapp/target/release/api ./
+COPY api/src/utils/commands.json ./
+
+RUN sudo chmod +x /home/cctl/*
 
 ENTRYPOINT ["./api"]
 

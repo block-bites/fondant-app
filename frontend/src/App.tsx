@@ -23,8 +23,8 @@ import Deploys from "./components/pages/deploys";
 import Start from "./components/pages/start";
 
 export const App = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [screenWidth, setScreenWidth] = useState(0);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
 
   // Set screen width state
   useEffect(() => {
@@ -72,8 +72,8 @@ function AppContent() {
   const isSettingsPage = location.pathname === "/settings";
   const isStartPage = location.pathname === "/";
 
-  const [screenWidth, setScreenWidth] = useState(0);
-  const [isLaptop, setIsLaptop] = useState(false);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
+  const [isLaptop, setIsLaptop] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLaptop(window.innerWidth > 768 && window.innerWidth < 1024);

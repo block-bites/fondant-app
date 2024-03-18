@@ -31,8 +31,8 @@ const Navbar = () => {
   const [isSystemRunning, setIsSystemRunning] = useState<boolean>(
     JSON.parse(localStorage.getItem("isSystemRunning") || "true")
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [resetTrigger, setResetTrigger] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [resetTrigger, setResetTrigger] = useState<boolean>(false);
 
   useEffect(() => {
     fetchStartTime();

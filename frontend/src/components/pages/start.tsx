@@ -1,13 +1,13 @@
 import { useSearchContext } from "../../context/SearchContext";
 import { Helmet } from "react-helmet-async";
 
-import { Flex, VStack, Spinner, Button } from "@chakra-ui/react";
+import { Flex, Spinner, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Start = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleClick = async () => {
     setIsLoading(true);

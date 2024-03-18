@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
- 
+
+## Unreleased
+
+### Fixes
+
+#### Frontend
+- [Deploy, Event and Logs mapped elements are separated](https://github.com/block-bites/fondant-app/pull/78)
+
 
 ## [1.0.0] - 2024-01-15
  

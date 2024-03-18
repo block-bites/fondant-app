@@ -25,7 +25,7 @@ export default function Logs() {
   const [currentLevel, setCurrentLevel] = useState<string>("All");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [expandedLogIndex, setExpandedLogIndex] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { nodeNumber } = useNodeContext();
 
   useEffect(() => {

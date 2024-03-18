@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const Start = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleClick = async () => {
     setIsLoading(true);

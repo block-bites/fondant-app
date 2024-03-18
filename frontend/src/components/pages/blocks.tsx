@@ -10,10 +10,10 @@ import {
 
 export default function Blocks() {
   const [blocks, setBlocks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLastPage, setIsLastPage] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isLastPage, setIsLastPage] = useState<boolean>(false);
 
   const DISPLAY_PER_PAGE = 10;
 

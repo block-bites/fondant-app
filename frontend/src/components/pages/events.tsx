@@ -11,7 +11,7 @@ export default function Events() {
   const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const eventCapacity = 100;
   const { nodeNumber } = useNodeContext();
 

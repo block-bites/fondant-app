@@ -13,7 +13,7 @@ type AccountData = {
 const Accounts = () => {
   const { searchValue } = useSearchContext();
   const [accountsData, setAccountsData] = useState<AccountData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchAccountsData = async () => {

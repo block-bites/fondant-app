@@ -47,7 +47,7 @@ export default function NavbarModal({
                   fontWeight="normal"
                   color="grey.border"
                 >
-                  Are you sure you want to reset the timer?
+                  Are you sure you want to reset the network?
                 </Text>
               </Stack>
               <Box>
@@ -57,7 +57,7 @@ export default function NavbarModal({
                   fontWeight="normal"
                   color="#F00"
                 >
-                  This action cannot be undone!
+                  This will remove all your deploys!
                 </Text>
               </Box>
             </Stack>

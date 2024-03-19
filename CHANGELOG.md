@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
  
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
- 
+
+## Unreleased
+
+### Features
+
+#### Frontend:
+- [added modal (popup) window for networks reset confirmation](https://github.com/block-bites/fondant-app/pull/77)
 
 ## [1.0.0] - 2024-01-15
  

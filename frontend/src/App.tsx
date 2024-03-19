@@ -53,15 +53,15 @@ export const App = () => {
 
   return (
     <NodeProvider>
-    <HelmetProvider>
-      <ChakraProvider theme={fondantTheme}>
-        <SearchProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </SearchProvider>
-      </ChakraProvider>
-    </HelmetProvider>
+      <HelmetProvider>
+        <ChakraProvider theme={fondantTheme}>
+          <SearchProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </SearchProvider>
+        </ChakraProvider>
+      </HelmetProvider>
     </NodeProvider>
   );
 };

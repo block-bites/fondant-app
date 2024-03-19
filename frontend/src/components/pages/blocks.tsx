@@ -8,7 +8,9 @@ import {
   JsonBlock,
 } from "casper-js-sdk";
 
-export default function Blocks() {
+
+
+const Blocks = () => {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -151,4 +153,6 @@ export default function Blocks() {
       </Flex>
     </>
   );
-}
+};
+
+export default Blocks;

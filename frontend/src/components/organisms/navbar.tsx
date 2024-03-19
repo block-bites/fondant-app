@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, Location } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -20,7 +21,11 @@ import { useNodeContext } from "../../context/NodeContext";
 import { CasperServiceByJsonRPC } from "casper-js-sdk";
 import Logo from "../../assets/logo.svg";
 
-const Navbar = () => {
+interface NavbarProps {
+  isLaptop: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
   const { nodeNumber, setNodeNumber } = useNodeContext();
   const [currentBlock, setCurrentBlock] = useState<number>(0);
   const client = new CasperServiceByJsonRPC(
@@ -33,6 +38,12 @@ const Navbar = () => {
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [resetTrigger, setResetTrigger] = useState<boolean>(false);
+  const location: Location = useLocation();
+  const [activePath, setActivePath] = useState<string>(location.pathname);
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location]);
 
   useEffect(() => {
     fetchStartTime();
@@ -44,6 +55,7 @@ const Navbar = () => {
       fetchBlocks();
     }, 10000); // 10 seconds interval
     return () => clearInterval(intervalId);
+    // eslint-disable-next-line
   }, [nodeNumber]);
 
   useEffect(() => {
@@ -178,37 +190,61 @@ const Navbar = () => {
               </Text>
             </Flex>
           </Link>
-          <Tabs variant="line" color="pri.orange" size="lg">
+          <Tabs variant="line" color="pri.orange" size={isLaptop ? "sm" : "lg"}>
             <TabList
               border="none"
-              gap={{ "2xl": "32px", xl: "20px", lg: "16px", md: "12px" }}
+              justifyContent={isLaptop ? "space-between" : "unset"}
             >
               <Link to="/accounts">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/accounts" ? "pri.orange" : "grey.100"}
+                  borderBottom={
+                    activePath === "/accounts" ? "2px solid" : "none"
+                  }
+                >
                   <Icon as={MdSupervisorAccount} size="24px" />
                   Accounts
                 </Tab>
               </Link>
               <Link to="/blocks">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/blocks" ? "pri.orange" : "grey.100"}
+                  borderBottom={activePath === "/blocks" ? "2px solid" : "none"}
+                >
                   <Icon as={BiGridAlt} size="24px" />
                   Blocks
                 </Tab>
               </Link>
               <Link to="/deploys">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/deploys" ? "pri.orange" : "grey.100"}
+                  borderBottom={
+                    activePath === "/deploys" ? "2px solid" : "none"
+                  }
+                >
                   <Icon as={MdCloudUpload} size="24px" />
                   Deploys
                 </Tab>
               </Link>
               <Link to="/events">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/events" ? "pri.orange" : "grey.100"}
+                  borderBottom={activePath === "/events" ? "2px solid" : "none"}
+                >
                   <Icon as={FaBell} size="24px" />
                   Events
                 </Tab>
               </Link>
               <Link to="/logs">
-                <Tab _hover={{ color: "grey.400", borderColor: "grey.400" }}>
+                <Tab
+                  _hover={{ color: "grey.400", borderColor: "grey.400" }}
+                  color={activePath === "/logs" ? "pri.orange" : "grey.100"}
+                  borderBottom={activePath === "/logs" ? "2px solid" : "none"}
+                >
                   <Icon as={FaRegFileCode} size="24px" />
                   Logs
                 </Tab>

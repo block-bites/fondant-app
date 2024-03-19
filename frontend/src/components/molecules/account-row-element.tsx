@@ -19,6 +19,14 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
     setIsModalOpen(false);
   };
 
+  const fontSize = {
+    base: "sm",
+    sm: "sm",
+    md: "md",
+    lg: "lg",
+    xl: "2xl",
+  };
+
   return (
     <>
       <Flex
@@ -32,7 +40,7 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
           <Text fontSize="md" color="grey.300" fontWeight={500}>
             Public Key
           </Text>
-          <Text fontSize="lg" color="grey.800">
+          <Text fontSize={fontSize} color="grey.800">
             {publicKey}
           </Text>
         </VStack>

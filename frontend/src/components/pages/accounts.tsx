@@ -10,6 +10,8 @@ type AccountData = {
   privateKey: string;
 };
 
+
+
 const Accounts = () => {
   const { searchValue } = useSearchContext();
   const [accountsData, setAccountsData] = useState<AccountData[]>([]);

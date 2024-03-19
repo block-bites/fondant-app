@@ -72,9 +72,24 @@ function AppContent() {
   const isSettingsPage = location.pathname === "/settings";
   const isStartPage = location.pathname === "/";
 
+  const [screenWidth, setScreenWidth] = useState<number>(0);
+  const [isLaptop, setIsLaptop] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsLaptop(window.innerWidth > 768 && window.innerWidth < 1024);
+  }, [screenWidth]);
+
+  useEffect(() => {
+    function handleResize() {
+      setScreenWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
-      {!isSettingsPage && !isStartPage && <Navbar />}
+      {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} />}
       <Routes>
         <Route path="/" element={<Start />} />
         <Route path="/accounts" element={<Accounts />} />

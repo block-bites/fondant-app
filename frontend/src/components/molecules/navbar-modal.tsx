@@ -63,11 +63,15 @@ export default function NavbarModal({
             </Stack>
           </ModalBody>
           <ModalFooter justifyContent={"space-between"}>
-            <Button colorScheme="red" onClick={handleAgreeClick}>
-              Yes, reset it
+            <Button
+              colorScheme="red"
+              onClick={handleAgreeClick}
+              minWidth="100px"
+            >
+              Confirm
             </Button>
-            <Button colorScheme="green" onClick={onClose}>
-              No, don't reset
+            <Button colorScheme="green" onClick={onClose} minWidth="100px">
+              Cancel
             </Button>
           </ModalFooter>
         </ModalContent>

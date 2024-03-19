@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [Navbar menu is working correctly](https://github.com/block-bites/fondant-app/pull/64)
 
-###Features
+### Features
 
 [added modal (popup) window for networks reset confirmation](https://github.com/block-bites/fondant-app/pull/77)
 [Preloaders added for all pages, visual bugs fixed](https://github.com/block-bites/fondant-app/pull/80)

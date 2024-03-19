@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from "react";
-import { Flex, Text, Box } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Flex, Text, Box, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
 import formatJson from "../atoms/format-json";
@@ -7,15 +7,17 @@ import formatJson from "../atoms/format-json";
 type Event = any;
 
 export default function Events() {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[] | null>(null);
   const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const eventCapacity = 100;
   const { nodeNumber } = useNodeContext();
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           `http://localhost:3001/cache/events/${nodeNumber}`
@@ -26,6 +28,8 @@ export default function Events() {
         setEvents(historicalEvents);
       } catch (error) {
         console.error("Error fetching historical events:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -40,7 +44,9 @@ export default function Events() {
       try {
         const newEvent: Event = JSON.parse(e.data);
         setEvents((prevEvents) => {
-          const updatedEvents = [newEvent, ...prevEvents];
+          const updatedEvents = prevEvents
+            ? [newEvent, ...prevEvents]
+            : [newEvent];
           return updatedEvents.slice(0, eventCapacity);
         });
       } catch (error) {
@@ -62,41 +68,59 @@ export default function Events() {
     setExpandedEventIndex(expandedEventIndex === index ? null : index);
   };
 
-  return (
-    <Flex direction="column" width="100%">
-      <Box overflowY="auto" maxHeight="80vh" p={3}>
-        {events.length === 0 ? (
+  if (isLoading) {
+    return (
+      <Flex
+        justifyContent="center"
+        height="calc(100vh - 148px)"
+        alignItems="center"
+      >
+        <Spinner size="xl" colorScheme="gray" />
+      </Flex>
+    );
+  }
+
+  if (events?.length === 0) {
+    return (
+      <Flex direction="column" width="100%">
+        <Box overflowY="auto" maxHeight="80vh" p={3}>
           <Flex w="100%" justify="center" pt="100px">
             <Text color="grey.400">No events</Text>
           </Flex>
-        ) : (
-          events.map((event, index) => (
-            <Box
-              key={index}
-              p={3}
-              borderBottom="1px solid grey"
-              cursor="pointer"
-              onClick={() => toggleEvent(index)}
-            >
-              <Flex alignItems="center">
-                <Text
-                  transform={
-                    expandedEventIndex === index
-                      ? "rotate(90deg)"
-                      : "rotate(0deg)"
-                  }
-                >
-                  ▶
-                </Text>
-                <Box ml={2} overflowX="auto">
-                  {expandedEventIndex === index
-                    ? formatJson(event, 0, true)
-                    : formatJson(event, 0, false)}
-                </Box>
-              </Flex>
-            </Box>
-          ))
-        )}
+        </Box>
+      </Flex>
+    );
+  }
+
+  return (
+    <Flex direction="column" width="100%">
+      <Box overflowY="auto" maxHeight="80vh" p={3}>
+        {events?.map((event, index) => (
+          <Box
+            key={index}
+            p={3}
+            borderBottom="1px solid grey"
+            cursor="pointer"
+            onClick={() => toggleEvent(index)}
+          >
+            <Flex alignItems="center">
+              <Text
+                transform={
+                  expandedEventIndex === index
+                    ? "rotate(90deg)"
+                    : "rotate(0deg)"
+                }
+              >
+                ▶
+              </Text>
+              <Box ml={2} overflowX="auto">
+                {expandedEventIndex === index
+                  ? formatJson(event, 0, true)
+                  : formatJson(event, 0, false)}
+              </Box>
+            </Flex>
+          </Box>
+        ))}
       </Box>
     </Flex>
   );

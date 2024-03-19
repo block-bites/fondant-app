@@ -13,6 +13,7 @@ import {
   Select,
   Image,
 } from "@chakra-ui/react";
+import NavbarModal from "../molecules/navbar-modal";
 import { FaBell, FaRegFileCode } from "react-icons/fa";
 import { BiGridAlt } from "react-icons/bi";
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md";
@@ -35,12 +36,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
   const [isSystemRunning, setIsSystemRunning] = useState<boolean>(
     JSON.parse(localStorage.getItem("isSystemRunning") || "true")
   );
-  const location: Location = useLocation();
-  const [activePath, setActivePath] = useState<string>(location.pathname);
-
-  useEffect(() => {
-    setActivePath(location.pathname);
-  }, [location]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [resetTrigger, setResetTrigger] = useState<boolean>(false);
 
   useEffect(() => {
     fetchStartTime();
@@ -56,12 +53,15 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
   }, [nodeNumber]);
 
   useEffect(() => {
+    fetchStartTime();
     fetchStatus();
+
     const intervalId = setInterval(() => {
       fetchStatus();
     }, 5000); // 5 seconds interval
+
     return () => clearInterval(intervalId);
-  }, []);
+  }, [resetTrigger]);
 
   useEffect(() => {
     localStorage.setItem("isSystemRunning", JSON.stringify(isSystemRunning));
@@ -103,6 +103,14 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
     } catch (error) {
       console.error("Error stopping the system:", error);
     }
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   const fetchStatus = async () => {
@@ -149,6 +157,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
         method: "POST",
       });
       console.log("Reset successful:", response.status);
+      setResetTrigger((prev) => !prev);
     } catch (error) {
       console.error("Error sending reset request:", error);
     }
@@ -258,7 +267,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
                 UPTIME
               </Text>
               <Text fontSize="14px" color="black">
-                {uptime}
+                {uptime ? uptime : "Loading..."}
               </Text>
             </Box>
           </HStack>
@@ -300,7 +309,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
               fontWeight="semibold"
               fontSize="14px"
               cursor="pointer"
-              onClick={handleReset}
+              onClick={handleModalOpen}
             >
               Reset
             </Box>
@@ -319,6 +328,11 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
           </HStack>
         </HStack>
       </HStack>
+      <NavbarModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        handleReset={handleReset}
+      />
     </Flex>
   );
 };

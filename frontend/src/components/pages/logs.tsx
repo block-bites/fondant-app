@@ -6,7 +6,7 @@ import {
   Button,
   Select,
   VStack,
-  Progress,
+  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
@@ -82,14 +82,7 @@ export default function Logs() {
         height="calc(100vh - 148px)"
         alignItems="center"
       >
-        <Progress
-          size="lg"
-          rounded={50}
-          isIndeterminate
-          width="100%"
-          maxWidth="1440px"
-          colorScheme="gray"
-        />
+        <Spinner size="xl" colorScheme="gray" />
       </Flex>
     );
 

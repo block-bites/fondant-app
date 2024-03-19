@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from "react";
-import { Flex, Text, Box, Progress } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Flex, Text, Box, Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { useNodeContext } from "../../context/NodeContext";
 import formatJson from "../atoms/format-json";
@@ -76,14 +76,7 @@ export default function Events() {
         height="calc(100vh - 148px)"
         alignItems="center"
       >
-        <Progress
-          size="lg"
-          rounded={50}
-          isIndeterminate
-          width="100%"
-          maxWidth="1440px"
-          colorScheme="gray"
-        />
+        <Spinner size="xl" colorScheme="gray" />
       </Flex>
     );
   }

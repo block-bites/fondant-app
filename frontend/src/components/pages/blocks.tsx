@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Flex, VStack, Text, Button, Progress } from "@chakra-ui/react";
+import { Flex, VStack, Text, Button, Spinner } from "@chakra-ui/react";
 import { Helmet } from "react-helmet-async";
 import BlockRowElement from "../molecules/blocks-row-element";
 import {
@@ -101,14 +101,7 @@ export default function Blocks() {
         height="calc(100vh - 148px)"
         alignItems="center"
       >
-        <Progress
-          size="lg"
-          rounded={50}
-          isIndeterminate
-          width="100%"
-          maxWidth="1440px"
-          colorScheme="gray"
-        />
+        <Spinner size="xl" colorScheme="gray" />
       </Flex>
     );
   }

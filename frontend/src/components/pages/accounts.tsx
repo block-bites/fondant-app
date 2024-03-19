@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchContext } from "../../context/SearchContext";
 import { Helmet } from "react-helmet-async";
-import { Flex, VStack, Text, Progress, Box } from "@chakra-ui/react";
+import { Flex, VStack, Text, Spinner } from "@chakra-ui/react";
 import AccountRowElement from "../molecules/account-row-element";
 import axios from "axios";
 
@@ -56,14 +56,7 @@ const Accounts = () => {
         height="calc(100vh - 148px)"
         alignItems="center"
       >
-        <Progress
-          size="lg"
-          rounded={50}
-          isIndeterminate
-          width="100%"
-          maxWidth="1440px"
-          colorScheme="gray"
-        />
+        <Spinner size="xl" colorScheme="gray" />
       </Flex>
     );
   }

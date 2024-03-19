@@ -38,6 +38,12 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [resetTrigger, setResetTrigger] = useState<boolean>(false);
+  const location: Location = useLocation();
+  const [activePath, setActivePath] = useState<string>(location.pathname);
+
+  useEffect(() => {
+    setActivePath(location.pathname);
+  }, [location]);
 
   useEffect(() => {
     fetchStartTime();

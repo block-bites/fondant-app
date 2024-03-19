@@ -44,7 +44,6 @@ export default function Events() {
       try {
         const newEvent: Event = JSON.parse(e.data);
         setEvents((prevEvents) => {
-          // Убедитесь, что prevEvents является массивом
           const updatedEvents = prevEvents
             ? [newEvent, ...prevEvents]
             : [newEvent];

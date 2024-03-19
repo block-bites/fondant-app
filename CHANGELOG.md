@@ -7,16 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Added
+
 #### Frontend
 
-### Fixes
+- [Added modal (popup) window for networks reset confirmation](https://github.com/block-bites/fondant-app/pull/77)
+- [Preloaders added for all pages, visual bugs fixed](https://github.com/block-bites/fondant-app/pull/80)
 
-[Navbar menu is working correctly](https://github.com/block-bites/fondant-app/pull/64)
+### Fixed
 
-### Features
+#### Frontend
 
-[added modal (popup) window for networks reset confirmation](https://github.com/block-bites/fondant-app/pull/77)
-[Preloaders added for all pages, visual bugs fixed](https://github.com/block-bites/fondant-app/pull/80)
+- [Navbar menu is working correctly](https://github.com/block-bites/fondant-app/pull/64)
 
 ## [1.0.0] - 2024-01-15
 

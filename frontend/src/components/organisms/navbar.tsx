@@ -3,6 +3,7 @@ import { useLocation, Location } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { Box, HStack, Tab, Tabs, TabList, Flex, Icon, Text, Select, Image } from "@chakra-ui/react"
 import NavbarModal from "../molecules/navbar-modal"
+import NavbarMobile from "./navbar-mobile"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
 import { BiGridAlt } from "react-icons/bi"
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
@@ -12,9 +13,10 @@ import Logo from "../../assets/logo.svg"
 
 interface NavbarProps {
     isLaptop: boolean
+    isMobile: boolean
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
+const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     const { nodeNumber, setNodeNumber } = useNodeContext()
     const [currentBlock, setCurrentBlock] = useState<number>(0)
     const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`)
@@ -164,6 +166,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop }) => {
             </option>
         )
     }
+
+    if (isMobile) return <NavbarMobile />
 
     return (
         <Flex w="100%" direction="column">

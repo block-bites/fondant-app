@@ -36,13 +36,13 @@ export const App = () => {
         )
     }, [screenWidth])
 
-    if (isMobile) {
-        return (
-            <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
-                <Text align="center">Used device and resolution not supported</Text>
-            </HStack>
-        )
-    }
+    // if (isMobile) {
+    //     return (
+    //         <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
+    //             <Text align="center">Used device and resolution not supported</Text>
+    //         </HStack>
+    //     )
+    // }
 
     return (
         <NodeProvider>
@@ -67,9 +67,11 @@ function AppContent() {
 
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [isLaptop, setIsLaptop] = useState<boolean>(false)
+    const [isMobile, setIsMobile] = useState<boolean>(false)
 
     useEffect(() => {
         setIsLaptop(window.innerWidth > 768 && window.innerWidth < 1024)
+        setIsMobile(window.innerWidth < 768)
     }, [screenWidth])
 
     useEffect(() => {
@@ -82,7 +84,7 @@ function AppContent() {
 
     return (
         <>
-            {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} />}
+            {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} isMobile={isMobile} />}
             <Routes>
                 <Route path="/" element={<Start />} />
                 <Route path="/accounts" element={<Accounts />} />

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 #### Frontend
 
+- [Deploy, Event and Logs mapped elements are separated](https://github.com/block-bites/fondant-app/pull/78)
 - [Navbar menu is working correctly](https://github.com/block-bites/fondant-app/pull/64)
 
 ## [1.0.0] - 2024-01-15

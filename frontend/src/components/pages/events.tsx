@@ -62,41 +62,53 @@ export default function Events() {
         setExpandedEventIndex(expandedEventIndex === index ? null : index)
     }
 
-    return (
-        <Flex direction="column" width="100%">
-            <Box overflowY="auto" maxHeight="80vh" p={3}>
-                {events?.length === 0 ? (
+    if (isLoading) {
+        return (
+            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
+                <Spinner size="xl" colorScheme="gray" />
+            </Flex>
+        )
+    }
+
+    if (events?.length === 0) {
+        return (
+            <Flex direction="column" width="100%">
+                <Box overflowY="auto" maxHeight="80vh" p={3}>
                     <Flex w="100%" justify="center" pt="100px">
                         <Text color="grey.400">No events</Text>
                     </Flex>
-                ) : (
-                    events?.map((event, index) => (
-                        <Box
-                            key={index}
-                            p={3}
-                            borderBottom="1px solid grey"
-                            cursor="pointer"
-                            onClick={() => toggleEvent(index)}
-                        >
-                            <Flex alignItems="center">
-                                <Text
-                                    transform={
-                                        expandedEventIndex === index
-                                            ? "rotate(90deg)"
-                                            : "rotate(0deg)"
-                                    }
-                                >
-                                    ▶
-                                </Text>
-                                <Box ml={2} overflowX="auto">
-                                    {expandedEventIndex === index
-                                        ? formatJson(event, 0, true)
-                                        : formatJson(event, 0, false)}
-                                </Box>
-                            </Flex>
-                        </Box>
-                    ))
-                )}
+                </Box>
+            </Flex>
+        )
+    }
+
+    return (
+        <Flex direction="column" width="100%">
+            <Box overflowY="auto" maxHeight="80vh" p={3}>
+                {events?.map((event, index) => (
+                    <Box
+                        key={index}
+                        p={3}
+                        borderBottom="1px solid grey"
+                        cursor="pointer"
+                        onClick={() => toggleEvent(index)}
+                    >
+                        <Flex alignItems="center">
+                            <Text
+                                transform={
+                                    expandedEventIndex === index ? "rotate(90deg)" : "rotate(0deg)"
+                                }
+                            >
+                                ▶
+                            </Text>
+                            <Box ml={2} overflowX="auto">
+                                {expandedEventIndex === index
+                                    ? formatJson(event, 0, true)
+                                    : formatJson(event, 0, false)}
+                            </Box>
+                        </Flex>
+                    </Box>
+                ))}
             </Box>
         </Flex>
     )

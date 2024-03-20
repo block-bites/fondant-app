@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Flex, Text, Box } from "@chakra-ui/react"
+import { Flex, Text, Box, Spinner } from "@chakra-ui/react"
 import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
@@ -37,42 +37,49 @@ export default function Events() {
         setExpandedEventIndex(expandedEventIndex === index ? null : index)
     }
 
-    return (
-        <Flex direction="column" width="100%">
-            <Box overflowY="auto" maxHeight="80vh">
-                {events?.length === 0 ? (
-                    <Flex w="100%" justify="center" color="grey.400" pt="100px">
-                        <Text color="grey">No deploys</Text>
-                    </Flex>
-                ) : (
-                    events?.map((event, index) => (
-                        <Box
-                            key={index}
-                            p={3}
-                            borderBottom="1px solid grey"
-                            cursor="pointer"
-                            onClick={() => toggleEvent(index)}
-                        >
-                            <Flex alignItems="center">
-                                <Text
-                                    transform={
-                                        expandedEventIndex === index
-                                            ? "rotate(90deg)"
-                                            : "rotate(0deg)"
-                                    }
-                                >
-                                    ▶
-                                </Text>
-                                <Box ml={2} overflowX="auto">
-                                    {expandedEventIndex === index
-                                        ? formatJson(event, 0, true)
-                                        : formatJson(event, 0, false)}
-                                </Box>
-                            </Flex>
-                        </Box>
-                    ))
-                )}
-            </Box>
-        </Flex>
-    )
+    if (isLoading)
+        return (
+            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
+                <Spinner size="xl" colorScheme="gray" />
+            </Flex>
+        )
+    else
+        return (
+            <Flex direction="column" width="100%">
+                <Box overflowY="auto" maxHeight="80vh">
+                    {events?.length === 0 ? (
+                        <Flex w="100%" justify="center" color="grey.400" pt="100px">
+                            <Text color="grey">No deploys</Text>
+                        </Flex>
+                    ) : (
+                        events?.map((event, index) => (
+                            <Box
+                                key={index}
+                                p={3}
+                                borderBottom="1px solid grey"
+                                cursor="pointer"
+                                onClick={() => toggleEvent(index)}
+                            >
+                                <Flex alignItems="center">
+                                    <Text
+                                        transform={
+                                            expandedEventIndex === index
+                                                ? "rotate(90deg)"
+                                                : "rotate(0deg)"
+                                        }
+                                    >
+                                        ▶
+                                    </Text>
+                                    <Box ml={2} overflowX="auto">
+                                        {expandedEventIndex === index
+                                            ? formatJson(event, 0, true)
+                                            : formatJson(event, 0, false)}
+                                    </Box>
+                                </Flex>
+                            </Box>
+                        ))
+                    )}
+                </Box>
+            </Flex>
+        )
 }

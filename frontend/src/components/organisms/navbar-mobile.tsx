@@ -54,98 +54,116 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({
                 </Link>
                 <Text color="white" fontSize={["12px", "16px"]}>
                     {isResetting
-                        ? "Resetting..."
-                        : `Uptime: ${uptime.length === 0 ? "Loading..." : uptime}`}
+                        ? "Uptime resetting..."
+                        : uptime.length === 0
+                          ? "Uptime loading..."
+                          : `Uptime: ${uptime}`}
                 </Text>
             </Flex>
             <Flex>
                 <Hamburger toggled={open} toggle={setOpen} size={35} color="white" rounded />
             </Flex>
             {open ? (
-                <Flex position="absolute" right="0" top="65px">
-                    <Flex
-                        w={["75vw", "55vw", "0"]}
-                        h={["90vh", "90vh", "0"]}
-                        flexDir="column"
-                        background="white"
-                        zIndex={90}
-                        padding="20px 24px 0 0"
-                        alignItems="flex-end"
-                        gap="20px"
-                        boxShadow="0px 4px 45px 0px rgba(52, 55, 80, 0.15)"
-                    >
-                        <Link to="/accounts" onClick={() => setOpen(false)}>
-                            <Text fontSize={["36px", "42px"]}>Accounts</Text>
-                        </Link>
-                        <Link to="/blocks" onClick={() => setOpen(false)}>
-                            <Text fontSize={["36px", "42px"]}>Blocks</Text>
-                        </Link>
-                        <Link to="/deploys" onClick={() => setOpen(false)}>
-                            <Text fontSize={["36px", "42px"]}>Deploys</Text>
-                        </Link>
-                        <Link to="/events" onClick={() => setOpen(false)}>
-                            <Text fontSize={["36px", "42px"]}>Events</Text>
-                        </Link>
-                        <Link to="/logs" onClick={() => setOpen(false)}>
-                            <Text fontSize={["36px", "42px"]}>Logs</Text>
-                        </Link>
-                        <Flex gap="20px" margin="50px 0 0 0">
-                            {!isSystemRunning ? (
+                <>
+                    <Box
+                        position="fixed"
+                        top="0"
+                        left="0"
+                        width="100vw"
+                        height="100vh"
+                        bg="transparent"
+                        zIndex="2"
+                        onClick={() => setOpen(false)}
+                    />
+                    <Flex position="absolute" right="0" top="60px">
+                        <Flex
+                            w={["75vw", "55vw", "0"]}
+                            h={["90vh", "90vh", "0"]}
+                            flexDir="column"
+                            background="white"
+                            zIndex={90}
+                            padding="20px 24px 0 0"
+                            alignItems="flex-end"
+                            gap="20px"
+                            boxShadow="0px 4px 45px 0px rgba(52, 55, 80, 0.15)"
+                        >
+                            <Link to="/accounts" onClick={() => setOpen(false)}>
+                                <Text fontSize={["36px", "42px"]}>Accounts</Text>
+                            </Link>
+                            <Link to="/blocks" onClick={() => setOpen(false)}>
+                                <Text fontSize={["36px", "42px"]}>Blocks</Text>
+                            </Link>
+                            <Link to="/deploys" onClick={() => setOpen(false)}>
+                                <Text fontSize={["36px", "42px"]}>Deploys</Text>
+                            </Link>
+                            <Link to="/events" onClick={() => setOpen(false)}>
+                                <Text fontSize={["36px", "42px"]}>Events</Text>
+                            </Link>
+                            <Link to="/logs" onClick={() => setOpen(false)}>
+                                <Text fontSize={["36px", "42px"]}>Logs</Text>
+                            </Link>
+                            <Flex gap="20px" margin="50px 0 0 0">
+                                {!isSystemRunning ? (
+                                    <Box
+                                        bg="green.500"
+                                        color="white"
+                                        borderRadius="4px"
+                                        p="4px 12px"
+                                        fontWeight="semibold"
+                                        fontSize="14px"
+                                        cursor="pointer"
+                                        onClick={handleStart}
+                                    >
+                                        Start
+                                    </Box>
+                                ) : (
+                                    <Box
+                                        bg="red.500"
+                                        color="white"
+                                        borderRadius="4px"
+                                        p="4px 12px"
+                                        fontWeight="semibold"
+                                        fontSize="14px"
+                                        cursor="pointer"
+                                        onClick={handleStop}
+                                    >
+                                        Stop
+                                    </Box>
+                                )}
                                 <Box
-                                    bg="green.500"
+                                    bg="pri.orange"
                                     color="white"
                                     borderRadius="4px"
                                     p="4px 12px"
                                     fontWeight="semibold"
                                     fontSize="14px"
                                     cursor="pointer"
-                                    onClick={handleStart}
+                                    onClick={() => setConformOpen((prev) => !prev)}
                                 >
-                                    Start
-                                </Box>
-                            ) : (
-                                <Box
-                                    bg="red.500"
-                                    color="white"
-                                    borderRadius="4px"
-                                    p="4px 12px"
-                                    fontWeight="semibold"
-                                    fontSize="14px"
-                                    cursor="pointer"
-                                    onClick={handleStop}
-                                >
-                                    Stop
-                                </Box>
-                            )}
-                            <Box
-                                bg="pri.orange"
-                                color="white"
-                                borderRadius="4px"
-                                p="4px 12px"
-                                fontWeight="semibold"
-                                fontSize="14px"
-                                cursor="pointer"
-                                onClick={() => setConformOpen((prev) => !prev)}
-                            >
-                                Reset
-                            </Box>
-                        </Flex>
-                        {confirmOpen ? (
-                            <Flex gap="20px">
-                                <Button color="red" w="90px" onClick={() => handleResetConfirm()}>
                                     Reset
-                                </Button>
-                                <Button
-                                    color="green"
-                                    w="90px"
-                                    onClick={() => setConformOpen(false)}
-                                >
-                                    Cancel
-                                </Button>
+                                </Box>
                             </Flex>
-                        ) : null}
+                            {confirmOpen ? (
+                                <Flex gap="20px">
+                                    <Button
+                                        color="red"
+                                        w="90px"
+                                        onClick={() => handleResetConfirm()}
+                                    >
+                                        Reset
+                                    </Button>
+                                    <Button
+                                        color="green"
+                                        w="90px"
+                                        onClick={() => setConformOpen(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </Flex>
+                            ) : null}
+                        </Flex>
                     </Flex>
-                </Flex>
+                </>
             ) : null}
         </Flex>
     )

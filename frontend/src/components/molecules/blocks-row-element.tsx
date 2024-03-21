@@ -26,7 +26,7 @@ export default function BlockRowElement({
         sm: "15px",
         lg: "14px",
         xl: "15px",
-        "2xl": "13px",
+        "2xl": "14px",
     }
 
     return (
@@ -37,7 +37,7 @@ export default function BlockRowElement({
             borderBottomColor="grey.100"
             justify="left"
             align="center"
-            p="0 32px 0 0"
+            p={["0 16px 0 0", "0 16px 0 0", "0 16px 0 0", "0 32px 0 0", "0"]}
         >
             <VStack
                 background="#00800033"
@@ -64,7 +64,7 @@ export default function BlockRowElement({
                         minWidth={"6vw"}
                         gap={["5px", "5px", "unset"]}
                     >
-                        <Text fontSize={fontSize} fontWeight="normal">
+                        <Text fontSize={fontSize} fontWeight="normal" whiteSpace="nowrap">
                             ERA
                         </Text>
                         <Text fontSize={fontSize} fontWeight="semibold">

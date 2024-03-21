@@ -17,17 +17,22 @@ export default function BlockRowElement({
     blockHash,
 }: BlockRowElementProps) {
     const fontSize = {
-        base: "1.15vw",
-        sm: "1.25vw",
-        lg: "1.25vw",
-        xl: "1.25vw",
-        "2xl": "1.13vw",
+        // base: "10px",
+        // sm: "1.5vw",
+        // lg: "1.10vw",
+        // xl: "1.30vw",
+        // "2xl": "14px",
+        base: "12px",
+        sm: "15px",
+        lg: "14px",
+        xl: "15px",
+        "2xl": "13px",
     }
 
     return (
         <Flex
             w="100%"
-            h="94px"
+            h={["165px", "165px", "135px", "105px", "94px"]}
             borderBottom="1px solid"
             borderBottomColor="grey.100"
             justify="left"
@@ -48,38 +53,51 @@ export default function BlockRowElement({
                     {height.toString()}
                 </Text>
             </VStack>
-            <VStack align="center" minWidth={"6vw"}>
-                <Text fontSize={fontSize} fontWeight="normal">
-                    ERA
-                </Text>
-                <Text fontSize={fontSize} fontWeight="semibold">
-                    {era.toString()}
-                </Text>
-            </VStack>
-            <VStack align="center" minWidth={"9.5vw"}>
-                <Text fontSize={fontSize} fontWeight="normal">
-                    DEPLOYS
-                </Text>
-                <Text fontSize={fontSize} fontWeight="semibold">
-                    {deploys.toString()}
-                </Text>
-            </VStack>
-            <VStack align="left" minWidth={"20vw"}>
-                <Text fontSize={fontSize} fontWeight="normal">
-                    AGE
-                </Text>
-                <Text fontSize={fontSize} fontWeight="semibold">
-                    {age}
-                </Text>
-            </VStack>
-            <VStack align="right" width={"100%"}>
-                <Text fontSize={fontSize} fontWeight="normal" align="left">
-                    BLOCK HASH
-                </Text>
-                <Text fontSize={fontSize} fontWeight="semibold" align="left">
-                    {blockHash}
-                </Text>
-            </VStack>
+            <Flex
+                direction={["column", "column", "row"]}
+                gap={["10px", "10px", "10px"]}
+                m={["0 0 0 16px", "0 0 0 16px", "unset"]}
+            >
+                <Flex gap={["24px", "24px", "10px", "10px", "10px"]}>
+                    <VStack align={["left", "left", "center"]} minWidth={"6vw"}>
+                        <Text fontSize={fontSize} fontWeight="normal">
+                            ERA
+                        </Text>
+                        <Text fontSize={fontSize} fontWeight="semibold">
+                            {era.toString()}
+                        </Text>
+                    </VStack>
+                    <VStack align="center" minWidth={"9.5vw"}>
+                        <Text fontSize={fontSize} fontWeight="normal">
+                            DEPLOYS
+                        </Text>
+                        <Text fontSize={fontSize} fontWeight="semibold">
+                            {deploys.toString()}
+                        </Text>
+                    </VStack>
+                    <VStack align="left" minWidth={"20vw"}>
+                        <Text fontSize={fontSize} fontWeight="normal">
+                            AGE
+                        </Text>
+                        <Text fontSize={fontSize} fontWeight="semibold">
+                            {age}
+                        </Text>
+                    </VStack>
+                </Flex>
+                <VStack align="right" width={"100%"} gap={["5px", "5px", "unset"]}>
+                    <Text fontSize={fontSize} fontWeight="normal" align="left">
+                        BLOCK HASH
+                    </Text>
+                    <Text
+                        fontSize={fontSize}
+                        fontWeight="semibold"
+                        align="left"
+                        wordBreak={["break-all", "break-all", "break-all", "break-all", "unset"]}
+                    >
+                        {blockHash}
+                    </Text>
+                </VStack>
+            </Flex>
         </Flex>
     )
 }

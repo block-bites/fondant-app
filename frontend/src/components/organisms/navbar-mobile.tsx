@@ -7,10 +7,20 @@ import Logo from "../../assets/logo.svg"
 interface INavbarMobProps {
     uptime: string
     isResetting: boolean
+    isSystemRunning: boolean
     handleReset: () => void
+    handleStart: () => void
+    handleStop: () => void
 }
 
-const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime, handleReset, isResetting }) => {
+const NavbarMobile: React.FC<INavbarMobProps> = ({
+    uptime,
+    isResetting,
+    isSystemRunning,
+    handleReset,
+    handleStart,
+    handleStop,
+}) => {
     const [open, setOpen] = useState<boolean>(false)
     const [confirmOpen, setConformOpen] = useState<boolean>(false)
 
@@ -79,30 +89,33 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime, handleReset, isResett
                             <Text fontSize={["36px", "42px"]}>Logs</Text>
                         </Link>
                         <Flex gap="20px" margin="50px 0 0 0">
-                            <Box
-                                bg="green.500"
-                                color="white"
-                                borderRadius="4px"
-                                p="4px 12px"
-                                fontWeight="semibold"
-                                fontSize="14px"
-                                cursor="pointer"
-                                //onClick={handleStart}
-                            >
-                                Start
-                            </Box>
-                            <Box
-                                bg="red.500"
-                                color="white"
-                                borderRadius="4px"
-                                p="4px 12px"
-                                fontWeight="semibold"
-                                fontSize="14px"
-                                cursor="pointer"
-                                // onClick={handleStop}
-                            >
-                                Stop
-                            </Box>
+                            {!isSystemRunning ? (
+                                <Box
+                                    bg="green.500"
+                                    color="white"
+                                    borderRadius="4px"
+                                    p="4px 12px"
+                                    fontWeight="semibold"
+                                    fontSize="14px"
+                                    cursor="pointer"
+                                    onClick={handleStart}
+                                >
+                                    Start
+                                </Box>
+                            ) : (
+                                <Box
+                                    bg="red.500"
+                                    color="white"
+                                    borderRadius="4px"
+                                    p="4px 12px"
+                                    fontWeight="semibold"
+                                    fontSize="14px"
+                                    cursor="pointer"
+                                    onClick={handleStop}
+                                >
+                                    Stop
+                                </Box>
+                            )}
                             <Box
                                 bg="pri.orange"
                                 color="white"

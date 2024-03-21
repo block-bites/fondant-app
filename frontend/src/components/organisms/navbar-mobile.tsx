@@ -6,10 +6,11 @@ import Logo from "../../assets/logo.svg"
 
 interface INavbarMobProps {
     uptime: string
+    isResetting: boolean
     handleReset: () => void
 }
 
-const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime, handleReset }) => {
+const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime, handleReset, isResetting }) => {
     const [open, setOpen] = useState<boolean>(false)
     const [confirmOpen, setConformOpen] = useState<boolean>(false)
 
@@ -41,7 +42,9 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime, handleReset }) => {
                     </Flex>
                 </Link>
                 <Text color="white" fontSize={["12px", "16px"]}>
-                    Uptime: {uptime.length === 0 ? "Loading..." : uptime}
+                    {isResetting
+                        ? "Resetting..."
+                        : `Uptime: ${uptime.length === 0 ? "Loading..." : uptime}`}
                 </Text>
             </Flex>
             <Flex>

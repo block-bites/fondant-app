@@ -27,6 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     )
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [resetTrigger, setResetTrigger] = useState<boolean>(false)
+    const [isResetting, setIsResetting] = useState<boolean>(false)
     const location: Location = useLocation()
     const [activePath, setActivePath] = useState<string>(location.pathname)
 
@@ -147,14 +148,21 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     }, [startTime])
 
     const handleReset = async () => {
+        setIsResetting(true)
         try {
             const response = await fetch("http://localhost:3001/nctl-start", {
                 method: "POST",
             })
-            console.log("Reset successful:", response.status)
-            setResetTrigger((prev) => !prev)
+            if (response.status === 200) {
+                console.log("Reset successful:", response.status)
+                setTimeout(() => {
+                    setIsResetting(false)
+                }, 5000)
+                setResetTrigger((prev) => !prev)
+            }
         } catch (error) {
             console.error("Error sending reset request:", error)
+            setIsResetting(false)
         }
     }
 
@@ -167,7 +175,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         )
     }
 
-    if (isMobile) return <NavbarMobile uptime={uptime} handleReset={handleReset} />
+    if (isMobile)
+        return <NavbarMobile uptime={uptime} isResetting={isResetting} handleReset={handleReset} />
 
     return (
         <Flex w="100%" direction="column">
@@ -271,7 +280,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 UPTIME
                             </Text>
                             <Text fontSize="14px" color="black">
-                                {uptime ? uptime : "Loading..."}
+                                {isResetting
+                                    ? "Resetting..."
+                                    : `Uptime: ${uptime.length === 0 ? "Loading..." : uptime}`}
                             </Text>
                         </Box>
                     </HStack>

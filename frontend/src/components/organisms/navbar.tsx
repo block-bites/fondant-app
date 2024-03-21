@@ -167,7 +167,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         )
     }
 
-    if (isMobile) return <NavbarMobile />
+    if (isMobile) return <NavbarMobile uptime={uptime} />
 
     return (
         <Flex w="100%" direction="column">

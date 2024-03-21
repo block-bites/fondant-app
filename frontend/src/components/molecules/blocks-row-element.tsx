@@ -34,7 +34,13 @@ export default function BlockRowElement({
             align="center"
             p="0 32px 0 0"
         >
-            <VStack background="#00800033" p="8px 32px" h="100%" justify="center" align="center">
+            <VStack
+                background="#00800033"
+                p={["8px 16px", "8px 16px", "8px 32px"]}
+                h="100%"
+                justify="center"
+                align="center"
+            >
                 <Text fontSize={fontSize} lineHeight="tall" fontWeight="normal" color="grey.border">
                     HEIGHT
                 </Text>

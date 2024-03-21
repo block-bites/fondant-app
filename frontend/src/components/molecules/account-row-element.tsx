@@ -31,7 +31,7 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
         <>
             <Flex
                 w="100%"
-                p="16px 32px"
+                p={["16px", "16px", "16px 32px"]}
                 justify="space-between"
                 borderBottom="1px solid"
                 borderBottomColor="grey.100"

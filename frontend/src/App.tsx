@@ -32,7 +32,7 @@ export const App = () => {
     // Check device and screen width
     useEffect(() => {
         setIsMobile(
-            /android|iphone|kindle|ipad/i.test(navigator.userAgent) || window.innerWidth <= 768
+            /android|iphone|kindle|ipad/i.test(navigator.userAgent) || window.innerWidth < 768
         )
     }, [screenWidth])
 
@@ -70,7 +70,7 @@ function AppContent() {
     const [isMobile, setIsMobile] = useState<boolean>(false)
 
     useEffect(() => {
-        setIsLaptop(window.innerWidth > 768 && window.innerWidth < 1024)
+        setIsLaptop(window.innerWidth >= 768 && window.innerWidth < 1024)
         setIsMobile(window.innerWidth < 768)
     }, [screenWidth])
 

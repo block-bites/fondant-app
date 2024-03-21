@@ -56,7 +56,7 @@ const Accounts = () => {
                 <title>Fondant | Accounts</title>
             </Helmet>
             <Flex w="100%" justify="center">
-                <VStack w="100%" maxW="1440px" gap="0" mt="16px">
+                <VStack w="100%" maxW="1440px" gap="0" mt={["0px", "8px"]}>
                     {filteredAccounts.length > 0 ? (
                         filteredAccounts.map((account, index) => (
                             <AccountRowElement

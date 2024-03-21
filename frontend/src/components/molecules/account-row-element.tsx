@@ -20,7 +20,7 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
     }
 
     const fontSize = {
-        base: "sm",
+        base: "13px",
         sm: "sm",
         md: "md",
         lg: "lg",
@@ -35,8 +35,9 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
                 justify="space-between"
                 borderBottom="1px solid"
                 borderBottomColor="grey.100"
+                gap="10px"
             >
-                <VStack align="left" w="100%">
+                <VStack align="left" w="100%" gap="5px">
                     <Text fontSize="md" color="grey.300" fontWeight={500}>
                         Public Key
                     </Text>

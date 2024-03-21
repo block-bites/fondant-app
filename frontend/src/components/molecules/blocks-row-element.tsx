@@ -17,11 +17,6 @@ export default function BlockRowElement({
     blockHash,
 }: BlockRowElementProps) {
     const fontSize = {
-        // base: "10px",
-        // sm: "1.5vw",
-        // lg: "1.10vw",
-        // xl: "1.30vw",
-        // "2xl": "14px",
         base: "12px",
         sm: "15px",
         lg: "14px",

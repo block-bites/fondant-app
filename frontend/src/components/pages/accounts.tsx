@@ -13,11 +13,10 @@ type AccountData = {
 const Accounts = () => {
     const { searchValue } = useSearchContext()
     const [accountsData, setAccountsData] = useState<AccountData[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true) // Initialize as true
 
     useEffect(() => {
         const fetchAccountsData = async () => {
-            setIsLoading(true)
             let fetchedAccounts: AccountData[] = []
             for (let i = 1; i <= 10; i++) {
                 try {
@@ -27,7 +26,6 @@ const Accounts = () => {
                         privateKey: response.data.private_key,
                     })
                 } catch (error) {
-                    setAccountsData([])
                     console.error(`Error fetching data for user ${i}:`, error)
                 }
             }

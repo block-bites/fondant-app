@@ -30,6 +30,7 @@ export default function Logs() {
                 setLogs(response.data)
                 filterLogs(response.data, currentLevel)
             } catch (error) {
+                setFilteredLogs([])
                 console.error("Error fetching logs:", error)
             } finally {
                 setIsLoading(false)
@@ -82,33 +83,35 @@ export default function Logs() {
                     ))}
                 </Select>
                 <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
-                    {selectedLogs.map((log, index) => (
-                        <Flex
-                            key={index}
-                            direction="column"
-                            p={3}
-                            borderBottom="1px solid #ddd"
-                            onClick={() => toggleLog(startIndex + index)}
-                            cursor="pointer"
-                        >
-                            <Flex alignItems="center">
-                                <Text
-                                    transform={
-                                        expandedLogIndex === startIndex + index
-                                            ? "rotate(90deg)"
-                                            : "rotate(0deg)"
-                                    }
-                                >
-                                    ▶
-                                </Text>
-                                <Box ml={2} overflowX="auto">
-                                    {expandedLogIndex === startIndex + index
-                                        ? formatJson(log, 0, true)
-                                        : formatJson(log, 0, false)}
-                                </Box>
-                            </Flex>
-                        </Flex>
-                    ))}
+                    {selectedLogs.length === 0
+                        ? "No logs for display"
+                        : selectedLogs.map((log, index) => (
+                              <Flex
+                                  key={index}
+                                  direction="column"
+                                  p={3}
+                                  borderBottom="1px solid #ddd"
+                                  onClick={() => toggleLog(startIndex + index)}
+                                  cursor="pointer"
+                              >
+                                  <Flex alignItems="center">
+                                      <Text
+                                          transform={
+                                              expandedLogIndex === startIndex + index
+                                                  ? "rotate(90deg)"
+                                                  : "rotate(0deg)"
+                                          }
+                                      >
+                                          ▶
+                                      </Text>
+                                      <Box ml={2} overflowX="auto">
+                                          {expandedLogIndex === startIndex + index
+                                              ? formatJson(log, 0, true)
+                                              : formatJson(log, 0, false)}
+                                      </Box>
+                                  </Flex>
+                              </Flex>
+                          ))}
                 </Box>
                 <Flex justifyContent="space-between" mt="10px" w="100%">
                     <Button onClick={handlePrevPage} disabled={currentPage === 1}>

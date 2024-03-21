@@ -104,7 +104,7 @@ const Blocks = () => {
     if (blocks.length === 0 && !loading) {
         return (
             <Flex w="100%" justify="center" color="grey.400" pt="100px">
-                <Text>No blocks available to display.</Text>
+                <Text>No blocks available to display</Text>
             </Flex>
         )
     }

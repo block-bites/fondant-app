@@ -23,6 +23,7 @@ export default function Events() {
                 )
                 setEvents(historicalEvents)
             } catch (error) {
+                setEvents([])
                 console.error("Error fetching historical events:", error)
             } finally {
                 setIsLoading(false)
@@ -75,7 +76,7 @@ export default function Events() {
             <Flex direction="column" width="100%">
                 <Box overflowY="auto" maxHeight="80vh" p={3}>
                     <Flex w="100%" justify="center" pt="100px">
-                        <Text color="grey.400">No events</Text>
+                        <Text color="grey.400">No events available to display</Text>
                     </Flex>
                 </Box>
             </Flex>

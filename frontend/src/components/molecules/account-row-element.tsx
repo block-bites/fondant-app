@@ -40,7 +40,7 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
                     <Text fontSize="md" color="grey.300" fontWeight={500}>
                         Public Key
                     </Text>
-                    <Text fontSize={fontSize} color="grey.800">
+                    <Text fontSize={fontSize} color="grey.800" wordBreak="break-all">
                         {publicKey}
                     </Text>
                 </VStack>

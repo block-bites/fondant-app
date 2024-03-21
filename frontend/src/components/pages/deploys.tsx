@@ -24,6 +24,7 @@ export default function Events() {
                 )
                 setEvents(historicalEvents)
             } catch (error) {
+                setEvents([])
                 console.error("Error fetching historical deploys:", error)
             } finally {
                 setIsLoading(false)
@@ -49,7 +50,7 @@ export default function Events() {
                 <Box overflowY="auto" maxHeight="80vh">
                     {events?.length === 0 ? (
                         <Flex w="100%" justify="center" color="grey.400" pt="100px">
-                            <Text color="grey">No deploys</Text>
+                            <Text color="grey">No deploys available to display</Text>
                         </Flex>
                     ) : (
                         events?.map((event, index) => (

@@ -27,6 +27,7 @@ const Accounts = () => {
                         privateKey: response.data.private_key,
                     })
                 } catch (error) {
+                    setAccountsData([])
                     console.error(`Error fetching data for user ${i}:`, error)
                 }
             }
@@ -58,7 +59,7 @@ const Accounts = () => {
             </Helmet>
             <Flex w="100%" justify="center">
                 <VStack w="100%" maxW="1440px" gap="0" mt="16px">
-                    {filteredAccounts ? (
+                    {filteredAccounts.length > 0 ? (
                         filteredAccounts.map((account, index) => (
                             <AccountRowElement
                                 key={index}
@@ -68,7 +69,7 @@ const Accounts = () => {
                         ))
                     ) : (
                         <Flex w="100%" justify="center" pt="100px">
-                            <Text color="grey.400">No accounts available to display.</Text>
+                            <Text color="grey.400">No accounts available to display</Text>
                         </Flex>
                     )}
                 </VStack>

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Flex, Image, Text, Box, Button } from "@chakra-ui/react"
 import Hamburger from "hamburger-react"
 import { Link } from "react-router-dom"
@@ -6,10 +6,18 @@ import Logo from "../../assets/logo.svg"
 
 interface INavbarMobProps {
     uptime: string
+    handleReset: () => void
 }
 
-const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime }) => {
-    const [open, setOpen] = useState(false)
+const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime, handleReset }) => {
+    const [open, setOpen] = useState<boolean>(false)
+    const [confirmOpen, setConformOpen] = useState<boolean>(false)
+
+    const handleResetConfirm = () => {
+        handleReset()
+        setConformOpen(false)
+    }
+
     return (
         <Flex
             w="100%"
@@ -100,19 +108,25 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({ uptime }) => {
                                 fontWeight="semibold"
                                 fontSize="14px"
                                 cursor="pointer"
-                                //onClick={handleModalOpen}
+                                onClick={() => setConformOpen((prev) => !prev)}
                             >
                                 Reset
                             </Box>
                         </Flex>
-                        <Flex gap="20px">
-                            <Button color="red" w="90px">
-                                Reset
-                            </Button>
-                            <Button color="green" w="90px">
-                                Cancel
-                            </Button>
-                        </Flex>
+                        {confirmOpen ? (
+                            <Flex gap="20px">
+                                <Button color="red" w="90px" onClick={() => handleResetConfirm()}>
+                                    Reset
+                                </Button>
+                                <Button
+                                    color="green"
+                                    w="90px"
+                                    onClick={() => setConformOpen(false)}
+                                >
+                                    Cancel
+                                </Button>
+                            </Flex>
+                        ) : null}
                     </Flex>
                 </Flex>
             ) : null}

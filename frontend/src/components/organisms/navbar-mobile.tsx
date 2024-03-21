@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react"
-import { Flex, Image, Text, Box, Button } from "@chakra-ui/react"
-import Hamburger from "hamburger-react"
 import { Link } from "react-router-dom"
+import { Flex, Image, Text, Box, Button, Icon } from "@chakra-ui/react"
+import Hamburger from "hamburger-react"
+import { FaBell, FaRegFileCode } from "react-icons/fa"
+import { BiGridAlt } from "react-icons/bi"
+import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
 import Logo from "../../assets/logo.svg"
 
 interface INavbarMobProps {
@@ -84,23 +87,38 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({
                             zIndex={90}
                             padding="20px 24px 0 0"
                             alignItems="flex-end"
-                            gap="20px"
+                            gap="15px"
                             boxShadow="0px 4px 45px 0px rgba(52, 55, 80, 0.15)"
                         >
                             <Link to="/accounts" onClick={() => setOpen(false)}>
-                                <Text fontSize={["36px", "42px"]}>Accounts</Text>
+                                <Flex alignItems="center" gap="15px" justifyContent="center">
+                                    <MdSupervisorAccount size="24px" />
+                                    <Text fontSize={["36px", "42px"]}> Accounts</Text>
+                                </Flex>
                             </Link>
                             <Link to="/blocks" onClick={() => setOpen(false)}>
-                                <Text fontSize={["36px", "42px"]}>Blocks</Text>
+                                <Flex alignItems="center" gap="15px" justifyContent="center">
+                                    <BiGridAlt size="24px" />
+                                    <Text fontSize={["36px", "42px"]}>Blocks</Text>
+                                </Flex>
                             </Link>
                             <Link to="/deploys" onClick={() => setOpen(false)}>
-                                <Text fontSize={["36px", "42px"]}>Deploys</Text>
+                                <Flex alignItems="center" gap="15px" justifyContent="center">
+                                    <MdCloudUpload size="24px" />
+                                    <Text fontSize={["36px", "42px"]}>Deploys</Text>
+                                </Flex>
                             </Link>
                             <Link to="/events" onClick={() => setOpen(false)}>
-                                <Text fontSize={["36px", "42px"]}>Events</Text>
+                                <Flex alignItems="center" gap="15px" justifyContent="center">
+                                    <FaBell size="24px" />
+                                    <Text fontSize={["36px", "42px"]}>Events</Text>
+                                </Flex>
                             </Link>
                             <Link to="/logs" onClick={() => setOpen(false)}>
-                                <Text fontSize={["36px", "42px"]}>Logs</Text>
+                                <Flex alignItems="center" gap="15px" justifyContent="center">
+                                    <FaRegFileCode size="24px" />
+                                    <Text fontSize={["36px", "42px"]}>Logs</Text>
+                                </Flex>
                             </Link>
                             <Flex gap="20px" margin="50px 0 0 0">
                                 {!isSystemRunning ? (

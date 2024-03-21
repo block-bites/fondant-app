@@ -59,7 +59,11 @@ export default function BlockRowElement({
                 m={["0 0 0 16px", "0 0 0 16px", "unset"]}
             >
                 <Flex gap={["24px", "24px", "10px", "10px", "10px"]}>
-                    <VStack align={["left", "left", "center"]} minWidth={"6vw"}>
+                    <VStack
+                        align={["left", "left", "center"]}
+                        minWidth={"6vw"}
+                        gap={["5px", "5px", "unset"]}
+                    >
                         <Text fontSize={fontSize} fontWeight="normal">
                             ERA
                         </Text>
@@ -67,7 +71,7 @@ export default function BlockRowElement({
                             {era.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="center" minWidth={"9.5vw"}>
+                    <VStack align="center" minWidth={"9.5vw"} gap={["5px", "5px", "unset"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             DEPLOYS
                         </Text>
@@ -75,7 +79,7 @@ export default function BlockRowElement({
                             {deploys.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="left" minWidth={"20vw"}>
+                    <VStack align="left" minWidth={"20vw"} gap={["5px", "5px", "unset"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             AGE
                         </Text>

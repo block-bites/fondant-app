@@ -27,6 +27,7 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({
     const handleResetConfirm = () => {
         handleReset()
         setConformOpen(false)
+        setOpen(false)
     }
 
     return (

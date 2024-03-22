@@ -132,11 +132,11 @@ export default function Events() {
                         </Box>
                     ))}
                 </Box>
-                <Flex justifyContent="space-between" mt="10px" w="100%">
+                <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
                     <Button onClick={handlePrevPage} disabled={currentPage === 1}>
                         Previous
                     </Button>
-                    <Text>
+                    <Text fontFamily="secondary">
                         Page {currentPage} of {Math.ceil(filteredEvents.length / EventsPerPage)}
                     </Text>
                     <Button

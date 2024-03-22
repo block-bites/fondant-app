@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { Flex, Image, Text, Box, Button, Icon } from "@chakra-ui/react"
+import { Flex, Image, Text, Box, Button } from "@chakra-ui/react"
 import Hamburger from "hamburger-react"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
 import { BiGridAlt } from "react-icons/bi"

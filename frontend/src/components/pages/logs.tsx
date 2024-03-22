@@ -117,7 +117,9 @@ export default function Logs() {
                     <Button onClick={handlePrevPage} disabled={currentPage === 1}>
                         Previous
                     </Button>
-                    <Text>Page {currentPage}</Text>
+                    <Text>
+                        Page {currentPage} of {Math.ceil(filteredLogs.length / LogsPerPage)}
+                    </Text>
                     <Button
                         onClick={handleNextPage}
                         disabled={currentPage * LogsPerPage >= logs.length}

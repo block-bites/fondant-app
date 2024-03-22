@@ -4,8 +4,6 @@ import { Link } from "react-router-dom"
 import Hamburger from "hamburger-react"
 import { Box, HStack, Tab, Tabs, TabList, Flex, Icon, Text, Select, Image } from "@chakra-ui/react"
 import NavbarModal from "../molecules/navbar-modal"
-
-import NavbarMobile from "./navbar-mobile"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
 import { BiGridAlt } from "react-icons/bi"
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
@@ -32,6 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     const [isResetting, setIsResetting] = useState<boolean>(false)
     const location: Location = useLocation()
     const [activePath, setActivePath] = useState<string>(location.pathname)
+    const [open, setOpen] = useState<boolean>(false)
 
     useEffect(() => {
         setActivePath(location.pathname)
@@ -64,6 +63,27 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     useEffect(() => {
         localStorage.setItem("isSystemRunning", JSON.stringify(isSystemRunning))
     }, [isSystemRunning])
+
+    useEffect(() => {
+        if (open) {
+            setOpen(false)
+        }
+    }, [isMobile])
+
+    useEffect(() => {
+        const updateUptime = () => {
+            if (startTime) {
+                const now = new Date()
+                const elapsed = new Date(now.getTime() - startTime.getTime())
+                const hours = elapsed.getUTCHours()
+                const minutes = elapsed.getUTCMinutes()
+                const seconds = elapsed.getUTCSeconds()
+                setUptime(`${hours}h ${minutes}m ${seconds}s`)
+            }
+        }
+        const intervalId = setInterval(updateUptime, 1000)
+        return () => clearInterval(intervalId)
+    }, [startTime])
 
     const fetchStartTime = async () => {
         try {
@@ -134,21 +154,6 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         }
     }
 
-    useEffect(() => {
-        const updateUptime = () => {
-            if (startTime) {
-                const now = new Date()
-                const elapsed = new Date(now.getTime() - startTime.getTime())
-                const hours = elapsed.getUTCHours()
-                const minutes = elapsed.getUTCMinutes()
-                const seconds = elapsed.getUTCSeconds()
-                setUptime(`${hours}h ${minutes}m ${seconds}s`)
-            }
-        }
-        const intervalId = setInterval(updateUptime, 1000)
-        return () => clearInterval(intervalId)
-    }, [startTime])
-
     const handleReset = async () => {
         setIsResetting(true)
         try {
@@ -177,21 +182,15 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         )
     }
 
-    // if (isMobile)
-    //     return (
-    //         <NavbarMobile
-    //             uptime={uptime}
-    //             isResetting={isResetting}
-    //             isSystemRunning={isSystemRunning}
-    //             handleReset={handleReset}
-    //             handleStart={handleStart}
-    //             handleStop={handleStop}
-    //         />
-    //     )
-
     return (
         <Flex w="100%" direction="column">
-            <HStack w="100%" bg="pri.dark" justify="center">
+            <HStack
+                w="100%"
+                bg="pri.dark"
+                justify="center"
+                position={["fixed", "fixed", "absolute"]}
+                zIndex="5"
+            >
                 <HStack
                     maxW="1440px"
                     w="100%"
@@ -208,7 +207,84 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                     </Link>
                     <Tabs variant="line" color="pri.orange" size={isLaptop ? "sm" : "lg"}>
                         {isMobile ? (
-                            <Hamburger color="white" />
+                            <Flex w="100%" height="50%">
+                                <Hamburger
+                                    toggled={open}
+                                    toggle={setOpen}
+                                    size={35}
+                                    color="white"
+                                    rounded
+                                />
+                                {open ? (
+                                    <Flex position="fixed" right="0" top="80px">
+                                        <Flex
+                                            w={["270px", "300px", "0"]}
+                                            h="100vh"
+                                            flexDir="column"
+                                            background="pri.dark"
+                                            color="grey.100"
+                                            zIndex={90}
+                                            padding="36px 24px 50px 0"
+                                            alignItems="flex-end"
+                                            gap="15px"
+                                        >
+                                            <Link to="/accounts" onClick={() => setOpen(false)}>
+                                                <Flex
+                                                    alignItems="center"
+                                                    gap="15px"
+                                                    justifyContent="center"
+                                                >
+                                                    <MdSupervisorAccount size="24px" />
+                                                    <Text fontSize={["36px", "42px"]}>
+                                                        {" "}
+                                                        Accounts
+                                                    </Text>
+                                                </Flex>
+                                            </Link>
+                                            <Link to="/blocks" onClick={() => setOpen(false)}>
+                                                <Flex
+                                                    alignItems="center"
+                                                    gap="15px"
+                                                    justifyContent="center"
+                                                >
+                                                    <BiGridAlt size="24px" />
+                                                    <Text fontSize={["36px", "42px"]}>Blocks</Text>
+                                                </Flex>
+                                            </Link>
+                                            <Link to="/deploys" onClick={() => setOpen(false)}>
+                                                <Flex
+                                                    alignItems="center"
+                                                    gap="15px"
+                                                    justifyContent="center"
+                                                >
+                                                    <MdCloudUpload size="24px" />
+                                                    <Text fontSize={["36px", "42px"]}>Deploys</Text>
+                                                </Flex>
+                                            </Link>
+                                            <Link to="/events" onClick={() => setOpen(false)}>
+                                                <Flex
+                                                    alignItems="center"
+                                                    gap="15px"
+                                                    justifyContent="center"
+                                                >
+                                                    <FaBell size="24px" />
+                                                    <Text fontSize={["36px", "42px"]}>Events</Text>
+                                                </Flex>
+                                            </Link>
+                                            <Link to="/logs" onClick={() => setOpen(false)}>
+                                                <Flex
+                                                    alignItems="center"
+                                                    gap="15px"
+                                                    justifyContent="center"
+                                                >
+                                                    <FaRegFileCode size="24px" />
+                                                    <Text fontSize={["36px", "42px"]}>Logs</Text>
+                                                </Flex>
+                                            </Link>
+                                        </Flex>
+                                    </Flex>
+                                ) : null}
+                            </Flex>
                         ) : (
                             <TabList
                                 border="none"

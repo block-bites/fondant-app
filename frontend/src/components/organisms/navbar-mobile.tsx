@@ -75,20 +75,20 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({
                         width="100vw"
                         height="100vh"
                         bg="transparent"
-                        zIndex="2"
+                        zIndex={2}
                         onClick={() => setOpen(false)}
                     />
                     <Flex position="absolute" right="0" top="60px">
                         <Flex
-                            w={["75vw", "55vw", "0"]}
-                            h={["90vh", "90vh", "0"]}
+                            w={["270px", "300px", "0"]}
+                            h={["calc(100vh - 60px)", "calc(100vh - 60px)", "0"]}
                             flexDir="column"
-                            background="white"
+                            background="pri.dark"
+                            color="grey.100"
                             zIndex={90}
                             padding="20px 24px 0 0"
                             alignItems="flex-end"
                             gap="15px"
-                            boxShadow="0px 4px 45px 0px rgba(52, 55, 80, 0.15)"
                         >
                             <Link to="/accounts" onClick={() => setOpen(false)}>
                                 <Flex alignItems="center" gap="15px" justifyContent="center">

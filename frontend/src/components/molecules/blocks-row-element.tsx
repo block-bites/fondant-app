@@ -57,7 +57,7 @@ export default function BlockRowElement({
                     <VStack
                         align={["left", "left", "center"]}
                         minWidth={"6vw"}
-                        gap={["3px", "5px", "unset"]}
+                        gap={["3px", "5px", "10px"]}
                     >
                         <Text fontSize={fontSize} fontWeight="normal" whiteSpace="nowrap">
                             ERA
@@ -66,7 +66,7 @@ export default function BlockRowElement({
                             {era.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="center" minWidth={"9.5vw"} gap={["3px", "5px", "unset"]}>
+                    <VStack align="center" minWidth={"9.5vw"} gap={["3px", "5px", "10px"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             DEPLOYS
                         </Text>
@@ -74,7 +74,7 @@ export default function BlockRowElement({
                             {deploys.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="left" minWidth={"20vw"} gap={["3px", "5px", "unset"]}>
+                    <VStack align="left" minWidth={"20vw"} gap={["3px", "5px", "10px"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             AGE
                         </Text>
@@ -83,7 +83,7 @@ export default function BlockRowElement({
                         </Text>
                     </VStack>
                 </Flex>
-                <VStack align="right" width={"100%"} gap={["3px", "5px", "unset"]}>
+                <VStack align="right" width={"100%"} gap={["3px", "5px", "10px"]}>
                     <Text fontSize={fontSize} fontWeight="normal" align="left">
                         BLOCK HASH
                     </Text>

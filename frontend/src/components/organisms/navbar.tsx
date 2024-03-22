@@ -308,8 +308,8 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             borderRight="1px solid"
                             borderColor="#2a3050"
                             alignItems="flex-start"
-                            width={["56px", "102px", "unset"]}
-                            p={["8px 0", "8px 5px 8px 0px", "8px 20px 8px 0px"]}
+                            width={["56px", "100px", "unset"]}
+                            p={["8px 0", "8px 0px", "8px 20px 8px 0px"]}
                         >
                             <Text fontSize={["8px", "10px"]} color="grey.400" fontWeight="semibold">
                                 CURRENT BLOCK

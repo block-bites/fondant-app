@@ -27,6 +27,16 @@ fn run(command: String, args: Option<Vec<String>>) -> Result<Json<utils::Command
     }
 }
 
+#[get("/activate")]
+fn activate() -> Result<Json<ActivationResponse>, Status> {
+    utils::run_command("cctl-infra-net-setup", None);
+    utils::parse_node_ports();
+    Ok(Json(ActivationResponse {
+        success: true,
+        message: "Network activated".to_string(),
+    }))
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()

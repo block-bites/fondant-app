@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
-[Added mobile view](https://github.com/block-bites/fondant-app/pull/91)
-
 ### Added
+
+[Added mobile view](https://github.com/block-bites/fondant-app/pull/91)
 
 #### Frontend
 

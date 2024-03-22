@@ -191,7 +191,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
 
     return (
         <Flex w="100%" direction="column">
-            <HStack w="100%" bg="pri.dark" justify="center" position="sticky">
+            <HStack w="100%" bg="pri.dark" justify="center">
                 <HStack
                     maxW="1440px"
                     w="100%"
@@ -314,37 +314,37 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             <Text fontSize={["8px", "10px"]} color="grey.400" fontWeight="semibold">
                                 CURRENT BLOCK
                             </Text>
-                            <Text fontSize={["11px", "14px"]} color="black">
+                            <Text fontSize={["10px", "14px"]} color="black">
                                 {currentBlock}
                             </Text>
                         </Box>
                         <Box
-                            p={["8px", "8px 15px", "8px 20px"]}
+                            p={["8px", "8px 3px", "8px 10px", "8px", "8px 5px", "8px 20px"]}
                             alignItems="flex-start"
-                            width={["95px", "140px", "unset"]}
+                            width={["91px", "103px", "unset"]}
                         >
                             <Text fontSize={["8px", "10px"]} color="grey.400" fontWeight="semibold">
                                 UPTIME
                             </Text>
-                            <Text fontSize={["11px", "14px"]} color="black" wordBreak="keep-all">
+                            <Text fontSize={["10px", "13px"]} color="black" wordBreak="keep-all">
                                 {isResetting
                                     ? "Resetting..."
                                     : uptime.length === 0
                                       ? "Loading..."
-                                      : uptime}
+                                      : "23m 45m 00sm"}
                             </Text>
                         </Box>
                     </HStack>
-                    <HStack gap={["8px", "16px"]}>
+                    <HStack gap={["5px", "6px", "16px"]}>
                         {/* Conditionally render Start/Stop buttons based on isSystemRunning */}
                         {!isSystemRunning ? (
                             <Box
                                 bg="green.500"
                                 color="white"
                                 borderRadius="4px"
-                                p={["4px 10px", "4px 12px"]}
+                                p={["5px 7px", "4px 12px"]}
                                 fontWeight="semibold"
-                                fontSize={["11px", "14px"]}
+                                fontSize={["10px", "14px"]}
                                 cursor="pointer"
                                 onClick={handleStart}
                             >
@@ -355,9 +355,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 bg="red.500"
                                 color="white"
                                 borderRadius="4px"
-                                p={["4px 10px", "4px 12px"]}
+                                p={["5px 7px", "4px 12px"]}
                                 fontWeight="semibold"
-                                fontSize={["11px", "14px"]}
+                                fontSize={["10px", "14px"]}
                                 cursor="pointer"
                                 onClick={handleStop}
                             >
@@ -369,9 +369,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             bg="pri.orange"
                             color="white"
                             borderRadius="4px"
-                            p={["4px 10px", "4px 12px"]}
+                            p={["5px 7px", "4px 12px"]}
                             fontWeight="semibold"
-                            fontSize={["11px", "14px"]}
+                            fontSize={["10px", "14px"]}
                             cursor="pointer"
                             onClick={handleModalOpen}
                         >
@@ -379,7 +379,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                         </Box>
 
                         <Select
-                            size="sm"
+                            size={["xs", "sm"]}
                             onChange={(e) => setNodeNumber(Number(e.target.value))}
                             value={nodeNumber}
                             bg="white"
@@ -387,6 +387,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             borderColor="grey.400"
                             fontWeight={500}
                             fontSize={["11px", "14px"]}
+                            margin="0 0 1px 0"
                         >
                             {nodeOptions}
                         </Select>

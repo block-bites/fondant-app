@@ -17,7 +17,7 @@ export default function BlockRowElement({
     blockHash,
 }: BlockRowElementProps) {
     const fontSize = {
-        base: "12px",
+        base: "11px",
         sm: "15px",
         lg: "14px",
         xl: "15px",
@@ -27,7 +27,7 @@ export default function BlockRowElement({
     return (
         <Flex
             w="100%"
-            h={["165px", "165px", "135px", "105px", "94px"]}
+            h={["140px", "165px", "135px", "105px", "94px"]}
             borderBottom="1px solid"
             borderBottomColor="grey.100"
             justify="left"
@@ -50,14 +50,14 @@ export default function BlockRowElement({
             </VStack>
             <Flex
                 direction={["column", "column", "row"]}
-                gap={["10px", "10px", "10px"]}
+                gap="10px"
                 m={["0 0 0 16px", "0 0 0 16px", "unset"]}
             >
-                <Flex gap={["24px", "24px", "10px", "10px", "10px"]}>
+                <Flex gap={["12px", "24px", "10px", "10px", "10px"]}>
                     <VStack
                         align={["left", "left", "center"]}
                         minWidth={"6vw"}
-                        gap={["5px", "5px", "unset"]}
+                        gap={["3px", "5px", "unset"]}
                     >
                         <Text fontSize={fontSize} fontWeight="normal" whiteSpace="nowrap">
                             ERA
@@ -66,7 +66,7 @@ export default function BlockRowElement({
                             {era.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="center" minWidth={"9.5vw"} gap={["5px", "5px", "unset"]}>
+                    <VStack align="center" minWidth={"9.5vw"} gap={["3px", "5px", "unset"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             DEPLOYS
                         </Text>
@@ -74,7 +74,7 @@ export default function BlockRowElement({
                             {deploys.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="left" minWidth={"20vw"} gap={["5px", "5px", "unset"]}>
+                    <VStack align="left" minWidth={"20vw"} gap={["3px", "5px", "unset"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             AGE
                         </Text>
@@ -83,7 +83,7 @@ export default function BlockRowElement({
                         </Text>
                     </VStack>
                 </Flex>
-                <VStack align="right" width={"100%"} gap={["5px", "5px", "unset"]}>
+                <VStack align="right" width={"100%"} gap={["3px", "5px", "unset"]}>
                     <Text fontSize={fontSize} fontWeight="normal" align="left">
                         BLOCK HASH
                     </Text>

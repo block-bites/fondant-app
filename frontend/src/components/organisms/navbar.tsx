@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { useLocation, Location } from "react-router-dom"
 import { Link } from "react-router-dom"
+import Hamburger from "hamburger-react"
 import { Box, HStack, Tab, Tabs, TabList, Flex, Icon, Text, Select, Image } from "@chakra-ui/react"
 import NavbarModal from "../molecules/navbar-modal"
+
 import NavbarMobile from "./navbar-mobile"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
 import { BiGridAlt } from "react-icons/bi"
@@ -175,22 +177,27 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         )
     }
 
-    if (isMobile)
-        return (
-            <NavbarMobile
-                uptime={uptime}
-                isResetting={isResetting}
-                isSystemRunning={isSystemRunning}
-                handleReset={handleReset}
-                handleStart={handleStart}
-                handleStop={handleStop}
-            />
-        )
+    // if (isMobile)
+    //     return (
+    //         <NavbarMobile
+    //             uptime={uptime}
+    //             isResetting={isResetting}
+    //             isSystemRunning={isSystemRunning}
+    //             handleReset={handleReset}
+    //             handleStart={handleStart}
+    //             handleStop={handleStop}
+    //         />
+    //     )
 
     return (
         <Flex w="100%" direction="column">
-            <HStack w="100%" bg="pri.dark" justify="center">
-                <HStack maxW="1440px" w="100%" p="12px 32px" justify="space-between">
+            <HStack w="100%" bg="pri.dark" justify="center" position="sticky">
+                <HStack
+                    maxW="1440px"
+                    w="100%"
+                    p={["12px 16px", "12px 16px", "12px 32px"]}
+                    justify="space-between"
+                >
                     <Link to="/accounts">
                         <Flex alignItems="center" gap="8px">
                             <Image src={Logo} width="56px" />
@@ -200,111 +207,144 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                         </Flex>
                     </Link>
                     <Tabs variant="line" color="pri.orange" size={isLaptop ? "sm" : "lg"}>
-                        <TabList
-                            border="none"
-                            justifyContent={isLaptop ? "space-between" : "unset"}
-                        >
-                            <Link to="/accounts">
-                                <Tab
-                                    _hover={{
-                                        color: "grey.400",
-                                        borderColor: "grey.400",
-                                    }}
-                                    color={activePath === "/accounts" ? "pri.orange" : "grey.100"}
-                                    borderBottom={activePath === "/accounts" ? "2px solid" : "none"}
-                                >
-                                    <Icon as={MdSupervisorAccount} size="24px" />
-                                    Accounts
-                                </Tab>
-                            </Link>
-                            <Link to="/blocks">
-                                <Tab
-                                    _hover={{
-                                        color: "grey.400",
-                                        borderColor: "grey.400",
-                                    }}
-                                    color={activePath === "/blocks" ? "pri.orange" : "grey.100"}
-                                    borderBottom={activePath === "/blocks" ? "2px solid" : "none"}
-                                >
-                                    <Icon as={BiGridAlt} size="24px" />
-                                    Blocks
-                                </Tab>
-                            </Link>
-                            <Link to="/deploys">
-                                <Tab
-                                    _hover={{
-                                        color: "grey.400",
-                                        borderColor: "grey.400",
-                                    }}
-                                    color={activePath === "/deploys" ? "pri.orange" : "grey.100"}
-                                    borderBottom={activePath === "/deploys" ? "2px solid" : "none"}
-                                >
-                                    <Icon as={MdCloudUpload} size="24px" />
-                                    Deploys
-                                </Tab>
-                            </Link>
-                            <Link to="/events">
-                                <Tab
-                                    _hover={{
-                                        color: "grey.400",
-                                        borderColor: "grey.400",
-                                    }}
-                                    color={activePath === "/events" ? "pri.orange" : "grey.100"}
-                                    borderBottom={activePath === "/events" ? "2px solid" : "none"}
-                                >
-                                    <Icon as={FaBell} size="24px" />
-                                    Events
-                                </Tab>
-                            </Link>
-                            <Link to="/logs">
-                                <Tab
-                                    _hover={{
-                                        color: "grey.400",
-                                        borderColor: "grey.400",
-                                    }}
-                                    color={activePath === "/logs" ? "pri.orange" : "grey.100"}
-                                    borderBottom={activePath === "/logs" ? "2px solid" : "none"}
-                                >
-                                    <Icon as={FaRegFileCode} size="24px" />
-                                    Logs
-                                </Tab>
-                            </Link>
-                        </TabList>
+                        {isMobile ? (
+                            <Hamburger color="white" />
+                        ) : (
+                            <TabList
+                                border="none"
+                                justifyContent={isLaptop ? "space-between" : "unset"}
+                            >
+                                <Link to="/accounts">
+                                    <Tab
+                                        _hover={{
+                                            color: "grey.400",
+                                            borderColor: "grey.400",
+                                        }}
+                                        color={
+                                            activePath === "/accounts" ? "pri.orange" : "grey.100"
+                                        }
+                                        borderBottom={
+                                            activePath === "/accounts" ? "2px solid" : "none"
+                                        }
+                                    >
+                                        <Icon as={MdSupervisorAccount} size="24px" />
+                                        Accounts
+                                    </Tab>
+                                </Link>
+                                <Link to="/blocks">
+                                    <Tab
+                                        _hover={{
+                                            color: "grey.400",
+                                            borderColor: "grey.400",
+                                        }}
+                                        color={activePath === "/blocks" ? "pri.orange" : "grey.100"}
+                                        borderBottom={
+                                            activePath === "/blocks" ? "2px solid" : "none"
+                                        }
+                                    >
+                                        <Icon as={BiGridAlt} size="24px" />
+                                        Blocks
+                                    </Tab>
+                                </Link>
+                                <Link to="/deploys">
+                                    <Tab
+                                        _hover={{
+                                            color: "grey.400",
+                                            borderColor: "grey.400",
+                                        }}
+                                        color={
+                                            activePath === "/deploys" ? "pri.orange" : "grey.100"
+                                        }
+                                        borderBottom={
+                                            activePath === "/deploys" ? "2px solid" : "none"
+                                        }
+                                    >
+                                        <Icon as={MdCloudUpload} size="24px" />
+                                        Deploys
+                                    </Tab>
+                                </Link>
+                                <Link to="/events">
+                                    <Tab
+                                        _hover={{
+                                            color: "grey.400",
+                                            borderColor: "grey.400",
+                                        }}
+                                        color={activePath === "/events" ? "pri.orange" : "grey.100"}
+                                        borderBottom={
+                                            activePath === "/events" ? "2px solid" : "none"
+                                        }
+                                    >
+                                        <Icon as={FaBell} size="24px" />
+                                        Events
+                                    </Tab>
+                                </Link>
+                                <Link to="/logs">
+                                    <Tab
+                                        _hover={{
+                                            color: "grey.400",
+                                            borderColor: "grey.400",
+                                        }}
+                                        color={activePath === "/logs" ? "pri.orange" : "grey.100"}
+                                        borderBottom={activePath === "/logs" ? "2px solid" : "none"}
+                                    >
+                                        <Icon as={FaRegFileCode} size="24px" />
+                                        Logs
+                                    </Tab>
+                                </Link>
+                            </TabList>
+                        )}
                     </Tabs>
                 </HStack>
             </HStack>
             <HStack minH="56px" w="100%" bg="pri.beige" justify="center">
-                <HStack maxW="1440px" w="100%" p="8px 32px" justify="space-between">
-                    <HStack>
-                        <Box borderRight="1px solid" borderColor="#2a3050" p={"8px 20px 8px 0px"}>
-                            <Text fontSize="10px" color="grey.400" fontWeight="semibold">
+                <HStack
+                    maxW="1440px"
+                    w="100%"
+                    p={["8px 16px 8px 16px", "8px 16px", "8px 32px"]}
+                    justify="space-between"
+                >
+                    <HStack alignItems="flex-start">
+                        <Box
+                            borderRight="1px solid"
+                            borderColor="#2a3050"
+                            alignItems="flex-start"
+                            width={["56px", "102px", "unset"]}
+                            p={["8px 0", "8px 5px 8px 0px", "8px 20px 8px 0px"]}
+                        >
+                            <Text fontSize={["8px", "10px"]} color="grey.400" fontWeight="semibold">
                                 CURRENT BLOCK
                             </Text>
-                            <Text fontSize="14px" color="black">
+                            <Text fontSize={["11px", "14px"]} color="black">
                                 {currentBlock}
                             </Text>
                         </Box>
-                        <Box p={"8px 20px"}>
-                            <Text fontSize="10px" color="grey.400" fontWeight="semibold">
+                        <Box
+                            p={["8px", "8px 15px", "8px 20px"]}
+                            alignItems="flex-start"
+                            width={["95px", "140px", "unset"]}
+                        >
+                            <Text fontSize={["8px", "10px"]} color="grey.400" fontWeight="semibold">
                                 UPTIME
                             </Text>
-                            <Text fontSize="14px" color="black">
+                            <Text fontSize={["11px", "14px"]} color="black" wordBreak="keep-all">
                                 {isResetting
                                     ? "Resetting..."
-                                    : `Uptime: ${uptime.length === 0 ? "Loading..." : uptime}`}
+                                    : uptime.length === 0
+                                      ? "Loading..."
+                                      : uptime}
                             </Text>
                         </Box>
                     </HStack>
-                    <HStack gap="16px">
+                    <HStack gap={["8px", "16px"]}>
                         {/* Conditionally render Start/Stop buttons based on isSystemRunning */}
                         {!isSystemRunning ? (
                             <Box
                                 bg="green.500"
                                 color="white"
                                 borderRadius="4px"
-                                p="4px 12px"
+                                p={["4px 10px", "4px 12px"]}
                                 fontWeight="semibold"
-                                fontSize="14px"
+                                fontSize={["11px", "14px"]}
                                 cursor="pointer"
                                 onClick={handleStart}
                             >
@@ -315,9 +355,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 bg="red.500"
                                 color="white"
                                 borderRadius="4px"
-                                p="4px 12px"
+                                p={["4px 10px", "4px 12px"]}
                                 fontWeight="semibold"
-                                fontSize="14px"
+                                fontSize={["11px", "14px"]}
                                 cursor="pointer"
                                 onClick={handleStop}
                             >
@@ -329,9 +369,9 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             bg="pri.orange"
                             color="white"
                             borderRadius="4px"
-                            p="4px 12px"
+                            p={["4px 10px", "4px 12px"]}
                             fontWeight="semibold"
-                            fontSize="14px"
+                            fontSize={["11px", "14px"]}
                             cursor="pointer"
                             onClick={handleModalOpen}
                         >
@@ -346,6 +386,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             color="pri.orange"
                             borderColor="grey.400"
                             fontWeight={500}
+                            fontSize={["11px", "14px"]}
                         >
                             {nodeOptions}
                         </Select>

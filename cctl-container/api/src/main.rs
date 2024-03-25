@@ -27,20 +27,27 @@ fn run(command: String, args: Option<Vec<String>>) -> Result<Json<utils::Command
     }
 }
 
-#[get("/activate")]
-fn activate() -> Result<Json<ActivationResponse>, Status> {
-    utils::run_command("cctl-infra-net-setup", None);
-    utils::parse_node_ports();
+#[post("/launch")]
+fn launch() -> Result<Json<ActivationResponse>, Status> {
+    let mut command = "cctl-infra-net-setup";
+    utils::run_command(&command, None);
+    command = "cctl-infra-net-start";
+    utils::run_command(&command, None);
+    let parsed_ports = utils::parse_node_ports();
+    println!("{:?}", parsed_ports);
+    utils::generate_nginx_config(&parsed_ports);
+    utils::start_nginx();
     Ok(Json(ActivationResponse {
         success: true,
-        message: "Network activated".to_string(),
+        message: "Network launched successfully".to_string(),
     }))
 }
 
 #[launch]
 fn rocket() -> _ {
+    
     rocket::build()
-        .mount("/", routes![health, run])
+        .mount("/", routes![health, run, launch])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

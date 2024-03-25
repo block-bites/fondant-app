@@ -219,7 +219,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 {open ? (
                                     <Flex position="fixed" right="0" top="146px" zIndex={65}>
                                         <Flex
-                                            w={["270px", "300px", "0"]}
+                                            w={["250px", "250px", "0"]}
                                             h="100vh"
                                             flexDir="column"
                                             background="pri.dark"
@@ -245,10 +245,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     }
                                                 >
                                                     <MdSupervisorAccount size="24px" />
-                                                    <Text fontSize={["36px", "42px"]}>
-                                                        {" "}
-                                                        Accounts
-                                                    </Text>
+                                                    <Text fontSize="28px">Accounts</Text>
                                                 </Flex>
                                             </Link>
                                             <Link to="/blocks" onClick={() => setOpen(false)}>
@@ -268,7 +265,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     }
                                                 >
                                                     <BiGridAlt size="24px" />
-                                                    <Text fontSize={["36px", "42px"]}>Blocks</Text>
+                                                    <Text fontSize="28px">Blocks</Text>
                                                 </Flex>
                                             </Link>
                                             <Link to="/deploys" onClick={() => setOpen(false)}>
@@ -288,7 +285,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     }
                                                 >
                                                     <MdCloudUpload size="24px" />
-                                                    <Text fontSize={["36px", "42px"]}>Deploys</Text>
+                                                    <Text fontSize="28px">Deploys</Text>
                                                 </Flex>
                                             </Link>
                                             <Link to="/events" onClick={() => setOpen(false)}>
@@ -308,7 +305,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     }
                                                 >
                                                     <FaBell size="24px" />
-                                                    <Text fontSize={["36px", "42px"]}>Events</Text>
+                                                    <Text fontSize="28px">Events</Text>
                                                 </Flex>
                                             </Link>
                                             <Link to="/logs" onClick={() => setOpen(false)}>
@@ -328,7 +325,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     }
                                                 >
                                                     <FaRegFileCode size="24px" />
-                                                    <Text fontSize={["36px", "42px"]}>Logs</Text>
+                                                    <Text fontSize="28px">Logs</Text>
                                                 </Flex>
                                             </Link>
                                         </Flex>

@@ -190,7 +190,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                 bg="pri.dark"
                 justify="center"
                 position={["fixed", "fixed", "absolute"]}
-                zIndex={65}
+                zIndex={1}
             >
                 <HStack
                     maxW="1440px"
@@ -224,8 +224,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                             flexDir="column"
                                             background="pri.dark"
                                             color="grey.100"
-                                            zIndex={90}
-                                            padding="36px 24px 50px 0"
+                                            padding="100px 24px 50px 0"
                                             alignItems="flex-end"
                                             gap="15px"
                                         >

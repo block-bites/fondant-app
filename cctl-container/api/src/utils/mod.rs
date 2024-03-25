@@ -73,21 +73,30 @@ pub fn parse_node_ports() -> HashMap<String, HashMap<String, i32>> {
     node_service_ports
 }   
 
+
 pub fn generate_nginx_config(node_service_ports: &HashMap<String, HashMap<String, i32>>) {
-    let mut config = String::from("events {\n worker_connections 1024;\n }\n http {\n    server {\n        listen 80;\n        server_name localhost;\n\n");
+    let mut config = String::from("events {\n worker_connections 1024;\n }\n http {\n server {\n listen 80;\n server_name localhost;\n\n");
 
     for (node_name, services) in node_service_ports {
         for (service_name, port) in services {
-            let location_block = format!("        location /{}/{} {{\n            proxy_pass http://localhost:{};\n        }}\n\n", node_name, service_name.to_lowercase(), port);
+            let location_block = format!(" location /{}/{}/{{
+                proxy_pass http://localhost:{}/;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+            }}\n\n", node_name, service_name.to_lowercase(), port);
+
             config.push_str(&location_block);
         }
     }
 
-    config.push_str("    }\n}");
+    config.push_str(" }\n}");
 
     let mut file = File::create("/etc/nginx/nginx.conf").unwrap();
     file.write_all(config.as_bytes()).unwrap();
 }
+
 
 pub fn start_nginx() {
     let start_output = Command::new("service")

@@ -123,7 +123,7 @@ const Blocks = () => {
             <Helmet>
                 <title>Fondant | Blocks</title>
             </Helmet>
-            <Flex w="100%" justify="center" m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}>
+            <Flex w="100%" justify="center" m={["140px 0 0 0", "140px 0 0 0", "80px 0 0 0"]}>
                 <VStack w="100%" maxW="1440px" gap="0">
                     {blocks.map((block) => (
                         <BlockRowElement

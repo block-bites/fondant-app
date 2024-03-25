@@ -17,17 +17,17 @@ export default function BlockRowElement({
     blockHash,
 }: BlockRowElementProps) {
     const fontSize = {
-        base: "11px",
+        base: "12px",
         sm: "15px",
-        lg: "14px",
+        lg: "15px",
         xl: "15px",
-        "2xl": "14px",
+        "2xl": "15px",
     }
 
     return (
         <Flex
             w="100%"
-            h={["140px", "165px", "135px", "105px", "94px"]}
+            h={["140px", "160px", "94px", "94px", "94px"]}
             borderBottom="1px solid"
             borderBottomColor="grey.100"
             justify="left"
@@ -50,7 +50,7 @@ export default function BlockRowElement({
             </VStack>
             <Flex
                 direction={["column", "column", "row"]}
-                gap={["10px", "14px", "10px"]}
+                gap={["10px", "16px", "10px"]}
                 m={["0 0 0 16px", "0 0 0 16px", "unset"]}
             >
                 <Flex gap={["12px", "24px", "10px", "10px", "10px"]}>
@@ -78,12 +78,17 @@ export default function BlockRowElement({
                         <Text fontSize={fontSize} fontWeight="normal">
                             AGE
                         </Text>
-                        <Text fontSize={fontSize} fontWeight="semibold">
+                        <Text fontSize={fontSize} fontWeight="semibold" whiteSpace="nowrap">
                             {age}
                         </Text>
                     </VStack>
                 </Flex>
-                <VStack align="right" width={"100%"} gap={["3px", "3px", "10px"]}>
+                <VStack
+                    align="right"
+                    width={"100%"}
+                    gap={["3px", "3px", "10px"]}
+                    m={["0", "0", "0 0 0 10px"]}
+                >
                     <Text fontSize={fontSize} fontWeight="normal" align="left">
                         BLOCK HASH
                     </Text>
@@ -91,7 +96,16 @@ export default function BlockRowElement({
                         fontSize={fontSize}
                         fontWeight="semibold"
                         align="left"
-                        wordBreak={["break-all", "break-all", "break-all", "break-all", "unset"]}
+                        width={[
+                            "70vw",
+                            "70vw",
+                            "calc(100vw - 540px)",
+                            "calc(100vw - 600px)",
+                            "unset",
+                        ]}
+                        textOverflow={["ellipsis", "ellipsis", "ellipsis", "ellipsis", "ellipsis"]}
+                        overflow={["hidden", "hidden", "hidden", "hidden", "none"]}
+                        whiteSpace="nowrap"
                     >
                         {blockHash}
                     </Text>

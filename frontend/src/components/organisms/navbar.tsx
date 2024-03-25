@@ -217,14 +217,14 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                     rounded
                                 />
                                 {open ? (
-                                    <Flex position="fixed" right="0" top="80px" zIndex={65}>
+                                    <Flex position="fixed" right="0" top="146px" zIndex={65}>
                                         <Flex
                                             w={["270px", "300px", "0"]}
                                             h="100vh"
                                             flexDir="column"
                                             background="pri.dark"
                                             color="grey.100"
-                                            padding="100px 24px 50px 0"
+                                            padding="30px 24px 50px 0"
                                             alignItems="flex-end"
                                             gap="15px"
                                         >
@@ -233,6 +233,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     alignItems="center"
                                                     gap="15px"
                                                     justifyContent="center"
+                                                    color={
+                                                        activePath === "/accounts"
+                                                            ? "pri.orange"
+                                                            : "grey.100"
+                                                    }
+                                                    borderBottom={
+                                                        activePath === "/accounts"
+                                                            ? "2px solid"
+                                                            : "none"
+                                                    }
                                                 >
                                                     <MdSupervisorAccount size="24px" />
                                                     <Text fontSize={["36px", "42px"]}>
@@ -246,6 +256,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     alignItems="center"
                                                     gap="15px"
                                                     justifyContent="center"
+                                                    color={
+                                                        activePath === "/blocks"
+                                                            ? "pri.orange"
+                                                            : "grey.100"
+                                                    }
+                                                    borderBottom={
+                                                        activePath === "/blocks"
+                                                            ? "2px solid"
+                                                            : "none"
+                                                    }
                                                 >
                                                     <BiGridAlt size="24px" />
                                                     <Text fontSize={["36px", "42px"]}>Blocks</Text>
@@ -256,6 +276,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     alignItems="center"
                                                     gap="15px"
                                                     justifyContent="center"
+                                                    color={
+                                                        activePath === "/deploys"
+                                                            ? "pri.orange"
+                                                            : "grey.100"
+                                                    }
+                                                    borderBottom={
+                                                        activePath === "/deploys"
+                                                            ? "2px solid"
+                                                            : "none"
+                                                    }
                                                 >
                                                     <MdCloudUpload size="24px" />
                                                     <Text fontSize={["36px", "42px"]}>Deploys</Text>
@@ -266,6 +296,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     alignItems="center"
                                                     gap="15px"
                                                     justifyContent="center"
+                                                    color={
+                                                        activePath === "/events"
+                                                            ? "pri.orange"
+                                                            : "grey.100"
+                                                    }
+                                                    borderBottom={
+                                                        activePath === "/events"
+                                                            ? "2px solid"
+                                                            : "none"
+                                                    }
                                                 >
                                                     <FaBell size="24px" />
                                                     <Text fontSize={["36px", "42px"]}>Events</Text>
@@ -276,6 +316,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                                     alignItems="center"
                                                     gap="15px"
                                                     justifyContent="center"
+                                                    color={
+                                                        activePath === "/logs"
+                                                            ? "pri.orange"
+                                                            : "grey.100"
+                                                    }
+                                                    borderBottom={
+                                                        activePath === "/logs"
+                                                            ? "2px solid"
+                                                            : "none"
+                                                    }
                                                 >
                                                     <FaRegFileCode size="24px" />
                                                     <Text fontSize={["36px", "42px"]}>Logs</Text>

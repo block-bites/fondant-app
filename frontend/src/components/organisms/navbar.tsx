@@ -374,7 +374,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                 </HStack>
             </HStack>
             <HStack
-                h="70px"
+                h="66px"
                 w="100%"
                 bg="pri.beige"
                 justify="center"

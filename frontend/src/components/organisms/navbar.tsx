@@ -68,6 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         if (open) {
             setOpen(false)
         }
+        // eslint-disable-next-line
     }, [isMobile])
 
     useEffect(() => {
@@ -189,7 +190,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                 bg="pri.dark"
                 justify="center"
                 position={["fixed", "fixed", "absolute"]}
-                zIndex="5"
+                zIndex={65}
             >
                 <HStack
                     maxW="1440px"
@@ -216,7 +217,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                     rounded
                                 />
                                 {open ? (
-                                    <Flex position="fixed" right="0" top="80px">
+                                    <Flex position="fixed" right="0" top="80px" zIndex={65}>
                                         <Flex
                                             w={["270px", "300px", "0"]}
                                             h="100vh"
@@ -372,7 +373,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                     </Tabs>
                 </HStack>
             </HStack>
-            <HStack minH="56px" w="100%" bg="pri.beige" justify="center">
+            <HStack
+                h="70px"
+                w="100%"
+                bg="pri.beige"
+                justify="center"
+                position={["fixed", "fixed", "relative"]}
+                right="0"
+                top="80px"
+                zIndex={10}
+            >
                 <HStack
                     maxW="1440px"
                     w="100%"
@@ -384,20 +394,20 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             borderRight="1px solid"
                             borderColor="#2a3050"
                             alignItems="flex-start"
-                            width={["56px", "100px", "unset"]}
-                            p={["8px 0", "8px 0px", "8px 20px 8px 0px"]}
+                            width={["66px", "82px", "116px"]}
+                            p={["8px 0"]}
                         >
                             <Text fontSize={["8px", "10px"]} color="grey.400" fontWeight="semibold">
-                                CURRENT BLOCK
+                                {isMobile ? "CURR." : "CURRENT"} BLOCK
                             </Text>
                             <Text fontSize={["10px", "14px"]} color="black">
                                 {currentBlock}
                             </Text>
                         </Box>
                         <Box
-                            p={["8px", "8px 3px", "8px 10px", "8px", "8px 5px", "8px 20px"]}
+                            p={["8px 0 0 5px", "8px0 0  13px", "8px 0 0 25px"]}
                             alignItems="flex-start"
-                            width={["91px", "103px", "unset"]}
+                            width={["87px", "103px", "unset"]}
                         >
                             <Text fontSize={["8px", "10px"]} color="grey.400" fontWeight="semibold">
                                 UPTIME
@@ -407,7 +417,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                     ? "Resetting..."
                                     : uptime.length === 0
                                       ? "Loading..."
-                                      : "23m 45m 00sm"}
+                                      : uptime}
                             </Text>
                         </Box>
                     </HStack>
@@ -418,7 +428,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 bg="green.500"
                                 color="white"
                                 borderRadius="4px"
-                                p={["5px 7px", "4px 12px"]}
+                                p={["4px 7px", "4px 12px"]}
                                 fontWeight="semibold"
                                 fontSize={["10px", "14px"]}
                                 cursor="pointer"
@@ -445,7 +455,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                             bg="pri.orange"
                             color="white"
                             borderRadius="4px"
-                            p={["5px 7px", "4px 12px"]}
+                            p={["4px 7px", "4px 12px"]}
                             fontWeight="semibold"
                             fontSize={["10px", "14px"]}
                             cursor="pointer"

@@ -50,14 +50,14 @@ export default function BlockRowElement({
             </VStack>
             <Flex
                 direction={["column", "column", "row"]}
-                gap="10px"
+                gap={["10px", "14px", "10px"]}
                 m={["0 0 0 16px", "0 0 0 16px", "unset"]}
             >
                 <Flex gap={["12px", "24px", "10px", "10px", "10px"]}>
                     <VStack
                         align={["left", "left", "center"]}
                         minWidth={"6vw"}
-                        gap={["3px", "5px", "10px"]}
+                        gap={["2px", "3px", "10px"]}
                     >
                         <Text fontSize={fontSize} fontWeight="normal" whiteSpace="nowrap">
                             ERA
@@ -66,7 +66,7 @@ export default function BlockRowElement({
                             {era.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="center" minWidth={"9.5vw"} gap={["3px", "5px", "10px"]}>
+                    <VStack align="center" minWidth={"9.5vw"} gap={["2px", "3px", "10px"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             DEPLOYS
                         </Text>
@@ -74,7 +74,7 @@ export default function BlockRowElement({
                             {deploys.toString()}
                         </Text>
                     </VStack>
-                    <VStack align="left" minWidth={"20vw"} gap={["3px", "5px", "10px"]}>
+                    <VStack align="left" minWidth={"20vw"} gap={["2px", "3px", "10px"]}>
                         <Text fontSize={fontSize} fontWeight="normal">
                             AGE
                         </Text>
@@ -83,7 +83,7 @@ export default function BlockRowElement({
                         </Text>
                     </VStack>
                 </Flex>
-                <VStack align="right" width={"100%"} gap={["3px", "5px", "10px"]}>
+                <VStack align="right" width={"100%"} gap={["3px", "3px", "10px"]}>
                     <Text fontSize={fontSize} fontWeight="normal" align="left">
                         BLOCK HASH
                     </Text>

@@ -67,77 +67,87 @@ export default function Logs() {
 
     if (isLoading)
         return (
-            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
+            <Flex
+                justifyContent="center"
+                height="100vh"
+                alignItems="center"
+                m={["68px 0 0 0", "68px 0 0 0", "0"]}
+            >
                 <Spinner size="xl" colorScheme="gray" />
             </Flex>
         )
 
-        if (filteredLogs.length === 0) {
-            return (
-                <Flex direction="column" width="100%">
-                    <Box overflowY="auto" maxHeight="80vh" p={3}>
-                        <Flex w="100%" justify="center" pt="100px">
-                            <Text color="grey.400">No logs available to display</Text>
-                        </Flex>
-                    </Box>
-                </Flex>
-            )
-        }
-
+    if (filteredLogs.length === 0) {
         return (
-            <Flex width="100%" justify="center" fontFamily="monospace">
-                <VStack spacing={4} width="100%" maxW={1440} p={5}>
-                    <Select onChange={handleLevelChange} value={currentLevel} w="200px" mb={3}>
-                        {LogLevels.map((level) => (
-                            <option key={level} value={level}>
-                                {level}
-                            </option>
-                        ))}
-                    </Select>
-                    <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
-                        {selectedLogs.map((log, index) => (
-                            <Flex
-                                key={index}
-                                direction="column"
-                                p={3}
-                                borderBottom="1px solid #ddd"
-                                onClick={() => toggleLog(startIndex + index)}
-                                cursor="pointer"
-                            >
-                                <Flex alignItems="center">
-                                    <Text
-                                        transform={
-                                            expandedLogIndex === startIndex + index
-                                                ? "rotate(90deg)"
-                                                : "rotate(0deg)"
-                                        }
-                                    >
-                                        ▶
-                                    </Text>
-                                    <Box ml={2} overflowX="auto">
-                                        {expandedLogIndex === startIndex + index
-                                            ? formatJson(log, 0, true)
-                                            : formatJson(log, 0, false)}
-                                    </Box>
-                                </Flex>
-                            </Flex>
-                        ))}
-                    </Box>
-                    <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
-                        <Button onClick={handlePrevPage} disabled={currentPage === 1}>
-                            Previous
-                        </Button>
-                        <Text fontFamily="secondary">
-                            Page {currentPage} of {Math.ceil(filteredLogs.length / LogsPerPage)}
-                        </Text>
-                        <Button
-                            onClick={handleNextPage}
-                            disabled={currentPage * LogsPerPage >= logs.length}
-                        >
-                            Next
-                        </Button>
+            <Flex justifyContent="center" height="100vh" alignItems="center">
+                <Box overflowY="auto" p={3}>
+                    <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
+                        <Text color="grey.400">No logs available to display</Text>
                     </Flex>
-                </VStack>
+                </Box>
             </Flex>
         )
+    }
+
+    return (
+        <Flex
+            width="100%"
+            justify="center"
+            fontFamily="monospace"
+            m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}
+        >
+            <VStack spacing={4} width="100%" maxW={1440} p={5}>
+                <Select onChange={handleLevelChange} value={currentLevel} w="200px" mb={3}>
+                    {LogLevels.map((level) => (
+                        <option key={level} value={level}>
+                            {level}
+                        </option>
+                    ))}
+                </Select>
+                <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
+                    {selectedLogs.map((log, index) => (
+                        <Flex
+                            key={index}
+                            direction="column"
+                            p={3}
+                            borderBottom="1px solid #ddd"
+                            onClick={() => toggleLog(startIndex + index)}
+                            cursor="pointer"
+                        >
+                            <Flex alignItems="center">
+                                <Text
+                                    transform={
+                                        expandedLogIndex === startIndex + index
+                                            ? "rotate(90deg)"
+                                            : "rotate(0deg)"
+                                    }
+                                >
+                                    ▶
+                                </Text>
+                                <Box ml={2} overflowX="auto">
+                                    {expandedLogIndex === startIndex + index
+                                        ? formatJson(log, 0, true)
+                                        : formatJson(log, 0, false)}
+                                </Box>
+                            </Flex>
+                        </Flex>
+                    ))}
+                </Box>
+                <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
+                    <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                        Previous
+                    </Button>
+                    <Text fontFamily="secondary">
+                        Page {currentPage} of {Math.ceil(filteredLogs.length / LogsPerPage)}
+                    </Text>
+                    <Button
+                        onClick={handleNextPage}
+                        disabled={currentPage * LogsPerPage >= logs.length}
+                    >
+                        Next
+                    </Button>
+                </Flex>
+            </VStack>
+        </Flex>
+    )
 }

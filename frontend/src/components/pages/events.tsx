@@ -81,20 +81,24 @@ export default function Events() {
     const startIndex = (currentPage - 1) * EventsPerPage
     const selectedEvents = filteredEvents.slice(startIndex, startIndex + EventsPerPage)
 
-    if (isLoading) {
+    if (isLoading)
         return (
-            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
+            <Flex
+                justifyContent="center"
+                height="100vh"
+                alignItems="center"
+                m={["68px 0 0 0", "68px 0 0 0", "0"]}
+            >
                 <Spinner size="xl" colorScheme="gray" />
             </Flex>
         )
-    }
 
     if (events?.length === 0) {
         return (
-            <Flex direction="column" width="100%">
-                <Box overflowY="auto" maxHeight="80vh" p={3}>
-                    <Flex w="100%" justify="center" pt="100px">
-                        <Text color="grey.400">No events available to display</Text>
+            <Flex justifyContent="center" height="100vh" alignItems="center">
+                <Box overflowY="auto" p={3}>
+                    <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
+                        <Text color="grey.400">No logs available to display</Text>
                     </Flex>
                 </Box>
             </Flex>
@@ -102,7 +106,12 @@ export default function Events() {
     }
 
     return (
-        <Flex direction="column" width="100%" alignItems="center">
+        <Flex
+            direction="column"
+            width="100%"
+            alignItems="center"
+            m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}
+        >
             <VStack spacing={4} width="100%" maxW={1440} p={5}>
                 <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
                     {selectedEvents?.map((event, index) => (

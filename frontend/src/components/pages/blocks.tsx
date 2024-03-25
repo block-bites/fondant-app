@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Flex, VStack, Text, Button, Spinner } from "@chakra-ui/react"
+import { Flex, VStack, Text, Button, Spinner, Box } from "@chakra-ui/react"
 import { Helmet } from "react-helmet-async"
 import BlockRowElement from "../molecules/blocks-row-element"
 import { CasperServiceByJsonRPC, GetBlockResult, JsonBlock } from "casper-js-sdk"
@@ -25,8 +25,8 @@ const Blocks = () => {
                     latestBlockInfo = await client.getLatestBlockInfo()
                 } catch (error) {
                     console.error("Error fetching latest block info:", error)
-                    setBlocks([]) // No blocks to display
-                    setIsLastPage(true) // No more pages to navigate
+                    setBlocks([])
+                    setIsLastPage(true)
                     return
                 }
 
@@ -87,7 +87,12 @@ const Blocks = () => {
 
     if (loading) {
         return (
-            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
+            <Flex
+                justifyContent="center"
+                height="100vh"
+                alignItems="center"
+                m={["68px 0 0 0", "-68px 0 0 0"]}
+            >
                 <Spinner size="xl" colorScheme="gray" />
             </Flex>
         )
@@ -103,8 +108,12 @@ const Blocks = () => {
 
     if (blocks.length === 0 && !loading) {
         return (
-            <Flex w="100%" justify="center" color="grey.400" pt="100px">
-                <Text>No blocks available to display</Text>
+            <Flex justifyContent="center" height="100vh" alignItems="center">
+                <Box overflowY="auto" p={3}>
+                    <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
+                        <Text color="grey.400">No blocks available to display</Text>
+                    </Flex>
+                </Box>
             </Flex>
         )
     }
@@ -114,7 +123,7 @@ const Blocks = () => {
             <Helmet>
                 <title>Fondant | Blocks</title>
             </Helmet>
-            <Flex w="100%" justify="center">
+            <Flex w="100%" justify="center" m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}>
                 <VStack w="100%" maxW="1440px" gap="0">
                     {blocks.map((block) => (
                         <BlockRowElement

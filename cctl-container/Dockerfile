@@ -24,7 +24,7 @@ RUN apt-get update && \
 WORKDIR /usr/local/bin
 
 COPY --from=builder /usr/src/myapp/target/release/api ./
-COPY api/src/utils/commands.json ./
+COPY api/src/commands.json ./
 
 RUN chmod -R +x /home/cctl
 

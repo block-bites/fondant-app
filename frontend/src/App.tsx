@@ -3,7 +3,7 @@ import { SearchProvider } from "./context/SearchContext"
 import { NodeProvider } from "./context/NodeContext"
 import { HelmetProvider } from "react-helmet-async"
 
-import { ChakraProvider, HStack, Text } from "@chakra-ui/react"
+import { ChakraProvider } from "@chakra-ui/react"
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom"
 import { fondantTheme } from "./styles/theme"
 
@@ -17,33 +17,6 @@ import Deploys from "./components/pages/deploys"
 import Start from "./components/pages/start"
 
 export const App = () => {
-    const [isMobile, setIsMobile] = useState<boolean>(false)
-    const [screenWidth, setScreenWidth] = useState<number>(0)
-
-    // Set screen width state
-    useEffect(() => {
-        function handleResize() {
-            setScreenWidth(window.innerWidth)
-        }
-        window.addEventListener("resize", handleResize)
-        return () => window.removeEventListener("resize", handleResize)
-    }, [])
-
-    // Check device and screen width
-    useEffect(() => {
-        setIsMobile(
-            /android|iphone|kindle|ipad/i.test(navigator.userAgent) || window.innerWidth <= 768
-        )
-    }, [screenWidth])
-
-    if (isMobile) {
-        return (
-            <HStack width="100%" justify="center" fontSize="28px" fontWeight="600">
-                <Text align="center">Used device and resolution not supported</Text>
-            </HStack>
-        )
-    }
-
     return (
         <NodeProvider>
             <HelmetProvider>
@@ -67,9 +40,11 @@ function AppContent() {
 
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [isLaptop, setIsLaptop] = useState<boolean>(false)
+    const [isMobile, setIsMobile] = useState<boolean>(false)
 
     useEffect(() => {
-        setIsLaptop(window.innerWidth > 768 && window.innerWidth < 1024)
+        setIsLaptop(window.innerWidth >= 768 && window.innerWidth < 1024)
+        setIsMobile(window.innerWidth < 768)
     }, [screenWidth])
 
     useEffect(() => {
@@ -82,7 +57,7 @@ function AppContent() {
 
     return (
         <>
-            {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} />}
+            {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} isMobile={isMobile} />}
             <Routes>
                 <Route path="/" element={<Start />} />
                 <Route path="/accounts" element={<Accounts />} />

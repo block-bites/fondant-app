@@ -30,6 +30,7 @@ export default function Logs() {
                 setLogs(response.data)
                 filterLogs(response.data, currentLevel)
             } catch (error) {
+                setFilteredLogs([])
                 console.error("Error fetching logs:", error)
             } finally {
                 setIsLoading(false)
@@ -66,13 +67,35 @@ export default function Logs() {
 
     if (isLoading)
         return (
-            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
+            <Flex
+                justifyContent="center"
+                height="100vh"
+                alignItems="center"
+                m={["68px 0 0 0", "68px 0 0 0", "0"]}
+            >
                 <Spinner size="xl" colorScheme="gray" />
             </Flex>
         )
 
+    if (filteredLogs.length === 0) {
+        return (
+            <Flex justifyContent="center" height="100vh" alignItems="center">
+                <Box overflowY="auto" p={3}>
+                    <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
+                        <Text color="grey.400">No logs available to display</Text>
+                    </Flex>
+                </Box>
+            </Flex>
+        )
+    }
+
     return (
-        <Flex width="100%" justify="center" fontFamily="monospace">
+        <Flex
+            width="100%"
+            justify="center"
+            fontFamily="monospace"
+            m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}
+        >
             <VStack spacing={4} width="100%" maxW={1440} p={5}>
                 <Select onChange={handleLevelChange} value={currentLevel} w="200px" mb={3}>
                     {LogLevels.map((level) => (
@@ -110,11 +133,13 @@ export default function Logs() {
                         </Flex>
                     ))}
                 </Box>
-                <Flex justifyContent="space-between" mt="10px" w="100%">
+                <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
                     <Button onClick={handlePrevPage} disabled={currentPage === 1}>
                         Previous
                     </Button>
-                    <Text>Page {currentPage}</Text>
+                    <Text fontFamily="secondary">
+                        Page {currentPage} of {Math.ceil(filteredLogs.length / LogsPerPage)}
+                    </Text>
                     <Button
                         onClick={handleNextPage}
                         disabled={currentPage * LogsPerPage >= logs.length}

@@ -26,7 +26,7 @@ export default function NavbarModal({ isOpen, onClose, handleReset }: INavbarMod
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} size={["xs", "md"]} isCentered>
             <ModalOverlay />
             <Center>
                 <ModalContent>

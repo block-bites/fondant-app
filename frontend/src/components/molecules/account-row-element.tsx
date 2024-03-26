@@ -18,29 +18,36 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
     const handleCloseModal = () => {
         setIsModalOpen(false)
     }
-
-    const fontSize = {
-        base: "sm",
-        sm: "sm",
-        md: "md",
-        lg: "lg",
-        xl: "2xl",
-    }
+   
+    const fontSize = "xl" // maybe we can update it, but I like it how it now
 
     return (
         <>
             <Flex
                 w="100%"
-                p="16px 32px"
+                p={["16px", "16px", "16px 32px"]}
                 justify="space-between"
                 borderBottom="1px solid"
                 borderBottomColor="grey.100"
+                gap="10px"
             >
-                <VStack align="left" w="100%">
+                <VStack align="left" w="100%" gap="5px">
                     <Text fontSize="md" color="grey.300" fontWeight={500}>
                         Public Key
                     </Text>
-                    <Text fontSize={fontSize} color="grey.800">
+                    <Text
+                        fontSize={fontSize}
+                        width={[
+                            "calc(100vw - 100px)",
+                            "calc(100vw - 100px)",
+                            "calc(100vw - 130px)",
+                            "unset",
+                        ]}
+                        color="grey.800"
+                        textOverflow={["ellipsis"]}
+                        overflow={["hidden", "hidden", "hidden", "hidden"]}
+                        whiteSpace="nowrap"
+                    >
                         {publicKey}
                     </Text>
                 </VStack>

@@ -9,12 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-[Added mobile view](https://github.com/block-bites/fondant-app/pull/91)
-
 #### Frontend
 
+- [Added support for smaller screens](https://github.com/block-bites/fondant-app/pull/91)
 - [Added modal (popup) window for networks reset confirmation](https://github.com/block-bites/fondant-app/pull/77)
-- [Preloaders added for all pages, visual bugs fixed](https://github.com/block-bites/fondant-app/pull/80)
+- [Added preloaders for all pages, visual bugs fixed](https://github.com/block-bites/fondant-app/pull/80)
 
 ### Fixed
 

@@ -27,7 +27,7 @@ export default function BlockRowElement({
     return (
         <Flex
             w="100%"
-            h={["140px", "160px", "94px", "94px", "94px"]}
+            h={["120px", "160px", "94px"]}
             borderBottom="1px solid"
             borderBottomColor="grey.100"
             justify="left"

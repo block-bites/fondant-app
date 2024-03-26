@@ -137,11 +137,11 @@ const Blocks = () => {
                     ))}
                 </VStack>
             </Flex>
-            <Flex justify="center" mt="4">
-                <Button onClick={handlePrevious} isDisabled={currentPage === 1}>
+            <Flex justify="center" mt="4" mb="5" gap="15px">
+                <Button onClick={handlePrevious} isDisabled={currentPage === 1} w="90px">
                     Previous
                 </Button>
-                <Button onClick={handleNext} isDisabled={isLastPage}>
+                <Button onClick={handleNext} isDisabled={isLastPage} w="90px">
                     Next
                 </Button>
             </Flex>

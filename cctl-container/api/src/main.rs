@@ -2,8 +2,11 @@
 
 use rocket::http::Status;
 use rocket::serde::{Serialize, json::Json};
-
+use cache::SseCache;
 mod utils;
+
+
+let mut sseCache = SseCache::new(100);
 
 #[derive(Serialize)]
 struct ActivationResponse {
@@ -37,11 +40,14 @@ fn launch() -> Result<Json<ActivationResponse>, Status> {
     println!("{:?}", parsed_ports);
     utils::generate_nginx_config(&parsed_ports);
     utils::start_nginx();
+
+    
     Ok(Json(ActivationResponse {
         success: true,
         message: "Network launched successfully".to_string(),
     }))
 }
+
 
 #[launch]
 fn rocket() -> _ {

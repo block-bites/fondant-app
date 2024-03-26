@@ -4,20 +4,20 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use sse_client::EventSource;
 
-struct SseCache {
+pub struct SseCache {
     data: Arc<Mutex<HashMap<String, Vec<String>>>>,
     capacity: i32,
 }
 
 impl SseCache {
-    fn new(capacity: i32) -> SseCache {
+    pub fn new(capacity: i32) -> SseCache {
         SseCache {
             data: Arc::new(Mutex::new(HashMap::new())),
             capacity: capacity,
         }
     }
 
-    fn start_listening(&self, url: String) {
+    pub fn start_listening(&self, url: String) {
         let event_source = EventSource::new(&url).unwrap();
         self.data.lock().unwrap().insert(url.clone(), Vec::new());
 
@@ -38,7 +38,7 @@ impl SseCache {
         });
     }
 
-    fn get_data(&self, url: &String) -> Option<Vec<String>> {
+    pub fn get_data(&self, url: &String) -> Option<Vec<String>> {
         self.data.lock().unwrap().get(url).cloned()
     }
 }

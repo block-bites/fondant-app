@@ -16,23 +16,44 @@ pub struct CommandResult {
 
 pub fn run_command(command: &str, args: Option<Vec<String>>) -> Result<CommandResult, String> {
     let json_file_path = "commands.json";
+
     let file_contents = fs::read_to_string(json_file_path)
         .map_err(|e| format!("Failed to read JSON file: {}", e))?;
-    
+
     let command_map: HashMap<String, String> = serde_json::from_str(&file_contents)
         .map_err(|e| format!("Failed to parse JSON: {}", e))?;
 
     let final_command = command_map.get(command)
         .ok_or_else(|| format!("Command not found: {}", command))?;
 
+    let sanitized_args = sanitize_args(args)?;
+
     let output = Command::new("bash")
         .arg("-c")
         .arg(&final_command)
-        .args(args.unwrap_or_default())
+        .args(sanitized_args.unwrap_or_default())
         .output()
         .map_err(|e| format!("Failed to execute command: {}", e))?;
 
     Ok(process_output(output))
+}
+
+fn sanitize_args(args: Option<Vec<String>>) -> Result<Option<Vec<String>>, String> {
+    if let Some(arg_list) = args {
+        let sanitized_args: Vec<String> = arg_list
+            .into_iter()
+            .map(|arg| {
+                if arg.contains(";") || arg.contains("&&") || arg.contains("||") {
+                    Err(format!("Invalid argument: {}", arg))
+                } else {
+                    Ok(arg)
+                }
+            })
+            .collect::<Result<_, _>>()?;
+        Ok(Some(sanitized_args))
+    } else {
+        Ok(None)
+    }
 }
 
 pub fn process_output(output: Output) -> CommandResult {

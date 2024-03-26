@@ -103,7 +103,7 @@ export default function BlockRowElement({
                             "calc(100vw - 600px)",
                             "unset",
                         ]}
-                        textOverflow={["ellipsis", "ellipsis", "ellipsis", "ellipsis", "ellipsis"]}
+                        textOverflow={["ellipsis"]}
                         overflow={["hidden", "hidden", "hidden", "hidden", "none"]}
                         whiteSpace="nowrap"
                     >

@@ -23,7 +23,7 @@ interface IAccountModalProps {
 
 function AccountModal({ isOpen, onClose, publicKey, privateKey }: IAccountModalProps) {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size={["sm", "md", "lg"]} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} size={["xs", "md", "lg"]} isCentered>
             <ModalOverlay />
             <Center>
                 <ModalContent>

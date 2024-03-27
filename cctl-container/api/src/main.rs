@@ -16,8 +16,10 @@ lazy_static! {
     static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(1000));
 }
 
+
 fn listen_to_sse(node_count: i32) {
-    for i in 0..node_count {
+
+    for i in 1.. node_count + 1{
         let events = format!("http://localhost/node-{}/sse/events/main", i);
         CACHE.lock().unwrap().start_listening(events);
 
@@ -75,26 +77,35 @@ fn search_deploys(node_number: i32, query: &str) -> Option<Json<Vec<String>>> {
 
 #[post("/launch")]
 fn launch() -> Result<Json<ActivationResponse>, Status> {
-    let mut command = "cctl-infra-net-setup";
-    utils::run_command(&command, None);
-    command = "cctl-infra-net-start";
-    utils::run_command(&command, None);
+    match utils::run_command("cctl-infra-net-setup", None) {
+        Ok(_) => {
+            match utils::run_command("cctl-infra-net-start", None) {
+                Ok(_) => {
+                    let parsed_ports = utils::parse_node_ports();
+                    println!("{:?}", parsed_ports);
 
-    let parsed_ports = utils::parse_node_ports();
-    println!("{:?}", parsed_ports);
+                    utils::generate_nginx_config(&parsed_ports);
+                    utils::start_nginx();
 
-    utils::generate_nginx_config(&parsed_ports);
-    utils::start_nginx();
+                    listen_to_sse(5);
 
-    listen_to_sse(parsed_ports.len() as i32);
-    
-
-    Ok(Json(ActivationResponse {
-        success: true,
-        message: "Network launched successfully".to_string(),
-    }))
+                    Ok(Json(ActivationResponse {
+                        success: true,
+                        message: "Network launched successfully".to_string(),
+                    }))
+                }
+                Err(error) => {
+                    eprintln!("Error starting network: {}", error);
+                    Err(Status::InternalServerError)
+                }
+            }
+        }
+        Err(error) => {
+            eprintln!("Error setting up network: {}", error);
+            Err(Status::InternalServerError)
+        }
+    }
 }
-
 
 #[launch]
 fn rocket() -> _ {

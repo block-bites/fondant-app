@@ -23,14 +23,20 @@ pub fn run_command(command: &str, args: Option<Vec<String>>) -> Result<CommandRe
     let command_map: HashMap<String, String> = serde_json::from_str(&file_contents)
         .map_err(|e| format!("Failed to parse JSON: {}", e))?;
 
-    let final_command = command_map.get(command)
-        .ok_or_else(|| format!("Command not found: {}", command))?;
- 
+    let mut final_command = command_map
+        .get(command)
+        .ok_or_else(|| format!("Command not found: {}", command))?
+        .clone();
+
+    if let Some(ref args_vec) = args {
+        final_command = format!("{} {}", final_command, args_vec.join(" "));
+    }
+
+    println!("Running command: {}", final_command);
 
     let output = Command::new("bash")
         .arg("-c")
         .arg(&final_command)
-        .args(args.as_ref().unwrap_or(&vec![]))
         .output()
         .map_err(|e| format!("Failed to execute command: {}", e))?;
 

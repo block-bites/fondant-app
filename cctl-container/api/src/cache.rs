@@ -41,4 +41,18 @@ impl SseCache {
     pub fn get_data(&self, url: &String) -> Option<Vec<String>> {
         self.data.lock().unwrap().get(url).cloned()
     }
+
+    pub fn search(&self, url: &String, query: &str) -> Option<Vec<String>> {
+        if let Some(messages) = self.data.lock().unwrap().get(url) {
+            let matching_messages: Vec<String> = messages
+                .iter()
+                .filter(|message| message.contains(query))
+                .cloned()
+                .collect();
+            if !matching_messages.is_empty() {
+                return Some(matching_messages);
+            }
+        }
+        None
+    }
 }

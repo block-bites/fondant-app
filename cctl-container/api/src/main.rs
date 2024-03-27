@@ -13,7 +13,7 @@ use cache::SseCache;
 
 //TODO: Flexible capacity
 lazy_static! {
-    static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(100));
+    static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(1000));
 }
 
 fn listen_to_sse(node_count: i32) {
@@ -60,6 +60,17 @@ fn get_deploys(node_number: i32) -> Option<Json<Vec<String>>> {
     CACHE.lock().unwrap().get_data(&deploys).map(Json)
 }
 
+#[get("/cache/events/<node_number>/search?<query>")]
+fn search_events(node_number: i32, query: &str) -> Option<Json<Vec<String>>> {
+    let events = format!("http://localhost/node-{}/sse/events/main", node_number);
+    CACHE.lock().unwrap().search(&events, query).map(Json)
+}
+
+#[get("/cache/deploys/<node_number>/search?<query>")]
+fn search_deploys(node_number: i32, query: &str) -> Option<Json<Vec<String>>> {
+    let deploys = format!("http://localhost/node-{}/sse/events/deploys", node_number);
+    CACHE.lock().unwrap().search(&deploys, query).map(Json)
+}
 
 
 #[post("/launch")]
@@ -89,7 +100,7 @@ fn launch() -> Result<Json<ActivationResponse>, Status> {
 fn rocket() -> _ {
     
     rocket::build()
-        .mount("/", routes![health, run, launch, get_events, get_deploys])
+        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

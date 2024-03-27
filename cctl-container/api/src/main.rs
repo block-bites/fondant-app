@@ -11,6 +11,7 @@ use std::sync::Mutex;
 
 use cache::SseCache;
 
+//TODO: Flexible capacity
 lazy_static! {
     static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(100));
 }

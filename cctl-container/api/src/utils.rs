@@ -25,13 +25,12 @@ pub fn run_command(command: &str, args: Option<Vec<String>>) -> Result<CommandRe
 
     let final_command = command_map.get(command)
         .ok_or_else(|| format!("Command not found: {}", command))?;
-
-    let sanitized_args = sanitize_args(args)?;
+ 
 
     let output = Command::new("bash")
         .arg("-c")
         .arg(&final_command)
-        .args(sanitized_args.unwrap_or_default())
+        .args(args.as_ref().unwrap_or(&vec![]))
         .output()
         .map_err(|e| format!("Failed to execute command: {}", e))?;
 

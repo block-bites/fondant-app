@@ -14,6 +14,7 @@ use cache::SseCache;
 //TODO: Flexible capacity
 lazy_static! {
     static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(1000));
+    static ref STATUS: Mutex<String> = Mutex::new("".to_string());
 }
 
 fn listen_to_sse(node_count: i32) {
@@ -75,10 +76,10 @@ fn search_deploys(node_number: i32, query: &str) -> Option<Json<Vec<String>>> {
 
 #[post("/launch")]
 fn launch() -> Result<Json<ActivationResponse>, Status> {
-    let mut command = "cctl-infra-net-setup";
-    utils::run_command(&command, None);
-    command = "cctl-infra-net-start";
-    utils::run_command(&command, None);
+    let mut status = STATUS.lock().unwrap();
+    *status = "launching".to_string();
+    utils::run_command("cctl-infra-net-setup", None);
+    utils::run_command("cctl-infra-net-start", None);
 
     let parsed_ports = utils::parse_node_ports();
     println!("{:?}", parsed_ports);
@@ -88,11 +89,60 @@ fn launch() -> Result<Json<ActivationResponse>, Status> {
 
     listen_to_sse(5);
     
-
+    *status = "running".to_string();
     Ok(Json(ActivationResponse {
         success: true,
         message: "Network launched successfully".to_string(),
     }))
+}
+
+#[post("/stop")]
+fn stop() -> Result<Json<ActivationResponse>, Status> {
+    let mut status = STATUS.lock().unwrap();
+    *status = "stopping".to_string();
+
+    match utils::run_command("cctl-infra-net-stop", None) {
+        Ok(_) => {
+            *status = "stopped".to_string();
+            Ok(Json(ActivationResponse {
+                success: true,
+                message: "Network stopped successfully".to_string(),
+            }))
+        }
+        Err(_) => {
+            *status = "stopped".to_string();
+            Err(Status::InternalServerError)
+        }
+    }
+}
+
+#[post("/start")]
+fn start() -> Result<Json<ActivationResponse>, Status> {
+    let mut status = STATUS.lock().unwrap();
+    *status = "starting".to_string();
+
+    match utils::run_command("cctl-infra-net-start", None) {
+        Ok(_) => {
+            *status = "running".to_string();
+            Ok(Json(ActivationResponse {
+                success: true,
+                message: "Network started successfully".to_string(),
+            }))
+        }
+        Err(_) => {
+            *status = "stopped".to_string();
+            Err(Status::InternalServerError)
+        }
+    }
+}
+
+#[get("/status")]
+fn status() -> Json<ActivationResponse> {
+    let status = STATUS.lock().unwrap();
+    Json(ActivationResponse {
+        success: true,
+        message: status.clone(),
+    })
 }
 
 
@@ -100,7 +150,7 @@ fn launch() -> Result<Json<ActivationResponse>, Status> {
 fn rocket() -> _ {
     
     rocket::build()
-        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys])
+        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

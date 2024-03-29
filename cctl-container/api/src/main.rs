@@ -3,6 +3,8 @@
 use rocket::http::Status;
 use rocket::serde::{Serialize, json::Json};
 
+use rocket_cors::{AllowedOrigins, CorsOptions};
+
 mod utils;
 mod cache;
 
@@ -148,7 +150,12 @@ fn status() -> Json<ActivationResponse> {
 
 #[launch]
 fn rocket() -> _ {
-    
+    let cors = CorsOptions::default()
+        .allowed_origins(AllowedOrigins::all())
+        .allowed_methods(["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+        .allow_credentials(true)
+        .to_cors().unwrap();
+
     rocket::build()
         .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status])
         .configure(rocket::Config {
@@ -156,4 +163,5 @@ fn rocket() -> _ {
             port: 3001,
             ..rocket::Config::default()
         })
+        .attach(cors)
 }

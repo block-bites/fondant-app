@@ -1,26 +1,16 @@
 # Fondant: A Blockchain Application Suite
-## Current Status
 
-Welcome to the Fondant app, version 1.0! This guide will walk you through setting up both the frontend and backend components. Get ready to explore and test the capabilities of this blockchain application.
+Welcome to Fondant version 1.1! Fondant is a suite of tools the purpose of which is to help you develop and test your applications on the Casper blokchain. We provide all the functionality of CCTL packaged in a slick UI. The app runs on docker containers so you don't have to wander about cross-compatibility or demanding compilations.
 
-## Prerequisites:
+To get started install **docker** and run  
+```curl -sL https://raw.githubusercontent.com/block-bites/fondant-app/master/setup/docker-compose.yml | docker-compose -f - up```
 
-You will need **docker** installed and running on your machine for this application to work.
-
-
-## Running the Application:
-
-Paste this command into your terminal 
-    ```curl -sL https://raw.githubusercontent.com/block-bites/fondant-app/master/setup/docker-compose.yml | docker-compose -f - up```
 
 In case of a docker-compose error try ```sudo docker-compose -f - up``` instead
 
-Or:
+### Want to add something to fondant?
 
-1. **Clone the repo**.
-2. **Script Selection:** Choose the appropriate script for your operating system (Windows or Linux) and execute it.
-3. **Initialization** Feedback: Monitor the initial output from nctl (Note: This feedback mechanism will be updated in future releases).
-4. **Launch:** Once the setup is complete, your Fondant app is ready for use!
+You can clone this repository and build the docker-compose file that's inside root folder, or use one of our setup scripts.
 
 ## Frontend Features
 
@@ -30,21 +20,15 @@ Explore the user-friendly interface of Fondant's frontend:
 - **Blocks Section:** View all blockchain blocks arranged in chronological order.
 - **Deploys, Events, Logs:** Access detailed information about deploys, events, and logs for in-depth analysis. 
 
-If you don't want to use any tools but want to see how deploy data looks like you can use `http://localhost:3000/transfer` endpoint. It will transfer some funds from the faucet account and generate some traffic.
-
 ## Backend Capabilities
 
-We've set up proxies for essential ports as backend endpoints. *Example: http://localhost:3001/net/1/rpc*. These endpoints allow direct connection to the respective node's RPC port.
+We've set up proxies for essential ports as backend endpoints. *Example: http://localhost/node-1/rpc*. These endpoints allow direct connection to the respective node's RPC port.
 Sample Commands:
 - To check the status of node 1: 
-    `casper-client get-node-status -n http://localhost:3001/net/1/rpc`
+    `casper-client get-node-status -n http://localhost/node-1/rpc`
 - To retrieve the latest block info from node 2:
-    `casper-client get-block -n http://localhost:3001/net/2/rpc`
+    `casper-client get-block -n http://localhost/node-1/rpc`
 - To get the current state root hash from node 3:
-    `casper-client get-state-root-hash -n http://localhost:3001/net/3/rpc` (applicable after the first block emission)
+    `casper-client get-state-root-hash -n http://localhost/node-1/rpc` (applicable after the first block emission)
 
 Currently, nodes 1 to 5 are supported, with plans to make this configurable in future updates.
-
-### Endpoint Documentation:
-
-For comprehensive information on all available endpoints, refer to the OpenAPI.yml file included in the package

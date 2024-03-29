@@ -11,7 +11,8 @@ services:
     ports:
       - "3001:3001"
       - "80:80"
-    
+    networks:
+      - fondant-network
 
   fondant-frontend:
     build:
@@ -19,7 +20,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    
+    networks:
+      - fondant-network
+
+
+networks:
+  fondant-network:
+    driver: bridge
 
 volumes:
   app-volume:

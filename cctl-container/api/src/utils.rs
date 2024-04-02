@@ -135,3 +135,7 @@ pub fn start_nginx() {
         eprintln!("Failed to start Nginx: {}", String::from_utf8_lossy(&start_output.stderr));
     }
 }
+
+pub fn read_file(file_path: &str) -> Result<String, String> {
+    fs::read_to_string(file_path).map_err(|e| format!("Failed to read file: {}", e))   
+}

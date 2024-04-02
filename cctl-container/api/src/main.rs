@@ -2,6 +2,7 @@
 
 use rocket::http::Status;
 use rocket::serde::{Serialize, json::Json};
+use std::fs;
 
 mod utils;
 mod cache;
@@ -152,6 +153,46 @@ fn status() -> Json<ActivationResponse> {
 }
 
 
+#[get("/users/<user_id>/secret_key")]
+fn get_secret_key(user_id: i32) -> Result<Json<ActivationResponse>, Status> {
+    let secret_key_path = format!("/home/cctl/cctl/assets/users/user-{}/secret_key.pem", user_id);
+
+    match fs::read_to_string(&secret_key_path) {
+        Ok(secret_key) => Ok(Json(ActivationResponse {
+            success: true,
+            message: secret_key,
+        })),
+        Err(error) => {
+            if error.kind() == std::io::ErrorKind::NotFound {
+                Err(Status::NotFound)
+            } else {
+                Err(Status::InternalServerError)
+            }
+        }
+    }
+}
+
+
+#[get("/users/<user_id>/public_key")]
+fn get_public_key(user_id: i32) -> Result<Json<ActivationResponse>, Status> {
+    let public_key_path = format!("/home/cctl/cctl/assets/users/user-{}/public_key.pem", user_id);
+
+    match fs::read_to_string(&public_key_path) {
+        Ok(public_key) => Ok(Json(ActivationResponse {
+            success: true,
+            message: public_key,
+        })),
+        Err(error) => {
+            if error.kind() == std::io::ErrorKind::NotFound {
+                Err(Status::NotFound)
+            } else {
+                Err(Status::InternalServerError)
+            }
+        }
+    }
+}
+
+
 
 
 #[rocket::async_trait]
@@ -178,7 +219,7 @@ fn rocket() -> _ {
     
     rocket::build()
         .attach(CORS)
-        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status])
+        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status, get_secret_key, get_public_key])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

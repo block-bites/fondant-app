@@ -90,7 +90,7 @@ const NavbarMobile: React.FC<INavbarMobProps> = ({
                             alignItems="flex-end"
                             gap="15px"
                         >
-                            <Link to="/accounts" onClick={() => setOpen(false)}>
+                            <Link to="/" onClick={() => setOpen(false)}>
                                 <Flex alignItems="center" gap="15px" justifyContent="center">
                                     <MdSupervisorAccount size="24px" />
                                     <Text fontSize={["36px", "42px"]}> Accounts</Text>

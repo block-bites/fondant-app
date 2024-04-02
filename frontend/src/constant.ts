@@ -1,0 +1,1 @@
+export const NUM_OF_NODES_CONSIDERED_RUNNING = 5

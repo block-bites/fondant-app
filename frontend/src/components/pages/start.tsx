@@ -1,7 +1,7 @@
-import { useSearchContext } from "../../context/SearchContext"
+// import { useSearchContext } from "../../context/SearchContext"
 import { Helmet } from "react-helmet-async"
 
-import { Flex, VStack, Spinner, Button } from "@chakra-ui/react"
+import { Flex, Spinner, Button } from "@chakra-ui/react"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 
@@ -12,9 +12,10 @@ const Start = () => {
     const handleClick = async () => {
         setIsLoading(true)
         try {
-            const response = await fetch("http://localhost:3001/nctl-start", {
+            const response = await fetch("http://localhost:3001/launch", {
                 method: "POST",
             })
+            console.log(response)
             if (response.ok) {
                 navigate("/accounts")
             } else {
@@ -31,9 +32,10 @@ const Start = () => {
         const checkStatus = async () => {
             setIsLoading(true)
             try {
-                const response = await fetch("http://localhost:3001/nctl-status", {
+                const response = await fetch("http://localhost:3001/run/cctl-infra-net-status", {
                     method: "POST",
                 })
+                console.log(response)
                 if (response.ok) {
                     navigate("/accounts")
                 } else {

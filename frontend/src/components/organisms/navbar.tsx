@@ -9,6 +9,8 @@ import { BiGridAlt } from "react-icons/bi"
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
 import { useNodeContext } from "../../context/NodeContext"
 import { CasperServiceByJsonRPC } from "casper-js-sdk"
+import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+
 import Logo from "../../assets/logo.svg"
 
 interface NavbarProps {
@@ -88,7 +90,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
 
     const fetchStartTime = async () => {
         try {
-            const response = await fetch("http://localhost:3001/get-start-time")
+            const response = await fetch("http://localhost:3001/run/cctl-infra-net-start")
             const data = await response.json()
             setStartTime(new Date(data.startupTime))
         } catch (error) {
@@ -98,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
 
     const handleStart = async () => {
         try {
-            const response = await fetch("http://localhost:3001/start", {
+            const response = await fetch("http://localhost:3001/run/cctl-infra-net-start", {
                 method: "POST",
             })
             if (response.ok) {
@@ -112,7 +114,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
 
     const handleStop = async () => {
         try {
-            const response = await fetch("http://localhost:3001/stop", {
+            const response = await fetch("http://localhost:3001/run/cctl-infra-net-stop", {
                 method: "POST",
             })
             if (response.ok) {
@@ -158,7 +160,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     const handleReset = async () => {
         setIsResetting(true)
         try {
-            const response = await fetch("http://localhost:3001/nctl-start", {
+            const response = await fetch("http://localhost:3001//run/cctl-infra-net-start", {
                 method: "POST",
             })
             if (response.status === 200) {
@@ -175,7 +177,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     }
 
     const nodeOptions = []
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
         nodeOptions.push(
             <option key={i} value={i}>
                 Node {i}

@@ -153,8 +153,8 @@ fn status() -> Json<ActivationResponse> {
 }
 
 
-#[get("/users/<user_id>/secret_key")]
-fn get_secret_key(user_id: i32) -> Result<Json<ActivationResponse>, Status> {
+#[get("/users/<user_id>/private_key")]
+fn get_private_key(user_id: i32) -> Result<Json<ActivationResponse>, Status> {
     let secret_key_path = format!("/home/cctl/cctl/assets/users/user-{}/secret_key.pem", user_id);
 
     match fs::read_to_string(&secret_key_path) {
@@ -219,7 +219,7 @@ fn rocket() -> _ {
     
     rocket::build()
         .attach(CORS)
-        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status, get_secret_key, get_public_key])
+        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status, get_private_key, get_public_key])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

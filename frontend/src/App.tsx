@@ -14,7 +14,6 @@ import Logs from "./components/pages/logs"
 import Settings from "./components/pages/settings"
 import Events from "./components/pages/events"
 import Deploys from "./components/pages/deploys"
-import Start from "./components/pages/start"
 
 export const App = () => {
     return (
@@ -36,7 +35,6 @@ function AppContent() {
     // we can move it to separate components
     const location = useLocation()
     const isSettingsPage = location.pathname === "/settings"
-    const isStartPage = location.pathname === "/"
 
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [isLaptop, setIsLaptop] = useState<boolean>(false)
@@ -57,10 +55,9 @@ function AppContent() {
 
     return (
         <>
-            {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} isMobile={isMobile} />}
+            {!isSettingsPage && <Navbar isLaptop={isLaptop} isMobile={isMobile} />}
             <Routes>
-                <Route path="/" element={<Start />} />
-                <Route path="/accounts" element={<Accounts />} />
+                <Route path="/" element={<Accounts />} />
                 <Route path="/blocks" element={<Blocks />} />
                 <Route path="/deploys" element={<Deploys />} />
                 <Route path="/events" element={<Events />} />

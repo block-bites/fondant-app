@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async"
 import { Flex, VStack, Text, Spinner, Box } from "@chakra-ui/react"
 import AccountRowElement from "../molecules/account-row-element"
 import axios from "axios"
+import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 
 type AccountData = {
     publicKey: string
@@ -18,12 +19,18 @@ const Accounts = () => {
     useEffect(() => {
         const fetchAccountsData = async () => {
             let fetchedAccounts: AccountData[] = []
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
                 try {
-                    const response = await axios.get(`http://localhost:3001/user-keys/${i}`)
+                    const responsePrivate = await axios.get(
+                        `http://localhost:3001/users/${i}/private_key`
+                    )
+                    const responsePublic = await axios.get(
+                        `http://localhost:3001/users/${i}/public_key`
+                    )
+
                     fetchedAccounts.push({
-                        publicKey: response.data.public_key,
-                        privateKey: response.data.private_key,
+                        publicKey: responsePublic.data.message.split("\r\n")[1],
+                        privateKey: responsePrivate.data.message.split("\r\n")[1],
                     })
                 } catch (error) {
                     console.error(`Error fetching data for user ${i}:`, error)
@@ -32,7 +39,6 @@ const Accounts = () => {
             setAccountsData(fetchedAccounts)
             setIsLoading(false)
         }
-
         fetchAccountsData()
     }, [])
 

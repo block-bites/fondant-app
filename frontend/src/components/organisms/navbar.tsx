@@ -230,20 +230,18 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                             alignItems="flex-end"
                                             gap="15px"
                                         >
-                                            <Link to="/accounts" onClick={() => setOpen(false)}>
+                                            <Link to="/" onClick={() => setOpen(false)}>
                                                 <Flex
                                                     alignItems="center"
                                                     gap="15px"
                                                     justifyContent="center"
                                                     color={
-                                                        activePath === "/accounts"
+                                                        activePath === "/"
                                                             ? "pri.orange"
                                                             : "grey.100"
                                                     }
                                                     borderBottom={
-                                                        activePath === "/accounts"
-                                                            ? "2px solid"
-                                                            : "none"
+                                                        activePath === "/" ? "2px solid" : "none"
                                                     }
                                                 >
                                                     <MdSupervisorAccount size="24px" />
@@ -339,18 +337,14 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 border="none"
                                 justifyContent={isLaptop ? "space-between" : "unset"}
                             >
-                                <Link to="/accounts">
+                                <Link to="/">
                                     <Tab
                                         _hover={{
                                             color: "grey.400",
                                             borderColor: "grey.400",
                                         }}
-                                        color={
-                                            activePath === "/accounts" ? "pri.orange" : "grey.100"
-                                        }
-                                        borderBottom={
-                                            activePath === "/accounts" ? "2px solid" : "none"
-                                        }
+                                        color={activePath === "/" ? "pri.orange" : "grey.100"}
+                                        borderBottom={activePath === "/" ? "2px solid" : "none"}
                                     >
                                         <Icon as={MdSupervisorAccount} size="24px" />
                                         Accounts

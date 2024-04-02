@@ -177,6 +177,7 @@ impl Fairing for CORS {
 fn rocket() -> _ {
     
     rocket::build()
+        .attach(CORS)
         .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),

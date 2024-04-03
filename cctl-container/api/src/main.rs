@@ -22,6 +22,7 @@ pub struct CORS;
 lazy_static! {
     static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(1000));
     static ref STATUS: Mutex<String> = Mutex::new("".to_string());
+    static ref IS_INIT: Mutex<bool> = Mutex::new(false);
 }
 
 fn listen_to_sse(node_count: i32) {
@@ -81,11 +82,14 @@ fn search_deploys(node_number: i32, query: &str) -> Option<Json<Vec<String>>> {
 }
 
 
-#[post("/launch")]
-fn launch() -> Result<Json<ActivationResponse>, Status> {
+#[post("/init")]
+fn init() -> Result<Json<ActivationResponse>, Status> {
     let mut status = STATUS.lock().unwrap();
     *status = "launching".to_string();
     utils::run_command("cctl-infra-net-setup", None);
+    let mut init = IS_INIT.lock().unwrap();
+    *init = true;
+
     utils::run_command("cctl-infra-net-start", None);
 
     let parsed_ports = utils::parse_node_ports();
@@ -99,7 +103,7 @@ fn launch() -> Result<Json<ActivationResponse>, Status> {
     *status = "running".to_string();
     Ok(Json(ActivationResponse {
         success: true,
-        message: "Network launched successfully".to_string(),
+        message: "Network is initilized and started.".to_string(),
     }))
 }
 
@@ -124,10 +128,18 @@ fn stop() -> Result<Json<ActivationResponse>, Status> {
 }
 
 #[post("/start")]
-fn start() -> Result<Json<ActivationResponse>, Status> {
+fn start() -> Result<Json<ActivationResponse>, (Status, &'static str)> {
     let mut status = STATUS.lock().unwrap();
+    if *status == "" {
+        return Err((Status::BadRequest, "You need to initialize the network before you can start it"));
+    }
+    if *status == "running" {
+        return Err((Status::Conflict, "The network is already running"));
+    }
+    if *status == "starting" {
+        return Err((Status::Conflict, "The network is already starting"));
+    }
     *status = "starting".to_string();
-
     match utils::run_command("cctl-infra-net-start", None) {
         Ok(_) => {
             *status = "running".to_string();
@@ -138,7 +150,7 @@ fn start() -> Result<Json<ActivationResponse>, Status> {
         }
         Err(_) => {
             *status = "stopped".to_string();
-            Err(Status::InternalServerError)
+            Err((Status::InternalServerError, "Failed to start the network"))
         }
     }
 }
@@ -219,7 +231,7 @@ fn rocket() -> _ {
     
     rocket::build()
         .attach(CORS)
-        .mount("/", routes![health, run, launch, get_events, get_deploys, search_events, search_deploys, stop, start, status, get_secret_key, get_public_key])
+        .mount("/", routes![health, run, init, get_events, get_deploys, search_events, search_deploys, stop, start, status, get_secret_key, get_public_key])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

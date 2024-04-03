@@ -201,32 +201,13 @@ const Navbar: React.FC<NavbarProps> = ({
         }
     }
 
-    const handleReset = async () => {
-        setIsResetting(true)
-        try {
-            const response = await fetch("http://localhost:3001/run/cctl-infra-net-start", {
-                method: "POST",
-            })
-            if (response.status === 200) {
-                console.log("Reset successful:", response.status)
-                setTimeout(() => {
-                    setIsResetting(false)
-                }, 5000)
-                setResetTrigger((prev) => !prev)
-            }
-        } catch (error) {
-            console.error("Error sending reset request:", error)
-            setIsResetting(false)
-        }
-    }
-
     // Open/Close modal to confirm restart
-    const handleModalOpen = () => {
-        setIsModalOpen(true)
-    }
-    const handleModalClose = () => {
-        setIsModalOpen(false)
-    }
+    // const handleModalOpen = () => {
+    //     setIsModalOpen(true)
+    // }
+    // const handleModalClose = () => {
+    //     setIsModalOpen(false)
+    // }
 
     //Dropdown nodes to choose
     const nodeOptions = []
@@ -567,8 +548,8 @@ const Navbar: React.FC<NavbarProps> = ({
                                 {isNetworkStopping ? <Spinner size="sm" /> : "Stop"}
                             </Center>
                         )}
-                        {isNetworkLaunched ? (
-                            <Box
+
+                        {/* <Box              //Reset feature will be develope later 
                                 height="29px"
                                 bg="pri.orange"
                                 color="white"
@@ -580,8 +561,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                 onClick={handleModalOpen}
                             >
                                 Reset
-                            </Box>
-                        ) : null}
+                            </Box> */}
                         <Select
                             size={["xs", "sm"]}
                             onChange={(e) => setNodeNumber(Number(e.target.value))}
@@ -598,11 +578,11 @@ const Navbar: React.FC<NavbarProps> = ({
                     </HStack>
                 </HStack>
             </HStack>
-            <NavbarModal
+            {/* <NavbarModal
                 isOpen={isModalOpen}
                 onClose={handleModalClose}
                 handleReset={handleReset}
-            />
+            /> */}
         </Flex>
     )
 }

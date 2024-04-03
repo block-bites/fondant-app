@@ -61,8 +61,9 @@ function AppContent() {
             const resJson = await response.json()
             if (response.ok) {
                 if (resJson.message === "") {
-                    console.log("Network status: LAUNCHED")
-                    setIsNetworkLaunched(true)
+                    console.log("Network status: NOT LAUNCHED")
+                    setIsNetworkLaunched(false)
+                    setIsNetworkRunning(false)
                 }
                 if (resJson.message === "running") {
                     console.log("Network status: RUNNING")

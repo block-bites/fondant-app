@@ -14,7 +14,7 @@ import {
     Select,
     Image,
     Spinner,
-    Center,
+    Button,
 } from "@chakra-ui/react"
 import NavbarModal from "../molecules/navbar-modal"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
@@ -126,11 +126,12 @@ const Navbar: React.FC<NavbarProps> = ({
     const handleLaunch = async () => {
         setIsLaunching(true)
         try {
-            const response = await fetch("http://localhost:3001/launch", {
+            const response = await fetch("http://localhost:3001/init", {
                 method: "POST",
             })
             if (response.ok) {
                 setIsNetworkLaunched(true)
+                setIsNetworkRunning(true)
                 setIsLaunching(false)
                 console.log("Launched successfully")
             } else {
@@ -500,9 +501,8 @@ const Navbar: React.FC<NavbarProps> = ({
                     <HStack gap={["5px", "6px", "16px"]}>
                         {/* Conditionally render Start/Stop buttons based on isNetworkRunning */}
                         {isNetworkLaunched ? null : (
-                            <Center
-                                as="button"
-                                width="74px"
+                            <Button
+                                width="100px"
                                 height="29px"
                                 bg="green.500"
                                 color="white"
@@ -512,13 +512,14 @@ const Navbar: React.FC<NavbarProps> = ({
                                 fontSize={["10px", "14px"]}
                                 cursor="pointer"
                                 onClick={handleLaunch}
+                                isDisabled={isLaunching}
+                                _hover={{ bg: "green.400" }}
                             >
                                 {isLaunching ? <Spinner size="sm" /> : "Launch"}
-                            </Center>
+                            </Button>
                         )}
-
-                        {!isNetworkRunning ? (
-                            <Center
+                        {!isNetworkRunning && isNetworkLaunched ? (
+                            <Button
                                 width="100px"
                                 height="29px"
                                 bg="green.500"
@@ -529,11 +530,14 @@ const Navbar: React.FC<NavbarProps> = ({
                                 fontSize={["10px", "14px"]}
                                 cursor="pointer"
                                 onClick={handleStart}
+                                isDisabled={isNetworkStarting}
+                                _hover={{ bg: "green.400" }}
                             >
                                 {isNetworkStarting ? <Spinner size="sm" /> : "Start"}
-                            </Center>
-                        ) : (
-                            <Center
+                            </Button>
+                        ) : null}
+                        {isNetworkRunning && isNetworkLaunched ? (
+                            <Button
                                 width="100px"
                                 height="29px"
                                 bg="red.500"
@@ -544,10 +548,12 @@ const Navbar: React.FC<NavbarProps> = ({
                                 fontSize={["10px", "14px"]}
                                 cursor="pointer"
                                 onClick={handleStop}
+                                isDisabled={isNetworkStopping}
+                                _hover={{ bg: "red.400" }}
                             >
                                 {isNetworkStopping ? <Spinner size="sm" /> : "Stop"}
-                            </Center>
-                        )}
+                            </Button>
+                        ) : null}
 
                         {/* <Box              //Reset feature will be develope later 
                                 height="29px"

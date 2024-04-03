@@ -26,7 +26,6 @@ services:
       - ./frontend:/app
       - /app/node_modules
 
-
 networks:
   fondant-network:
     driver: bridge

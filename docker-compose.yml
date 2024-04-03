@@ -30,6 +30,3 @@ services:
 networks:
   fondant-network:
     driver: bridge
-
-volumes:
-  app-volume:

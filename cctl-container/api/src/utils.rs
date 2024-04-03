@@ -87,28 +87,24 @@ pub fn parse_node_ports() -> HashMap<String, HashMap<String, i32>> {
 
 
 pub fn generate_nginx_config(node_service_ports: &HashMap<String, HashMap<String, i32>>) {
-    let mut config = String::from("events {\n worker_connections 1024;\n }\n http {\n server {\n listen 80;\n server_name localhost;\n\n");
+    let mut config = String::from("events {\n  worker_connections 1024;\n}\n\nhttp {\n  server {\n    listen 80;\n    server_name localhost;\n\n");
+
+    let cors_config = "    location / {\n      if ($request_method = 'OPTIONS') {\n        add_header 'Access-Control-Allow-Origin' '127.0.0.1:11101';\n        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';\n        add_header 'Access-Control-Allow-Headers' 'Origin, X-Requested-With';\n        add_header 'Access-Control-Max-Age' 1728000;\n        add_header 'Content-Type' 'text/plain; charset=utf-8';\n        add_header 'Content-Length' 0;\n        return 204;\n      }\n\n      add_header 'Access-Control-Allow-Origin' '127.0.0.1:11101' always;\n      add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;\n      add_header 'Access-Control-Allow-Headers' 'Origin, X-Requested-With' always;\n      add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range' always;\n\n      proxy_hide_header 'Cookie';\n      proxy_hide_header 'Cookie2';\n    }\n\n";
+
+    config.push_str(cors_config);
 
     for (node_name, services) in node_service_ports {
         for (service_name, port) in services {
-            let location_block = format!(" location /{}/{}/{{
-                proxy_pass http://localhost:{}/;
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-            }}\n\n", node_name, service_name.to_lowercase(), port);
-
+            let location_block = format!("    location /{}/{}/ {{\n      proxy_pass http://localhost:{}/;\n      proxy_set_header Host $host;\n      proxy_set_header X-Real-IP $remote_addr;\n      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n      proxy_set_header X-Forwarded-Proto $scheme;\n    }}\n\n", node_name, service_name.to_lowercase(), port);
             config.push_str(&location_block);
         }
     }
 
-    config.push_str(" }\n}");
+    config.push_str("  }\n}");
 
     let mut file = File::create("/etc/nginx/nginx.conf").unwrap();
     file.write_all(config.as_bytes()).unwrap();
 }
-
 
 pub fn start_nginx() {
     let start_output = Command::new("service")

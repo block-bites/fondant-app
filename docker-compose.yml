@@ -11,13 +11,14 @@ services:
     ports:
       - "3001:3001"
       - "80:80"
+      - "11101:11101"
     networks:
       - fondant-network
 
   fondant-frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     networks:

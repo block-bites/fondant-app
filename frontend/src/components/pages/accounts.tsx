@@ -1,75 +1,116 @@
-import { useEffect, useState } from "react";
-import { useSearchContext } from "../../context/SearchContext";
-import { Helmet } from "react-helmet-async";
-import { Flex, VStack, Text } from "@chakra-ui/react";
-import AccountRowElement from "../molecules/account-row-element";
-import axios from "axios";
+import { useEffect, useState } from "react"
+import { useSearchContext } from "../../context/SearchContext"
+import { Helmet } from "react-helmet-async"
+import { Flex, VStack, Text, Spinner, Box } from "@chakra-ui/react"
+import AccountRowElement from "../molecules/account-row-element"
+import axios from "axios"
+import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+import { Keys } from "casper-js-sdk"
 
 type AccountData = {
-  publicKey: string;
-  privateKey: string;
-};
+    publicKey: string
+    privateKey: string
+}
 
-const Accounts = () => {
-  const { searchValue } = useSearchContext();
-  const [accountsData, setAccountsData] = useState<AccountData[]>([]);
+interface AccountsProps {
+    isNetworkLaunched: boolean
+}
 
-  useEffect(() => {
-    const fetchAccountsData = async () => {
-      let fetchedAccounts: AccountData[] = [];
-      for (let i = 1; i <= 10; i++) {
-        try {
-          const response = await axios.get(
-            `http://localhost:3001/user-keys/${i}`
-          );
-          fetchedAccounts.push({
-            publicKey: response.data.public_key,
-            privateKey: response.data.private_key,
-          });
-        } catch (error) {
-          console.error(`Error fetching data for user ${i}:`, error);
+const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
+    const { searchValue } = useSearchContext()
+    const [accountsData, setAccountsData] = useState<AccountData[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(true) // Initialize as true
+
+    // console.log(Keys.getKeysFromHexPrivKey)
+    // console.log(Keys.SignatureAlgorithm.Ed25519)
+
+    useEffect(() => {
+        const fetchAccountsData = async () => {
+            let fetchedAccounts: AccountData[] = []
+            for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
+                try {
+                    const responsePrivate = await axios.get(
+                        `http://localhost:3001/users/${i}/private_key`
+                    )
+                    const responsePublic = await axios.get(
+                        `http://localhost:3001/users/${i}/public_key` //private i z casper przekonwertowac  //parse public key
+                    )
+
+                    const x = Keys.Ed25519.readBase64WithPEM(responsePrivate.data.message)
+                    const key = responsePublic.data.message.split("\r\n")[1]
+
+                    const privKey = Keys.Ed25519.parsePrivateKey(x)
+                    // console.log(privKey)
+
+                    const pub = Keys.Ed25519.privateToPublicKey(privKey)
+                    // console.log(pub)
+                    const keyPair = Keys.getKeysFromHexPrivKey(key, Keys.SignatureAlgorithm.Ed25519)
+                    console.log(keyPair.publicKey.toHex())
+
+                    fetchedAccounts.push({
+                        publicKey: responsePublic.data.message.split("\r\n")[1],
+                        privateKey: responsePrivate.data.message.split("\r\n")[1],
+                    })
+                } catch (error) {
+                    console.error(`Error fetching data for user ${i}:`, error)
+                }
+            }
+            setAccountsData(fetchedAccounts)
+            setIsLoading(false)
         }
-      }
-      setAccountsData(fetchedAccounts);
-    };
+        if (isNetworkLaunched) {
+            fetchAccountsData()
+        }
+    }, [isNetworkLaunched])
 
-    fetchAccountsData();
-  }, []);
+    const filteredAccounts = accountsData.filter(
+        (account) =>
+            account.publicKey.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
+            account.privateKey.toLowerCase().includes(searchValue.toLowerCase().trim())
+    )
 
-  const filteredAccounts = accountsData.filter(
-    (account) =>
-      account.publicKey
-        .toLowerCase()
-        .includes(searchValue.toLowerCase().trim()) ||
-      account.privateKey
-        .toLowerCase()
-        .includes(searchValue.toLowerCase().trim())
-  );
-
-  return (
-    <>
-      <Helmet>
-        <title>Fondant | Accounts</title>
-      </Helmet>
-      <Flex w="100%" justify="center">
-        <VStack w="100%" maxW="1440px" gap="0" mt="16px">
-          {filteredAccounts.length > 0 ? (
-            filteredAccounts.map((account, index) => (
-              <AccountRowElement
-                key={index}
-                publicKey={account.publicKey}
-                privateKey={account.privateKey}
-              />
-            ))
-          ) : (
-            <Flex w="100%" justify="center" pt="100px">
-              <Text color="grey.400">No results</Text>
+    if (isLoading && isNetworkLaunched)
+        return (
+            <Flex
+                justifyContent="center"
+                height="100vh"
+                alignItems="center"
+                m={["68px 0 0 0", "68px 0 0 0", "0"]}
+            >
+                <Spinner size="xl" colorScheme="gray" />
             </Flex>
-          )}
-        </VStack>
-      </Flex>
-    </>
-  );
-};
+        )
 
-export default Accounts;
+    return (
+        <>
+            <Helmet>
+                <title>Fondant | Accounts</title>
+            </Helmet>
+            <Flex w="100%" justify="center" m="0">
+                <VStack w="100%" maxW="1440px" gap="0" mt={["0px", "8px"]}>
+                    {filteredAccounts.length > 0 ? (
+                        <Flex w="100%" mt={["146px", "146px", "76px"]} display="column">
+                            {filteredAccounts.map((account, index) => (
+                                <AccountRowElement
+                                    key={index}
+                                    publicKey={account.publicKey}
+                                    privateKey={account.privateKey}
+                                />
+                            ))}
+                        </Flex>
+                    ) : (
+                        <Flex justifyContent="center" height="100vh" alignItems="center">
+                            <Box overflowY="auto" p={3}>
+                                <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
+                                    <Text color="grey.400">No accounts available to display</Text>
+                                </Flex>
+                            </Box>
+                        </Flex>
+                    )}
+                </VStack>
+            </Flex>
+        </>
+    )
+}
+
+export default Accounts

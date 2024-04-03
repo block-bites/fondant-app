@@ -5,6 +5,7 @@ import { Flex, VStack, Text, Spinner, Box } from "@chakra-ui/react"
 import AccountRowElement from "../molecules/account-row-element"
 import axios from "axios"
 import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+import { Keys } from "casper-js-sdk"
 
 type AccountData = {
     publicKey: string
@@ -20,6 +21,9 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
     const [accountsData, setAccountsData] = useState<AccountData[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true) // Initialize as true
 
+    // console.log(Keys.getKeysFromHexPrivKey)
+    // console.log(Keys.SignatureAlgorithm.Ed25519)
+
     useEffect(() => {
         const fetchAccountsData = async () => {
             let fetchedAccounts: AccountData[] = []
@@ -31,6 +35,17 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
                     const responsePublic = await axios.get(
                         `http://localhost:3001/users/${i}/public_key` //private i z casper przekonwertowac  //parse public key
                     )
+
+                    const x = Keys.Ed25519.readBase64WithPEM(responsePrivate.data.message)
+                    const key = responsePublic.data.message.split("\r\n")[1]
+
+                    const privKey = Keys.Ed25519.parsePrivateKey(x)
+                    // console.log(privKey)
+
+                    const pub = Keys.Ed25519.privateToPublicKey(privKey)
+                    // console.log(pub)
+                    const keyPair = Keys.getKeysFromHexPrivKey(key, Keys.SignatureAlgorithm.Ed25519)
+                    console.log(keyPair.publicKey.toHex())
 
                     fetchedAccounts.push({
                         publicKey: responsePublic.data.message.split("\r\n")[1],

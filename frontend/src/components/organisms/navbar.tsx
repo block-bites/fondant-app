@@ -23,6 +23,7 @@ import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
 import { useNodeContext } from "../../context/NodeContext"
 import { CasperServiceByJsonRPC } from "casper-js-sdk"
 import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+import { defaultClient } from "../../casper-client"
 
 import Logo from "../../assets/logo.svg"
 
@@ -46,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({
     const { nodeNumber, setNodeNumber } = useNodeContext()
     const [currentBlock, setCurrentBlock] = useState<number>(0)
     const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`)
-    const [startTime, setStartTime] = useState<Date | null>(null)
+    // const [startTime, setStartTime] = useState<Date | null>(null)
     const [uptime, setUptime] = useState<string>("")
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [resetTrigger, setResetTrigger] = useState<boolean>(false)
@@ -62,9 +63,29 @@ const Navbar: React.FC<NavbarProps> = ({
         setActivePath(location.pathname)
     }, [location])
 
-    // useEffect(() => {
-    //     fetchStartTime()
-    // }, [])
+    useEffect(() => {
+        // fetchStartTime()
+    }, [])
+
+    useEffect(() => {
+        fetchUptime()
+
+        const intervalId = setInterval(() => {
+            fetchUptime()
+        }, 10000) // 10 seconds interval
+        return () => clearInterval(intervalId)
+        // eslint-disable-next-line
+    }, [])
+
+    const fetchUptime = async () => {
+        try {
+            const response = await defaultClient.casperService.getStatus()
+            console.log("!!!" + response)
+        } catch (error) {
+            console.error("Network error:", error)
+            // Handle network errors here
+        }
+    }
 
     // useEffect(() => {
     //     fetchBlocks()
@@ -85,10 +106,6 @@ const Navbar: React.FC<NavbarProps> = ({
 
     //     return () => clearInterval(intervalId)
     // }, [resetTrigger])
-
-    // useEffect(() => {
-    //     localStorage.setItem("isNetworkRunning", JSON.stringify(isNetworkRunning))
-    // }, [isNetworkRunning])
 
     useEffect(() => {
         if (open) {
@@ -178,18 +195,18 @@ const Navbar: React.FC<NavbarProps> = ({
         }
     }
 
-    // const fetchStatus = async () => {
-    //     try {
-    //         const response = await fetch("http://localhost:3001/status")
-    //         console.log(response.json())
-    //         if (response.ok) {
-    //             setIsNetworkRunning(true)
-    //         }
-    //     } catch (error) {
-    //         setIsNetworkRunning(false)
-    //         console.error("Error fetching system status:", error)
-    //     }
-    // }
+    const fetchStatus = async () => {
+        try {
+            const response = await fetch("http://localhost:3001/status")
+            console.log(response.json())
+            if (response.ok) {
+                setIsNetworkRunning(true)
+            }
+        } catch (error) {
+            setIsNetworkRunning(false)
+            console.error("Error fetching system status:", error)
+        }
+    }
 
     const fetchBlocks = async () => {
         try {

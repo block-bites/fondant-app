@@ -11,7 +11,11 @@ type AccountData = {
     privateKey: string
 }
 
-const Accounts = () => {
+interface AccountsProps {
+    isNetworkLaunched: boolean
+}
+
+const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
     const { searchValue } = useSearchContext()
     const [accountsData, setAccountsData] = useState<AccountData[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true) // Initialize as true
@@ -25,7 +29,7 @@ const Accounts = () => {
                         `http://localhost:3001/users/${i}/private_key`
                     )
                     const responsePublic = await axios.get(
-                        `http://localhost:3001/users/${i}/public_key`
+                        `http://localhost:3001/users/${i}/public_key` //private i z casper przekonwertowac  //parse public key
                     )
 
                     fetchedAccounts.push({
@@ -39,8 +43,10 @@ const Accounts = () => {
             setAccountsData(fetchedAccounts)
             setIsLoading(false)
         }
-        fetchAccountsData()
-    }, [])
+        if (isNetworkLaunched) {
+            fetchAccountsData()
+        }
+    }, [isNetworkLaunched])
 
     const filteredAccounts = accountsData.filter(
         (account) =>
@@ -48,7 +54,7 @@ const Accounts = () => {
             account.privateKey.toLowerCase().includes(searchValue.toLowerCase().trim())
     )
 
-    if (isLoading)
+    if (isLoading && isNetworkLaunched)
         return (
             <Flex
                 justifyContent="center"

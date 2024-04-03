@@ -2,7 +2,20 @@ import { useEffect, useState } from "react"
 import { useLocation, Location } from "react-router-dom"
 import { Link } from "react-router-dom"
 import Hamburger from "hamburger-react"
-import { Box, HStack, Tab, Tabs, TabList, Flex, Icon, Text, Select, Image } from "@chakra-ui/react"
+import {
+    Box,
+    HStack,
+    Tab,
+    Tabs,
+    TabList,
+    Flex,
+    Icon,
+    Text,
+    Select,
+    Image,
+    Spinner,
+    Center,
+} from "@chakra-ui/react"
 import NavbarModal from "../molecules/navbar-modal"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
 import { BiGridAlt } from "react-icons/bi"
@@ -16,55 +29,66 @@ import Logo from "../../assets/logo.svg"
 interface NavbarProps {
     isLaptop: boolean
     isMobile: boolean
+    isNetworkLaunched: boolean
+    setIsNetworkLaunched: React.Dispatch<React.SetStateAction<boolean>>
+    isNetworkRunning: boolean
+    setIsNetworkRunning: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
+const Navbar: React.FC<NavbarProps> = ({
+    isLaptop,
+    isMobile,
+    isNetworkLaunched,
+    setIsNetworkLaunched,
+    isNetworkRunning,
+    setIsNetworkRunning,
+}) => {
     const { nodeNumber, setNodeNumber } = useNodeContext()
     const [currentBlock, setCurrentBlock] = useState<number>(0)
     const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`)
     const [startTime, setStartTime] = useState<Date | null>(null)
     const [uptime, setUptime] = useState<string>("")
-    const [isSystemRunning, setIsSystemRunning] = useState<boolean>(
-        JSON.parse(localStorage.getItem("isSystemRunning") || "true")
-    )
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [resetTrigger, setResetTrigger] = useState<boolean>(false)
     const [isResetting, setIsResetting] = useState<boolean>(false)
     const location: Location = useLocation()
     const [activePath, setActivePath] = useState<string>(location.pathname)
     const [open, setOpen] = useState<boolean>(false)
+    const [isLaunching, setIsLaunching] = useState<boolean>(false)
+    const [isNetworkStarting, setIsNetworkStarting] = useState<boolean>(false)
+    const [isNetworkStopping, setIsNetworkStopping] = useState<boolean>(false)
 
     useEffect(() => {
         setActivePath(location.pathname)
     }, [location])
 
-    useEffect(() => {
-        fetchStartTime()
-    }, [])
+    // useEffect(() => {
+    //     fetchStartTime()
+    // }, [])
 
-    useEffect(() => {
-        fetchBlocks()
-        const intervalId = setInterval(() => {
-            fetchBlocks()
-        }, 10000) // 10 seconds interval
-        return () => clearInterval(intervalId)
-        // eslint-disable-next-line
-    }, [nodeNumber])
+    // useEffect(() => {
+    //     fetchBlocks()
+    //     const intervalId = setInterval(() => {
+    //         fetchBlocks()
+    //     }, 10000) // 10 seconds interval
+    //     return () => clearInterval(intervalId)
+    //     // eslint-disable-next-line
+    // }, [nodeNumber])
 
-    useEffect(() => {
-        fetchStartTime()
-        fetchStatus()
+    // useEffect(() => {
+    //     fetchStartTime()
+    //     fetchStatus()
 
-        const intervalId = setInterval(() => {
-            fetchStatus()
-        }, 5000) // 5 seconds interval
+    //     const intervalId = setInterval(() => {
+    //         fetchStatus()
+    //     }, 5000) // 5 seconds interval
 
-        return () => clearInterval(intervalId)
-    }, [resetTrigger])
+    //     return () => clearInterval(intervalId)
+    // }, [resetTrigger])
 
-    useEffect(() => {
-        localStorage.setItem("isSystemRunning", JSON.stringify(isSystemRunning))
-    }, [isSystemRunning])
+    // useEffect(() => {
+    //     localStorage.setItem("isNetworkRunning", JSON.stringify(isNetworkRunning))
+    // }, [isNetworkRunning])
 
     useEffect(() => {
         if (open) {
@@ -73,38 +97,62 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         // eslint-disable-next-line
     }, [isMobile])
 
-    useEffect(() => {
-        const updateUptime = () => {
-            if (startTime) {
-                const now = new Date()
-                const elapsed = new Date(now.getTime() - startTime.getTime())
-                const hours = elapsed.getUTCHours()
-                const minutes = elapsed.getUTCMinutes()
-                const seconds = elapsed.getUTCSeconds()
-                setUptime(`${hours}h ${minutes}m ${seconds}s`)
-            }
-        }
-        const intervalId = setInterval(updateUptime, 1000)
-        return () => clearInterval(intervalId)
-    }, [startTime])
+    // useEffect(() => {
+    //     const updateUptime = () => {
+    //         if (startTime) {
+    //             const now = new Date()
+    //             const elapsed = new Date(now.getTime() - startTime.getTime())
+    //             const hours = elapsed.getUTCHours()
+    //             const minutes = elapsed.getUTCMinutes()
+    //             const seconds = elapsed.getUTCSeconds()
+    //             setUptime(`${hours}h ${minutes}m ${seconds}s`)
+    //         }
+    //     }
+    //     const intervalId = setInterval(updateUptime, 1000)
+    //     return () => clearInterval(intervalId)
+    // }, [startTime])
 
-    const fetchStartTime = async () => {
-        try {
-            const response = await fetch("http://localhost:3001/run/cctl-infra-net-start")
-            const data = await response.json()
-            setStartTime(new Date(data.startupTime))
-        } catch (error) {
-            console.error("Error fetching start time:", error)
-        }
-    }
+    // const fetchStartTime = async () => {
+    //     try {
+    // const response = await fetch("http://localhost:3001/run/cctl-infra-net-start")
+    // const data = await response.json()
+    // setStartTime(new Date(data.startupTime))
+    //     } catch (error) {
+    //         console.error("Error fetching start time:", error)
+    //     }
+    // }
 
-    const handleStart = async () => {
+    //Launching network
+    const handleLaunch = async () => {
+        setIsLaunching(true)
         try {
-            const response = await fetch("http://localhost:3001/run/cctl-infra-net-start", {
+            const response = await fetch("http://localhost:3001/launch", {
                 method: "POST",
             })
             if (response.ok) {
-                setIsSystemRunning(true)
+                setIsNetworkLaunched(true)
+                setIsLaunching(false)
+                console.log("Launched successfully")
+            } else {
+                console.error("Server error:", response.status)
+                // Handle server errors here
+            }
+        } catch (error) {
+            console.error("Network error:", error)
+            // Handle network errors here
+        }
+    }
+
+    //Start network
+    const handleStart = async () => {
+        setIsNetworkStarting(true)
+        try {
+            const response = await fetch("http://localhost:3001/start", {
+                method: "POST",
+            })
+            if (response.ok) {
+                setIsNetworkRunning(true)
+                setIsNetworkStarting(false)
                 console.log("System started successfully")
             }
         } catch (error) {
@@ -112,13 +160,16 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         }
     }
 
+    //Stop network
     const handleStop = async () => {
+        setIsNetworkStopping(true)
         try {
-            const response = await fetch("http://localhost:3001/run/cctl-infra-net-stop", {
+            const response = await fetch("http://localhost:3001/stop", {
                 method: "POST",
             })
             if (response.ok) {
-                setIsSystemRunning(false)
+                setIsNetworkRunning(false)
+                setIsNetworkStopping(false)
                 console.log("System stopped successfully")
             }
         } catch (error) {
@@ -126,25 +177,18 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         }
     }
 
-    const handleModalOpen = () => {
-        setIsModalOpen(true)
-    }
-
-    const handleModalClose = () => {
-        setIsModalOpen(false)
-    }
-
-    const fetchStatus = async () => {
-        try {
-            const response = await fetch("http://localhost:3001/status")
-            if (response.ok) {
-                setIsSystemRunning(true)
-            }
-        } catch (error) {
-            setIsSystemRunning(false)
-            console.error("Error fetching system status:", error)
-        }
-    }
+    // const fetchStatus = async () => {
+    //     try {
+    //         const response = await fetch("http://localhost:3001/status")
+    //         console.log(response.json())
+    //         if (response.ok) {
+    //             setIsNetworkRunning(true)
+    //         }
+    //     } catch (error) {
+    //         setIsNetworkRunning(false)
+    //         console.error("Error fetching system status:", error)
+    //     }
+    // }
 
     const fetchBlocks = async () => {
         try {
@@ -160,7 +204,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     const handleReset = async () => {
         setIsResetting(true)
         try {
-            const response = await fetch("http://localhost:3001//run/cctl-infra-net-start", {
+            const response = await fetch("http://localhost:3001/run/cctl-infra-net-start", {
                 method: "POST",
             })
             if (response.status === 200) {
@@ -176,6 +220,15 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
         }
     }
 
+    // Open/Close modal to confirm restart
+    const handleModalOpen = () => {
+        setIsModalOpen(true)
+    }
+    const handleModalClose = () => {
+        setIsModalOpen(false)
+    }
+
+    //Dropdown nodes to choose
     const nodeOptions = []
     for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
         nodeOptions.push(
@@ -200,7 +253,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                     p={["12px 16px", "12px 16px", "12px 32px"]}
                     justify="space-between"
                 >
-                    <Link to="/accounts">
+                    <Link to="/">
                         <Flex alignItems="center" gap="8px">
                             <Image src={Logo} width="56px" />
                             <Text fontFamily="logo" fontSize={"3xl"} color={"pri.orange"}>
@@ -464,9 +517,29 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                         </Box>
                     </HStack>
                     <HStack gap={["5px", "6px", "16px"]}>
-                        {/* Conditionally render Start/Stop buttons based on isSystemRunning */}
-                        {!isSystemRunning ? (
-                            <Box
+                        {/* Conditionally render Start/Stop buttons based on isNetworkRunning */}
+                        {isNetworkLaunched ? null : (
+                            <Center
+                                as="button"
+                                width="74px"
+                                height="29px"
+                                bg="green.500"
+                                color="white"
+                                borderRadius="4px"
+                                p={["4px 7px", "4px 12px"]}
+                                fontWeight="semibold"
+                                fontSize={["10px", "14px"]}
+                                cursor="pointer"
+                                onClick={handleLaunch}
+                            >
+                                {isLaunching ? <Spinner size="sm" /> : "Launch"}
+                            </Center>
+                        )}
+
+                        {!isNetworkRunning ? (
+                            <Center
+                                width="100px"
+                                height="29px"
                                 bg="green.500"
                                 color="white"
                                 borderRadius="4px"
@@ -476,10 +549,12 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 cursor="pointer"
                                 onClick={handleStart}
                             >
-                                Start
-                            </Box>
+                                {isNetworkStarting ? <Spinner size="sm" /> : "Start"}
+                            </Center>
                         ) : (
-                            <Box
+                            <Center
+                                width="100px"
+                                height="29px"
                                 bg="red.500"
                                 color="white"
                                 borderRadius="4px"
@@ -489,23 +564,24 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                 cursor="pointer"
                                 onClick={handleStop}
                             >
-                                Stop
-                            </Box>
+                                {isNetworkStopping ? <Spinner size="sm" /> : "Stop"}
+                            </Center>
                         )}
-
-                        <Box
-                            bg="pri.orange"
-                            color="white"
-                            borderRadius="4px"
-                            p={["4px 7px", "4px 12px"]}
-                            fontWeight="semibold"
-                            fontSize={["10px", "14px"]}
-                            cursor="pointer"
-                            onClick={handleModalOpen}
-                        >
-                            Reset
-                        </Box>
-
+                        {isNetworkLaunched ? (
+                            <Box
+                                height="29px"
+                                bg="pri.orange"
+                                color="white"
+                                borderRadius="4px"
+                                p={["4px 7px", "4px 12px"]}
+                                fontWeight="semibold"
+                                fontSize={["10px", "14px"]}
+                                cursor="pointer"
+                                onClick={handleModalOpen}
+                            >
+                                Reset
+                            </Box>
+                        ) : null}
                         <Select
                             size={["xs", "sm"]}
                             onChange={(e) => setNodeNumber(Number(e.target.value))}

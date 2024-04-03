@@ -32,13 +32,14 @@ export const App = () => {
 }
 
 function AppContent() {
-    // we can move it to separate components
     const location = useLocation()
     const isSettingsPage = location.pathname === "/settings"
 
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [isLaptop, setIsLaptop] = useState<boolean>(false)
     const [isMobile, setIsMobile] = useState<boolean>(false)
+    const [isNetworkLaunched, setIsNetworkLaunched] = useState<boolean>(false)
+    const [isNetworkRunning, setIsNetworkRunning] = useState<boolean>(false)
 
     useEffect(() => {
         setIsLaptop(window.innerWidth >= 768 && window.innerWidth < 1024)
@@ -46,6 +47,7 @@ function AppContent() {
     }, [screenWidth])
 
     useEffect(() => {
+        checkStatus()
         function handleResize() {
             setScreenWidth(window.innerWidth)
         }
@@ -53,11 +55,47 @@ function AppContent() {
         return () => window.removeEventListener("resize", handleResize)
     }, [])
 
+    const checkStatus = async () => {
+        try {
+            const response = await fetch("http://localhost:3001/status")
+            const resJson = await response.json()
+            if (response.ok) {
+                if (resJson.message === "") {
+                    console.log("Network status: LAUNCHED")
+                    setIsNetworkLaunched(true)
+                }
+                if (resJson.message === "running") {
+                    console.log("Network status: RUNNING")
+                    setIsNetworkLaunched(true)
+                    setIsNetworkRunning(true)
+                }
+                if (resJson.message === "stopped") {
+                    console.log("Network status: STOPPED")
+                    setIsNetworkLaunched(true)
+                    setIsNetworkRunning(false)
+                }
+            }
+        } catch (error) {
+            setIsNetworkRunning(false)
+            setIsNetworkLaunched(false)
+            console.error("Error fetching system status:", error)
+        }
+    }
+
     return (
         <>
-            {!isSettingsPage && <Navbar isLaptop={isLaptop} isMobile={isMobile} />}
+            {!isSettingsPage && (
+                <Navbar
+                    isNetworkLaunched={isNetworkLaunched}
+                    setIsNetworkLaunched={setIsNetworkLaunched}
+                    isNetworkRunning={isNetworkRunning}
+                    setIsNetworkRunning={setIsNetworkRunning}
+                    isLaptop={isLaptop}
+                    isMobile={isMobile}
+                />
+            )}
             <Routes>
-                <Route path="/" element={<Accounts />} />
+                <Route path="/" element={<Accounts isNetworkLaunched={isNetworkLaunched} />} />
                 <Route path="/blocks" element={<Blocks />} />
                 <Route path="/deploys" element={<Deploys />} />
                 <Route path="/events" element={<Events />} />

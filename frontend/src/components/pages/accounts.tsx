@@ -21,9 +21,6 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
     const [accountsData, setAccountsData] = useState<AccountData[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true) // Initialize as true
 
-    // console.log(Keys.getKeysFromHexPrivKey)
-    // console.log(Keys.SignatureAlgorithm.Ed25519)
-
     useEffect(() => {
         const fetchAccountsData = async () => {
             let fetchedAccounts: AccountData[] = []
@@ -33,22 +30,18 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
                         `http://localhost:3001/users/${i}/private_key`
                     )
                     const responsePublic = await axios.get(
-                        `http://localhost:3001/users/${i}/public_key` //private i z casper przekonwertowac  //parse public key
+                        `http://localhost:3001/users/${i}/public_key`
                     )
 
-                    const x = Keys.Ed25519.readBase64WithPEM(responsePrivate.data.message)
-                    const key = responsePublic.data.message.split("\r\n")[1]
+                    const pubKeyPEMSplited = responsePublic.data.message.split("\r\n")[1]
 
-                    const privKey = Keys.Ed25519.parsePrivateKey(x)
-                    // console.log(privKey)
-
-                    const pub = Keys.Ed25519.privateToPublicKey(privKey)
-                    // console.log(pub)
-                    const keyPair = Keys.getKeysFromHexPrivKey(key, Keys.SignatureAlgorithm.Ed25519)
-                    console.log(keyPair.publicKey.toHex())
+                    const keyPair = Keys.getKeysFromHexPrivKey(
+                        pubKeyPEMSplited,
+                        Keys.SignatureAlgorithm.Ed25519
+                    )
 
                     fetchedAccounts.push({
-                        publicKey: responsePublic.data.message.split("\r\n")[1],
+                        publicKey: keyPair.publicKey.toHex(),
                         privateKey: responsePrivate.data.message.split("\r\n")[1],
                     })
                 } catch (error) {

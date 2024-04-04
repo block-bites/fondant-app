@@ -16,14 +16,15 @@ import {
     Spinner,
     Button,
 } from "@chakra-ui/react"
-import NavbarModal from "../molecules/navbar-modal"
+// import NavbarModal from "../molecules/navbar-modal"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
 import { BiGridAlt } from "react-icons/bi"
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
 import { useNodeContext } from "../../context/NodeContext"
-import { CasperServiceByJsonRPC } from "casper-js-sdk"
+import { CasperServiceByJsonRPC, GetStatusResult } from "casper-js-sdk"
 import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 import { defaultClient } from "../../casper-client"
+import NavbarMobile from "./navbar-mobile"
 
 import Logo from "../../assets/logo.svg"
 
@@ -49,8 +50,8 @@ const Navbar: React.FC<NavbarProps> = ({
     const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`)
     // const [startTime, setStartTime] = useState<Date | null>(null)
     const [uptime, setUptime] = useState<string>("")
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-    const [resetTrigger, setResetTrigger] = useState<boolean>(false)
+    // const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    // const [resetTrigger, setResetTrigger] = useState<boolean>(false)
     const [isResetting, setIsResetting] = useState<boolean>(false)
     const location: Location = useLocation()
     const [activePath, setActivePath] = useState<string>(location.pathname)
@@ -64,23 +65,20 @@ const Navbar: React.FC<NavbarProps> = ({
     }, [location])
 
     useEffect(() => {
-        // fetchStartTime()
-    }, [])
-
-    useEffect(() => {
         fetchUptime()
 
         const intervalId = setInterval(() => {
             fetchUptime()
-        }, 10000) // 10 seconds interval
+        }, 1000) // 1 seconds interval
         return () => clearInterval(intervalId)
         // eslint-disable-next-line
-    }, [])
+    }, [isNetworkRunning])
 
+    // Need to optimize to not fetch every 1sec
     const fetchUptime = async () => {
         try {
-            const response = await defaultClient.casperService.getStatus()
-            console.log("!!!" + response)
+            const response: GetStatusResult = await defaultClient.casperService.getStatus()
+            setUptime(response.uptime.split(" ").slice(0, -1).join(" "))
         } catch (error) {
             console.error("Network error:", error)
             // Handle network errors here
@@ -271,117 +269,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                     rounded
                                 />
                                 {open ? (
-                                    <Flex position="fixed" right="0" top="146px" zIndex={65}>
-                                        <Flex
-                                            w={["250px", "250px", "0"]}
-                                            h="100vh"
-                                            flexDir="column"
-                                            background="pri.dark"
-                                            color="grey.100"
-                                            padding="30px 24px 50px 0"
-                                            alignItems="flex-end"
-                                            gap="15px"
-                                        >
-                                            <Link to="/" onClick={() => setOpen(false)}>
-                                                <Flex
-                                                    alignItems="center"
-                                                    gap="15px"
-                                                    justifyContent="center"
-                                                    color={
-                                                        activePath === "/"
-                                                            ? "pri.orange"
-                                                            : "grey.100"
-                                                    }
-                                                    borderBottom={
-                                                        activePath === "/" ? "2px solid" : "none"
-                                                    }
-                                                >
-                                                    <MdSupervisorAccount size="24px" />
-                                                    <Text fontSize="28px">Accounts</Text>
-                                                </Flex>
-                                            </Link>
-                                            <Link to="/blocks" onClick={() => setOpen(false)}>
-                                                <Flex
-                                                    alignItems="center"
-                                                    gap="15px"
-                                                    justifyContent="center"
-                                                    color={
-                                                        activePath === "/blocks"
-                                                            ? "pri.orange"
-                                                            : "grey.100"
-                                                    }
-                                                    borderBottom={
-                                                        activePath === "/blocks"
-                                                            ? "2px solid"
-                                                            : "none"
-                                                    }
-                                                >
-                                                    <BiGridAlt size="24px" />
-                                                    <Text fontSize="28px">Blocks</Text>
-                                                </Flex>
-                                            </Link>
-                                            <Link to="/deploys" onClick={() => setOpen(false)}>
-                                                <Flex
-                                                    alignItems="center"
-                                                    gap="15px"
-                                                    justifyContent="center"
-                                                    color={
-                                                        activePath === "/deploys"
-                                                            ? "pri.orange"
-                                                            : "grey.100"
-                                                    }
-                                                    borderBottom={
-                                                        activePath === "/deploys"
-                                                            ? "2px solid"
-                                                            : "none"
-                                                    }
-                                                >
-                                                    <MdCloudUpload size="24px" />
-                                                    <Text fontSize="28px">Deploys</Text>
-                                                </Flex>
-                                            </Link>
-                                            <Link to="/events" onClick={() => setOpen(false)}>
-                                                <Flex
-                                                    alignItems="center"
-                                                    gap="15px"
-                                                    justifyContent="center"
-                                                    color={
-                                                        activePath === "/events"
-                                                            ? "pri.orange"
-                                                            : "grey.100"
-                                                    }
-                                                    borderBottom={
-                                                        activePath === "/events"
-                                                            ? "2px solid"
-                                                            : "none"
-                                                    }
-                                                >
-                                                    <FaBell size="24px" />
-                                                    <Text fontSize="28px">Events</Text>
-                                                </Flex>
-                                            </Link>
-                                            <Link to="/logs" onClick={() => setOpen(false)}>
-                                                <Flex
-                                                    alignItems="center"
-                                                    gap="15px"
-                                                    justifyContent="center"
-                                                    color={
-                                                        activePath === "/logs"
-                                                            ? "pri.orange"
-                                                            : "grey.100"
-                                                    }
-                                                    borderBottom={
-                                                        activePath === "/logs"
-                                                            ? "2px solid"
-                                                            : "none"
-                                                    }
-                                                >
-                                                    <FaRegFileCode size="24px" />
-                                                    <Text fontSize="28px">Logs</Text>
-                                                </Flex>
-                                            </Link>
-                                        </Flex>
-                                    </Flex>
+                                    <NavbarMobile setOpen={setOpen} activePath={activePath} />
                                 ) : null}
                             </Flex>
                         ) : (
@@ -507,11 +395,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                 UPTIME
                             </Text>
                             <Text fontSize={["10px", "13px"]} color="black" wordBreak="keep-all">
-                                {isResetting
-                                    ? "Resetting..."
-                                    : uptime.length === 0
-                                      ? "Loading..."
-                                      : uptime}
+                                {uptime.length === 0 ? "Loading..." : uptime}
                             </Text>
                         </Box>
                     </HStack>
@@ -571,20 +455,6 @@ const Navbar: React.FC<NavbarProps> = ({
                                 {isNetworkStopping ? <Spinner size="sm" /> : "Stop"}
                             </Button>
                         ) : null}
-
-                        {/* <Box              //Reset feature will be develope later 
-                                height="29px"
-                                bg="pri.orange"
-                                color="white"
-                                borderRadius="4px"
-                                p={["4px 7px", "4px 12px"]}
-                                fontWeight="semibold"
-                                fontSize={["10px", "14px"]}
-                                cursor="pointer"
-                                onClick={handleModalOpen}
-                            >
-                                Reset
-                            </Box> */}
                         <Select
                             size={["xs", "sm"]}
                             onChange={(e) => setNodeNumber(Number(e.target.value))}
@@ -601,11 +471,6 @@ const Navbar: React.FC<NavbarProps> = ({
                     </HStack>
                 </HStack>
             </HStack>
-            {/* <NavbarModal
-                isOpen={isModalOpen}
-                onClose={handleModalClose}
-                handleReset={handleReset}
-            /> */}
         </Flex>
     )
 }

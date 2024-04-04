@@ -26,21 +26,23 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
             let fetchedAccounts: AccountData[] = []
             for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
                 try {
-                    const responsePrivate = await axios.get(
-                        `${NODE_URL_PORT}/users/${i}/private_key`
-                    )
-                    const responsePublic = await axios.get(`${NODE_URL_PORT}/users/${i}/public_key`)
+                    const getPrivateKey = axios.get(`${NODE_URL_PORT}/users/${i}/private_key`)
+                    const getPublicKey = axios.get(`${NODE_URL_PORT}/users/${i}/public_key`)
 
-                    const pubKeyPEMSplited = responsePublic.data.message.split("\r\n")[1]
+                    const results = await Promise.all([getPrivateKey, getPublicKey]).then(
+                        (values) => {
+                            return values.map((v) => v.data.message.split("\r\n")[1])
+                        }
+                    )
 
                     const keyPair = Keys.getKeysFromHexPrivKey(
-                        pubKeyPEMSplited,
+                        results[1],
                         Keys.SignatureAlgorithm.Ed25519
                     )
 
                     fetchedAccounts.push({
                         publicKey: keyPair.publicKey.toHex(),
-                        privateKey: responsePrivate.data.message.split("\r\n")[1],
+                        privateKey: results[0],
                     })
                 } catch (error) {
                     console.error(`Error fetching data for user ${i}:`, error)

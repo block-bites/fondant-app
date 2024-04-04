@@ -7,12 +7,12 @@ class Client {
 
     constructor(nodeNum: number) {
         this.nodeNum = nodeNum
-        this.casperService = new CasperServiceByJsonRPC(`${NODE_URL}/node-${this.nodeNum}/rpc/rpc`)
+        this.casperService = new CasperServiceByJsonRPC(`${NODE_URL}/node-${this.nodeNum}/rpc`)
     }
 
     setClient(nodeNum: number) {
         this.nodeNum = nodeNum
-        this.casperService = new CasperServiceByJsonRPC(`${NODE_URL}/node-${this.nodeNum}/rpc/rpc`)
+        this.casperService = new CasperServiceByJsonRPC(`${NODE_URL}/node-${this.nodeNum}/rpc`)
     }
 }
 

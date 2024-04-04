@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async"
 import { Flex, VStack, Text, Spinner, Box } from "@chakra-ui/react"
 import AccountRowElement from "../molecules/account-row-element"
 import axios from "axios"
-import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 import { Keys } from "casper-js-sdk"
 
 type AccountData = {
@@ -27,11 +27,9 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
             for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
                 try {
                     const responsePrivate = await axios.get(
-                        `http://localhost:3001/users/${i}/private_key`
+                        `${NODE_URL_PORT}/users/${i}/private_key`
                     )
-                    const responsePublic = await axios.get(
-                        `http://localhost:3001/users/${i}/public_key`
-                    )
+                    const responsePublic = await axios.get(`${NODE_URL_PORT}/users/${i}/public_key`)
 
                     const pubKeyPEMSplited = responsePublic.data.message.split("\r\n")[1]
 

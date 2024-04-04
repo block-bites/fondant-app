@@ -22,7 +22,7 @@ import { BiGridAlt } from "react-icons/bi"
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
 import { useNodeContext } from "../../context/NodeContext"
 import { CasperServiceByJsonRPC } from "casper-js-sdk"
-import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 import { defaultClient } from "../../casper-client"
 
 import Logo from "../../assets/logo.svg"
@@ -143,7 +143,7 @@ const Navbar: React.FC<NavbarProps> = ({
     const handleLaunch = async () => {
         setIsLaunching(true)
         try {
-            const response = await fetch("http://localhost:3001/init", {
+            const response = await fetch(`${NODE_URL_PORT}/init`, {
                 method: "POST",
             })
             if (response.ok) {
@@ -165,7 +165,7 @@ const Navbar: React.FC<NavbarProps> = ({
     const handleStart = async () => {
         setIsNetworkStarting(true)
         try {
-            const response = await fetch("http://localhost:3001/start", {
+            const response = await fetch(`${NODE_URL_PORT}/start`, {
                 method: "POST",
             })
             if (response.ok) {
@@ -182,7 +182,7 @@ const Navbar: React.FC<NavbarProps> = ({
     const handleStop = async () => {
         setIsNetworkStopping(true)
         try {
-            const response = await fetch("http://localhost:3001/stop", {
+            const response = await fetch(`${NODE_URL_PORT}/stop`, {
                 method: "POST",
             })
             if (response.ok) {
@@ -197,7 +197,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
     const fetchStatus = async () => {
         try {
-            const response = await fetch("http://localhost:3001/status")
+            const response = await fetch(`${NODE_URL_PORT}/status`)
             console.log(response.json())
             if (response.ok) {
                 setIsNetworkRunning(true)

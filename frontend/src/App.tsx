@@ -14,6 +14,7 @@ import Logs from "./components/pages/logs"
 import Settings from "./components/pages/settings"
 import Events from "./components/pages/events"
 import Deploys from "./components/pages/deploys"
+import { NODE_URL_PORT } from "./constant"
 
 export const App = () => {
     return (
@@ -57,7 +58,7 @@ function AppContent() {
 
     const checkStatus = async () => {
         try {
-            const response = await fetch("http://localhost:3001/status")
+            const response = await fetch(`${NODE_URL_PORT}/status`)
             const resJson = await response.json()
             if (response.ok) {
                 if (resJson.message === "") {

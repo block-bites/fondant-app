@@ -14,7 +14,7 @@ const Blocks = () => {
     const DISPLAY_PER_PAGE = 10
 
     useEffect(() => {
-        const client = new CasperServiceByJsonRPC("http://localhost:3001/net/1/rpc")
+        const client = new CasperServiceByJsonRPC("http://localhost/node-1/rpc")
 
         const fetchBlocks = async () => {
             setLoading(true)

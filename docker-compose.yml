@@ -11,6 +11,7 @@ services:
     ports:
       - "3001:3001"
       - "80:80"
+      - "11101:11101"
     networks:
       - fondant-network
 

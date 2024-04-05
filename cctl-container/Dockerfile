@@ -30,6 +30,6 @@ RUN chmod -R +x /home/cctl
 
 ENTRYPOINT ["./api"]
 
-EXPOSE 3001 80 11101
+EXPOSE 3001 80 
 
 CMD ["tail", "-f", "/dev/null"]

@@ -4,11 +4,6 @@
 use rocket::response::Redirect;
 use rocket::http::uri::Origin;
 
-#[get("/node-11/rpc")]
-fn reverse_proxy() -> Redirect {
-    let backend_url = "http://localhost:11101";
-    Redirect::to(Origin::parse(backend_url).unwrap())
-}
 
 use rocket::http::Status;
 use rocket::serde::{Serialize, json::Json};
@@ -241,7 +236,7 @@ fn rocket() -> _ {
     
     rocket::build()
         .attach(CORS)
-        .mount("/", routes![health, run, init, get_events, get_deploys, search_events, search_deploys, stop, start, status, get_private_key, get_public_key, reverse_proxy])
+        .mount("/", routes![health, run, init, get_events, get_deploys, search_events, search_deploys, stop, start, status, get_private_key, get_public_key])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

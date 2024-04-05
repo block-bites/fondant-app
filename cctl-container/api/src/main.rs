@@ -64,8 +64,9 @@ fn run(command: String, args: Option<Vec<String>>) -> Result<Json<utils::Command
 
 #[get("/cache/events/<node_number>")]
 fn get_events(node_number: i32) -> Option<Json<Vec<String>>> {
-    let events = format!("http://localhost/node-{}/sse/events/main", node_number);
-    CACHE.lock().unwrap().get_data(&events).map(Json)
+    let event_url = format!("http://localhost/node-{}/sse/events/main", node_number);
+    let events = CACHE.lock().unwrap().get_data(&event_url).map(Json);
+    events.map(|events| Json(events.0[1..].to_vec()))
 }
 
 #[get("/cache/deploys/<node_number>")]

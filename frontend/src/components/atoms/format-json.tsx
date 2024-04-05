@@ -19,7 +19,7 @@ const formatJson = (json: any, indent = 0, isFullDisplay = false) => {
             <div
                 key={key}
                 style={{
-                    marginLeft: `${indent * 20}px`,
+                    marginLeft: `${indent * 5}px`,
                     fontFamily: "monospace",
                     whiteSpace: "pre-wrap",
                 }}

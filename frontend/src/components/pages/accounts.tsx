@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async"
 import { Flex, VStack, Text, Spinner, Box } from "@chakra-ui/react"
 import AccountRowElement from "../molecules/account-row-element"
 import axios from "axios"
-import { NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 import { Keys } from "casper-js-sdk"
 
 type AccountData = {
@@ -21,35 +21,28 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
     const [accountsData, setAccountsData] = useState<AccountData[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true) // Initialize as true
 
-    // console.log(Keys.getKeysFromHexPrivKey)
-    // console.log(Keys.SignatureAlgorithm.Ed25519)
-
     useEffect(() => {
         const fetchAccountsData = async () => {
             let fetchedAccounts: AccountData[] = []
             for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
                 try {
-                    const responsePrivate = await axios.get(
-                        `http://localhost:3001/users/${i}/private_key`
+                    const getPrivateKey = axios.get(`${NODE_URL_PORT}/users/${i}/private_key`)
+                    const getPublicKey = axios.get(`${NODE_URL_PORT}/users/${i}/public_key`)
+
+                    const results = await Promise.all([getPrivateKey, getPublicKey]).then(
+                        (values) => {
+                            return values.map((v) => v.data.message.split("\r\n")[1])
+                        }
                     )
-                    const responsePublic = await axios.get(
-                        `http://localhost:3001/users/${i}/public_key` //private i z casper przekonwertowac  //parse public key
+
+                    const keyPair = Keys.getKeysFromHexPrivKey(
+                        results[1],
+                        Keys.SignatureAlgorithm.Ed25519
                     )
-
-                    const x = Keys.Ed25519.readBase64WithPEM(responsePrivate.data.message)
-                    const key = responsePublic.data.message.split("\r\n")[1]
-
-                    const privKey = Keys.Ed25519.parsePrivateKey(x)
-                    // console.log(privKey)
-
-                    const pub = Keys.Ed25519.privateToPublicKey(privKey)
-                    // console.log(pub)
-                    const keyPair = Keys.getKeysFromHexPrivKey(key, Keys.SignatureAlgorithm.Ed25519)
-                    console.log(keyPair.publicKey.toHex())
 
                     fetchedAccounts.push({
-                        publicKey: responsePublic.data.message.split("\r\n")[1],
-                        privateKey: responsePrivate.data.message.split("\r\n")[1],
+                        publicKey: keyPair.publicKey.toHex(),
+                        privateKey: results[0],
                     })
                 } catch (error) {
                     console.error(`Error fetching data for user ${i}:`, error)

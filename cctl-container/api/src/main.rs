@@ -25,7 +25,7 @@ pub struct CORS;
 
 //TODO: Flexible capacity
 lazy_static! {
-    static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(1000));
+    static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(100000));
     static ref STATUS: Mutex<String> = Mutex::new("".to_string());
     static ref IS_INIT: Mutex<bool> = Mutex::new(false);
 }

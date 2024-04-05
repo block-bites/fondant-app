@@ -85,14 +85,14 @@ const Navbar: React.FC<NavbarProps> = ({
         }
     }
 
-    // useEffect(() => {
-    //     fetchBlocks()
-    //     const intervalId = setInterval(() => {
-    //         fetchBlocks()
-    //     }, 10000) // 10 seconds interval
-    //     return () => clearInterval(intervalId)
-    //     // eslint-disable-next-line
-    // }, [nodeNumber])
+    useEffect(() => {
+        fetchLatestBlock()
+        const intervalId = setInterval(() => {
+            fetchLatestBlock()
+        }, 5 * 1000) // 10 seconds interval
+        return () => clearInterval(intervalId)
+        // eslint-disable-next-line
+    }, [])
 
     // useEffect(() => {
     //     fetchStartTime()
@@ -206,9 +206,10 @@ const Navbar: React.FC<NavbarProps> = ({
         }
     }
 
-    const fetchBlocks = async () => {
+    const fetchLatestBlock = async () => {
         try {
-            const latestBlockInfo = await client.getLatestBlockInfo()
+            const latestBlockInfo = await defaultClient.casperService.getLatestBlockInfo()
+              console.log('latestBlockInfo', latestBlockInfo);
             if (latestBlockInfo && latestBlockInfo.block) {
                 setCurrentBlock(latestBlockInfo.block.header.height)
             }

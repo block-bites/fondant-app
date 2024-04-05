@@ -71,8 +71,14 @@ fn get_events(node_number: i32) -> Option<Json<Vec<String>>> {
 
 #[get("/cache/deploys/<node_number>")]
 fn get_deploys(node_number: i32) -> Option<Json<Vec<String>>> {
-    let deploys = format!("http://localhost/node-{}/sse/events/deploys", node_number);
-    CACHE.lock().unwrap().get_data(&deploys).map(Json)
+    let event_url = format!("http://localhost/node-{}/sse/events/main", node_number);
+    let events = CACHE.lock().unwrap().get_data(&event_url).map(Json);
+    //if string contains "Deploy" then add to the return list
+    let deploys = events.map(|events| {
+        let deploys: Vec<String> = events.0[1..].iter().filter(|event| event.contains("Deploy")).cloned().collect();
+        Json(deploys)
+    });
+    deploys
 }
 
 #[get("/cache/events/<node_number>/search?<query>")]

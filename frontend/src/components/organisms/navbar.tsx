@@ -209,7 +209,6 @@ const Navbar: React.FC<NavbarProps> = ({
     const fetchLatestBlock = async () => {
         try {
             const latestBlockInfo = await defaultClient.casperService.getLatestBlockInfo()
-              console.log('latestBlockInfo', latestBlockInfo);
             if (latestBlockInfo && latestBlockInfo.block) {
                 setCurrentBlock(latestBlockInfo.block.header.height)
             }

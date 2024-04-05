@@ -20,6 +20,7 @@ export default function Events() {
                 const response = await axios.get(
                     `http://localhost:3001/cache/deploys/${nodeNumber}`
                 )
+              console.log(response);
                 const historicalEvents = response.data.events.map((event: string) =>
                     JSON.parse(event)
                 )

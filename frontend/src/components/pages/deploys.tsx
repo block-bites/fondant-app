@@ -117,7 +117,7 @@ export default function Events() {
                     ))}
                 </Box>
                 <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
-                    <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                    <Button onClick={handlePrevPage} isDisabled={currentPage === 1}>
                         Previous
                     </Button>
                     <Text fontFamily="secondary">
@@ -125,7 +125,7 @@ export default function Events() {
                     </Text>
                     <Button
                         onClick={handleNextPage}
-                        disabled={currentPage * EventsPerPage >= selectedEvents.length}
+                        isDisabled={currentPage * EventsPerPage >= selectedEvents.length}
                     >
                         Next
                     </Button>

@@ -3,7 +3,6 @@ import { Flex, Text, Box, Spinner, VStack, Button } from "@chakra-ui/react"
 import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
-import { EventName } from "casper-js-sdk"
 
 type Event = any
 const EventsPerPage = 10

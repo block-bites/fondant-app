@@ -16,12 +16,11 @@ import {
     Spinner,
     Button,
 } from "@chakra-ui/react"
-// import NavbarModal from "../molecules/navbar-modal"
 import { FaBell, FaRegFileCode } from "react-icons/fa"
 import { BiGridAlt } from "react-icons/bi"
 import { MdCloudUpload, MdSupervisorAccount } from "react-icons/md"
 import { useNodeContext } from "../../context/NodeContext"
-import { CasperServiceByJsonRPC, GetStatusResult } from "casper-js-sdk"
+import { GetStatusResult } from "casper-js-sdk"
 import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 import { defaultClient } from "../../casper-client"
 import NavbarMobile from "./navbar-mobile"
@@ -47,12 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
     const { nodeNumber, setNodeNumber } = useNodeContext()
     const [currentBlock, setCurrentBlock] = useState<number>(0)
-    const client = new CasperServiceByJsonRPC(`http://localhost:3001/net/${nodeNumber}/rpc`)
-    // const [startTime, setStartTime] = useState<Date | null>(null)
     const [uptime, setUptime] = useState<string>("")
-    // const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-    // const [resetTrigger, setResetTrigger] = useState<boolean>(false)
-    const [isResetting, setIsResetting] = useState<boolean>(false)
     const location: Location = useLocation()
     const [activePath, setActivePath] = useState<string>(location.pathname)
     const [open, setOpen] = useState<boolean>(false)
@@ -94,48 +88,12 @@ const Navbar: React.FC<NavbarProps> = ({
         // eslint-disable-next-line
     }, [])
 
-    // useEffect(() => {
-    //     fetchStartTime()
-    //     fetchStatus()
-
-    //     const intervalId = setInterval(() => {
-    //         fetchStatus()
-    //     }, 5000) // 5 seconds interval
-
-    //     return () => clearInterval(intervalId)
-    // }, [resetTrigger])
-
     useEffect(() => {
         if (open) {
             setOpen(false)
         }
         // eslint-disable-next-line
     }, [isMobile])
-
-    // useEffect(() => {
-    //     const updateUptime = () => {
-    //         if (startTime) {
-    //             const now = new Date()
-    //             const elapsed = new Date(now.getTime() - startTime.getTime())
-    //             const hours = elapsed.getUTCHours()
-    //             const minutes = elapsed.getUTCMinutes()
-    //             const seconds = elapsed.getUTCSeconds()
-    //             setUptime(`${hours}h ${minutes}m ${seconds}s`)
-    //         }
-    //     }
-    //     const intervalId = setInterval(updateUptime, 1000)
-    //     return () => clearInterval(intervalId)
-    // }, [startTime])
-
-    // const fetchStartTime = async () => {
-    //     try {
-    // const response = await fetch("http://localhost:3001/run/cctl-infra-net-start")
-    // const data = await response.json()
-    // setStartTime(new Date(data.startupTime))
-    //     } catch (error) {
-    //         console.error("Error fetching start time:", error)
-    //     }
-    // }
 
     //Launching network
     const handleLaunch = async () => {
@@ -193,19 +151,7 @@ const Navbar: React.FC<NavbarProps> = ({
         }
     }
 
-    const fetchStatus = async () => {
-        try {
-            const response = await fetch(`${NODE_URL_PORT}/status`)
-            console.log(response.json())
-            if (response.ok) {
-                setIsNetworkRunning(true)
-            }
-        } catch (error) {
-            setIsNetworkRunning(false)
-            console.error("Error fetching system status:", error)
-        }
-    }
-
+    //Get block height
     const fetchLatestBlock = async () => {
         try {
             const latestBlockInfo = await defaultClient.casperService.getLatestBlockInfo()
@@ -216,14 +162,6 @@ const Navbar: React.FC<NavbarProps> = ({
             console.error("Error fetching latest block info:", error)
         }
     }
-
-    // Open/Close modal to confirm restart
-    // const handleModalOpen = () => {
-    //     setIsModalOpen(true)
-    // }
-    // const handleModalClose = () => {
-    //     setIsModalOpen(false)
-    // }
 
     //Dropdown nodes to choose
     const nodeOptions = []

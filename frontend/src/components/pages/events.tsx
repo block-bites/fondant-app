@@ -6,9 +6,13 @@ import formatJson from "../atoms/format-json"
 
 type Event = any
 
+interface EventsProps {
+    isNetworkRunning: boolean
+}
+
 const EventsPerPage = 10
 
-export default function Events() {
+const Events: React.FC<EventsProps> = ({ isNetworkRunning }) => {
     const [events, setEvents] = useState<Event[]>([])
     const [filteredEvents, setFilteredEvents] = useState<Event[]>([])
     const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(null)
@@ -41,9 +45,10 @@ export default function Events() {
                 setIsLoading(false)
             }
         }
-
-        fetchEvents()
-    }, [nodeNumber])
+        if (isNetworkRunning) {
+            fetchEvents()
+        }
+    }, [nodeNumber, isNetworkRunning])
 
     const toggleEvent = (index: number) => {
         setExpandedEventIndex(expandedEventIndex === index ? null : index)
@@ -140,3 +145,5 @@ export default function Events() {
         </Flex>
     )
 }
+
+export default Events

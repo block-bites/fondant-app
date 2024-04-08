@@ -24,11 +24,15 @@ export default function Logs() {
         const fetchLogs = async () => {
             setIsLoading(true)
             try {
-                const response = await axios.get<LogEntry[]>(
-                    `http://localhost:3001/logs/${nodeNumber}`
-                )
-                setLogs(response.data)
-                filterLogs(response.data, currentLevel)
+                const response = await fetch(`http://localhost:3001/run/cctl-infra-node-view-log`, {
+                    method: "POST",
+                })
+
+                const logs = await response.json()
+                const logsWithCommas = logs.stdout.replaceAll("}\n{", "},\n{")
+                const logsParsed = JSON.parse(`[${logsWithCommas}]`)
+                setLogs(logsParsed)
+                filterLogs(logsParsed, currentLevel)
             } catch (error) {
                 setFilteredLogs([])
                 console.error("Error fetching logs:", error)

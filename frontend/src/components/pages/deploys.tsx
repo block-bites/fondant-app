@@ -4,21 +4,24 @@ import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
 
-type Event = any
-const EventsPerPage = 10
+type Deploy = any
+const DeploysPerPage = 10
 
-export default function Events() {
-    const [events, setEvents] = useState<Event[]>([])
+export default function Deploys() {
+    const [events, setEvents] = useState<Deploy[]>([])
     const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { nodeNumber } = useNodeContext() // Use nodeNumber from context
     const [currentPage, setCurrentPage] = useState<number>(1)
+
     useEffect(() => {
         const fetchEvents = async () => {
             setIsLoading(true)
             try {
-                const response = await axios.get(`http://localhost:3001/cache/events/${nodeNumber}`)
-                const historicalEvents = response.data
+                const response = await axios.get(
+                    `http://localhost:3001/cache/deploys/${nodeNumber}`
+                )
+                const historicalDeploys = response.data
                     .filter((e: any) => e.includes("DeployProcessed"))
                     .map((event: string) => {
                         try {
@@ -30,19 +33,18 @@ export default function Events() {
                     })
                     .filter((e: any) => !!e)
                     .reverse()
-                setEvents(historicalEvents)
+                setEvents(historicalDeploys)
             } catch (error) {
-                console.error("Error fetching historical events:", error)
+                console.error("Error fetching historical deploys:", error)
             } finally {
                 setIsLoading(false)
             }
         }
-
         fetchEvents()
     }, [nodeNumber])
 
-    const startIndex = (currentPage - 1) * EventsPerPage
-    const selectedEvents = events.slice(startIndex, startIndex + EventsPerPage)
+    const startIndex = (currentPage - 1) * DeploysPerPage
+    const selectedEvents = events.slice(startIndex, startIndex + DeploysPerPage)
 
     const toggleEvent = (index: number) => {
         setExpandedEventIndex(expandedEventIndex === index ? null : index)
@@ -53,7 +55,9 @@ export default function Events() {
     }
 
     const handleNextPage = () => {
-        setCurrentPage((current) => Math.min(current + 1, Math.ceil(events.length / EventsPerPage)))
+        setCurrentPage((current) =>
+            Math.min(current + 1, Math.ceil(events.length / DeploysPerPage))
+        )
     }
 
     if (isLoading)
@@ -121,11 +125,11 @@ export default function Events() {
                         Previous
                     </Button>
                     <Text fontFamily="secondary">
-                        Page {currentPage} of {Math.ceil(selectedEvents.length / EventsPerPage)}
+                        Page {currentPage} of {Math.ceil(selectedEvents.length / DeploysPerPage)}
                     </Text>
                     <Button
                         onClick={handleNextPage}
-                        isDisabled={currentPage * EventsPerPage >= selectedEvents.length}
+                        isDisabled={currentPage * DeploysPerPage >= selectedEvents.length}
                     >
                         Next
                     </Button>

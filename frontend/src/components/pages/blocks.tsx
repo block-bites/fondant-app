@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Flex, VStack, Text, Button, Spinner, Box } from "@chakra-ui/react"
 import { Helmet } from "react-helmet-async"
 import BlockRowElement from "../molecules/blocks-row-element"

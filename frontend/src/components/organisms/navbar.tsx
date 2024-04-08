@@ -59,13 +59,15 @@ const Navbar: React.FC<NavbarProps> = ({
     }, [location])
 
     useEffect(() => {
-        fetchUptime()
-
-        const intervalId = setInterval(() => {
+        if (isNetworkRunning) {
             fetchUptime()
+        }
+        const intervalId = setInterval(() => {
+            if (isNetworkRunning) {
+                fetchUptime()
+            }
         }, 1000) // 1 seconds interval
         return () => clearInterval(intervalId)
-        // eslint-disable-next-line
     }, [isNetworkRunning])
 
     // Need to optimize to not fetch every 1sec
@@ -74,19 +76,22 @@ const Navbar: React.FC<NavbarProps> = ({
             const response: GetStatusResult = await defaultClient.casperService.getStatus()
             setUptime(response.uptime.split(" ").slice(0, -1).join(" "))
         } catch (error) {
-            console.error("Network error:", error)
             // Handle network errors here
+            console.error("Network error:", error)
         }
     }
 
     useEffect(() => {
-        fetchLatestBlock()
-        const intervalId = setInterval(() => {
+        if (isNetworkRunning) {
             fetchLatestBlock()
+        }
+        const intervalId = setInterval(() => {
+            if (isNetworkRunning) {
+                fetchLatestBlock()
+            }
         }, 5 * 1000) // 10 seconds interval
         return () => clearInterval(intervalId)
-        // eslint-disable-next-line
-    }, [])
+    }, [isNetworkRunning])
 
     useEffect(() => {
         if (open) {

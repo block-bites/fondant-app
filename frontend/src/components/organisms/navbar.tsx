@@ -23,7 +23,7 @@ import { useNodeContext } from "../../context/NodeContext"
 import { GetStatusResult } from "casper-js-sdk"
 import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 import { defaultClient } from "../../casper-client"
-import NavbarMobile from "./navbar-mobile"
+import NavbarMobile from "../molecules/navbar-mobile"
 
 import Logo from "../../assets/logo.svg"
 

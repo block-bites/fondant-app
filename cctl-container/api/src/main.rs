@@ -1,10 +1,6 @@
 #[macro_use] extern crate rocket;
 
-
-use rocket::response::Redirect;
-use rocket::http::uri::Origin;
-
-
+use log::{debug, error, info, trace, warn};
 use rocket::http::Status;
 use rocket::serde::{Serialize, json::Json};
 use std::fs;
@@ -23,11 +19,11 @@ use rocket::fairing::{Fairing, Info, Kind};
 
 pub struct CORS;
 
-//TODO: Flexible capacity
+
+
 lazy_static! {
     static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(100000));
     static ref STATUS: Mutex<String> = Mutex::new("".to_string());
-    static ref IS_INIT: Mutex<bool> = Mutex::new(false);
 }
 
 fn listen_to_sse(node_count: i32) {
@@ -98,11 +94,29 @@ fn search_deploys(node_number: i32, query: &str) -> Option<Json<Vec<String>>> {
 fn init() -> Result<Json<ActivationResponse>, Status> {
     let mut status = STATUS.lock().unwrap();
     *status = "launching".to_string();
-    utils::run_command("cctl-infra-net-setup", None);
-    let mut init = IS_INIT.lock().unwrap();
-    *init = true;
 
-    utils::run_command("cctl-infra-net-start", None);
+    match utils::run_command("cctl-infra-net-setup", None) {
+        Ok(_) => {
+            *status = "launched".to_string();
+            info!("Network setup completed successfully.");
+        }
+        Err(_) => {
+            *status = "stopped".to_string();
+            error!("Failed to setup the network.");
+        }
+    }
+
+    match utils::run_command("cctl-infra-net-start", None) {
+        Ok(_) => {
+            *status = "running".to_string();
+            info!("Network started successfully.");
+        }
+        Err(_) => {
+            *status = "stopped".to_string();
+            error!("Failed to start the network.");
+        }
+    }
+
 
     let parsed_ports = utils::parse_node_ports();
     println!("{:?}", parsed_ports);
@@ -240,6 +254,9 @@ impl Fairing for CORS {
 
 #[launch]
 fn rocket() -> _ {
+
+    
+    env_logger::init();
     
     rocket::build()
         .attach(CORS)

@@ -29,8 +29,8 @@ COPY api/src/commands.json ./
 
 RUN chmod -R +x /home/cctl
 
-ENTRYPOINT ["./api"]
+ENTRYPOINT ["/usr/local/bin/api"]
 
-EXPOSE 3001 80 
+EXPOSE 3001 80
 
 CMD ["tail", "-f", "/dev/null"]

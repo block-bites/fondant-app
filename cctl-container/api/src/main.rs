@@ -75,7 +75,8 @@ fn init() -> Result<Json<ActivationResponse>, Status> {
     utils::generate_nginx_config(&parsed_ports);
     utils::start_nginx();
 
-    let node_count = 5; // Hardcoded for now TODO: Scan for running nodes.
+    let node_count = utils::count_running_nodes();
+    println!("{} nodes running.", node_count);
 
     for i in 1..node_count + 1{
         let events = format!("http://localhost/node-{}/sse/events/main", i);
@@ -218,6 +219,14 @@ fn get_public_key(user_id: i32) -> Result<Json<ActivationResponse>, Status> {
     }
 }
 
+#[get("/node_count")]
+fn node_count() -> Json<ActivationResponse> {
+    let node_count = utils::count_running_nodes();
+    Json(ActivationResponse {
+        success: true,
+        message: format!("There are {} nodes running", node_count),
+    })
+}
 
 
 
@@ -242,7 +251,7 @@ impl Fairing for CORS {
 fn rocket() -> _ {
     rocket::build()
         .attach(CORS)
-        .mount("/", routes![run, init, status, get_private_key, get_public_key, stop, start, get_events, get_deploys, search_events, search_deploys])
+        .mount("/", routes![run, init, status, get_private_key, get_public_key, stop, start, get_events, get_deploys, search_events, search_deploys, node_count])
         .configure(rocket::Config {
             address: "0.0.0.0".parse().unwrap(),
             port: 3001,

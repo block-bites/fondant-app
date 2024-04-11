@@ -154,3 +154,17 @@ pub fn start_nginx() {
         eprintln!("Failed to start Nginx: {}", String::from_utf8_lossy(&start_output.stderr));
     }
 }
+
+pub fn count_running_nodes() -> i32 {
+    let command_output = run_command("cctl-infra-net-status", None).unwrap();
+    let stdout = command_output.stdout;
+    let mut running_nodes = 0;
+    
+    for line in stdout.lines() {
+        if line.contains("RUNNING") {
+            running_nodes += 1;
+        }
+    }
+
+    running_nodes
+}

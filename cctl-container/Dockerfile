@@ -3,6 +3,7 @@ FROM --platform=linux/amd64 rust:buster as builder
 WORKDIR /usr/src/myapp
 
 COPY api/Cargo.toml ./
+COPY api/Rocket.toml ./
 
 RUN mkdir src && \
     echo "fn main() {}" > src/main.rs && \

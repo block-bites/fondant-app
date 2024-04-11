@@ -1,6 +1,10 @@
 #[macro_use] extern crate rocket;
 
-use log::{debug, error, info, trace, warn};
+
+use rocket::response::Redirect;
+use rocket::http::uri::Origin;
+
+
 use rocket::http::Status;
 use rocket::serde::{Serialize, json::Json};
 use std::fs;
@@ -19,11 +23,11 @@ use rocket::fairing::{Fairing, Info, Kind};
 
 pub struct CORS;
 
-
-
+//TODO: Flexible capacity
 lazy_static! {
-    static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(100000));
+    static ref CACHE: Mutex<SseCache> = Mutex::new(SseCache::new(1000));
     static ref STATUS: Mutex<String> = Mutex::new("".to_string());
+    static ref IS_INIT: Mutex<bool> = Mutex::new(false);
 }
 
 fn listen_to_sse(node_count: i32) {
@@ -88,7 +92,6 @@ fn search_deploys(node_number: i32, query: &str) -> Option<Json<Vec<String>>> {
     let deploys = format!("http://localhost/node-{}/sse/events/deploys", node_number);
     CACHE.lock().unwrap().search(&deploys, query).map(Json)
 }
-
 
 #[post("/init")]
 fn init() -> Result<Json<ActivationResponse>, Status> {
@@ -254,9 +257,6 @@ impl Fairing for CORS {
 
 #[launch]
 fn rocket() -> _ {
-
-    
-    env_logger::init();
     
     rocket::build()
         .attach(CORS)

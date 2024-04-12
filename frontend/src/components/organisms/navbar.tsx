@@ -206,9 +206,11 @@ const Navbar: React.FC<NavbarProps> = ({
                             <Flex w="100%" height="50%">
                                 <Hamburger
                                     toggled={open}
-                                    toggle={setOpen}
+                                    toggle={() =>
+                                        isNetworkLaunched ? setOpen((prev) => !prev) : null
+                                    }
                                     size={35}
-                                    color="white"
+                                    color={isNetworkLaunched ? "white" : "grey"}
                                     rounded
                                 />
                                 {open ? (
@@ -222,6 +224,7 @@ const Navbar: React.FC<NavbarProps> = ({
                             >
                                 <Link to="/">
                                     <Tab
+                                        isDisabled={!isNetworkLaunched}
                                         _hover={{
                                             color: "grey.400",
                                             borderColor: "grey.400",
@@ -235,6 +238,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                 </Link>
                                 <Link to="/blocks">
                                     <Tab
+                                        isDisabled={!isNetworkLaunched}
                                         _hover={{
                                             color: "grey.400",
                                             borderColor: "grey.400",
@@ -250,6 +254,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                 </Link>
                                 <Link to="/deploys">
                                     <Tab
+                                        isDisabled={!isNetworkLaunched}
                                         _hover={{
                                             color: "grey.400",
                                             borderColor: "grey.400",
@@ -267,6 +272,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                 </Link>
                                 <Link to="/events">
                                     <Tab
+                                        isDisabled={!isNetworkLaunched}
                                         _hover={{
                                             color: "grey.400",
                                             borderColor: "grey.400",
@@ -282,6 +288,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                 </Link>
                                 <Link to="/logs">
                                     <Tab
+                                        isDisabled={!isNetworkLaunched}
                                         _hover={{
                                             color: "grey.400",
                                             borderColor: "grey.400",

@@ -155,6 +155,16 @@ pub fn start_nginx() {
     }
 }
 
-pub fn read_file(file_path: &str) -> Result<String, String> {
-    fs::read_to_string(file_path).map_err(|e| format!("Failed to read file: {}", e))   
+pub fn count_running_nodes() -> i32 {
+    let command_output = run_command("cctl-infra-net-status", None).unwrap();
+    let stdout = command_output.stdout;
+    let mut running_nodes = 0;
+    
+    for line in stdout.lines() {
+        if line.contains("RUNNING") {
+            running_nodes += 1;
+        }
+    }
+
+    running_nodes
 }

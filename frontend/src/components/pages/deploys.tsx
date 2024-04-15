@@ -8,7 +8,7 @@ type Deploy = any
 const DeploysPerPage = 10
 
 export default function Deploys() {
-    const [events, setEvents] = useState<Deploy[]>([])
+    const [deploys, setDeploys] = useState<Deploy[]>([])
     const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { nodeNumber } = useNodeContext() // Use nodeNumber from context
@@ -18,9 +18,7 @@ export default function Deploys() {
         const fetchEvents = async () => {
             setIsLoading(true)
             try {
-                const response = await axios.get(
-                    `http://localhost:3001/cache/deploys/${nodeNumber}`
-                )
+                const response = await axios.get(`http://localhost:3001/cache/events/${nodeNumber}`)
                 const historicalDeploys = response.data
                     .filter((e: any) => e.includes("DeployProcessed"))
                     .map((event: string) => {
@@ -33,7 +31,7 @@ export default function Deploys() {
                     })
                     .filter((e: any) => !!e)
                     .reverse()
-                setEvents(historicalDeploys)
+                setDeploys(historicalDeploys)
             } catch (error) {
                 console.error("Error fetching historical deploys:", error)
             } finally {
@@ -44,7 +42,7 @@ export default function Deploys() {
     }, [nodeNumber])
 
     const startIndex = (currentPage - 1) * DeploysPerPage
-    const selectedEvents = events.slice(startIndex, startIndex + DeploysPerPage)
+    const selectedDeploys = deploys.slice(startIndex, startIndex + DeploysPerPage)
 
     const toggleEvent = (index: number) => {
         setExpandedEventIndex(expandedEventIndex === index ? null : index)
@@ -56,7 +54,7 @@ export default function Deploys() {
 
     const handleNextPage = () => {
         setCurrentPage((current) =>
-            Math.min(current + 1, Math.ceil(events.length / DeploysPerPage))
+            Math.min(current + 1, Math.ceil(deploys.length / DeploysPerPage))
         )
     }
 
@@ -72,7 +70,7 @@ export default function Deploys() {
             </Flex>
         )
 
-    if (events?.length === 0) {
+    if (deploys?.length === 0) {
         return (
             <Flex justifyContent="center" height="100vh" alignItems="center">
                 <Box overflowY="auto" p={3}>
@@ -93,7 +91,7 @@ export default function Deploys() {
         >
             <VStack spacing={4} width="100%" maxW={1440} p={5}>
                 <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
-                    {selectedEvents.map((event, index) => (
+                    {selectedDeploys.map((deploy, index) => (
                         <Box
                             key={index}
                             p={3}
@@ -113,8 +111,8 @@ export default function Deploys() {
                                 </Text>
                                 <Box ml={2} overflowX="auto">
                                     {expandedEventIndex === startIndex + index
-                                        ? formatJson(event, 0, true)
-                                        : formatJson(event, 0, false)}
+                                        ? formatJson(deploy, 0, true)
+                                        : formatJson(deploy, 0, false)}
                                 </Box>
                             </Flex>
                         </Box>
@@ -125,11 +123,11 @@ export default function Deploys() {
                         Previous
                     </Button>
                     <Text fontFamily="secondary">
-                        Page {currentPage} of {Math.ceil(selectedEvents.length / DeploysPerPage)}
+                        Page {currentPage} of {Math.ceil(selectedDeploys.length / DeploysPerPage)}
                     </Text>
                     <Button
                         onClick={handleNextPage}
-                        isDisabled={currentPage * DeploysPerPage >= selectedEvents.length}
+                        isDisabled={currentPage * DeploysPerPage >= selectedDeploys.length}
                     >
                         Next
                     </Button>

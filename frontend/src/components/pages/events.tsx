@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { Flex, Text, Box, Spinner, VStack, Button } from "@chakra-ui/react"
+import { Flex, Text, Box, VStack, Button } from "@chakra-ui/react"
 import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
+import SpinnerFrame from "../atoms/spinner-frame"
 
 type Event = any
 
@@ -67,17 +68,7 @@ const Events: React.FC<EventsProps> = ({ isNetworkRunning }) => {
     const startIndex = (currentPage - 1) * EventsPerPage
     const selectedEvents = filteredEvents.slice(startIndex, startIndex + EventsPerPage)
 
-    if (isLoading)
-        return (
-            <Flex
-                justifyContent="center"
-                height="calc(100vh - 148px)"
-                alignItems="center"
-                m={["68px 0 0 0", "68px 0 0 0", "0"]}
-            >
-                <Spinner size="xl" colorScheme="gray" />
-            </Flex>
-        )
+    if (isLoading) return <SpinnerFrame />
 
     if (events?.length === 0) {
         return (

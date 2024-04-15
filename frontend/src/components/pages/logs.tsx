@@ -1,7 +1,8 @@
 import { useState, useEffect, ChangeEvent } from "react"
-import { Box, Text, Flex, Button, Select, VStack, Spinner } from "@chakra-ui/react"
+import { Box, Text, Flex, Button, Select, VStack } from "@chakra-ui/react"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
+import SpinnerFrame from "../atoms/spinner-frame"
 
 interface LogEntry {
     [key: string]: string
@@ -68,17 +69,7 @@ export default function Logs() {
     const startIndex = (currentPage - 1) * LogsPerPage
     const selectedLogs = filteredLogs.slice(startIndex, startIndex + LogsPerPage)
 
-    if (isLoading)
-        return (
-            <Flex
-                justifyContent="center"
-                height="calc(100vh - 148px)"
-                alignItems="center"
-                m={["68px 0 0 0", "68px 0 0 0", "0"]}
-            >
-                <Spinner size="xl" colorScheme="gray" />
-            </Flex>
-        )
+    if (isLoading) return <SpinnerFrame />
 
     return (
         <Flex

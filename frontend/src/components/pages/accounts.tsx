@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { useSearchContext } from "../../context/SearchContext"
 import { Helmet } from "react-helmet-async"
-import { Flex, VStack, Text, Spinner, Box } from "@chakra-ui/react"
+import { Flex, VStack, Text, Box } from "@chakra-ui/react"
 import AccountRowElement from "../molecules/account-row-element"
 import axios from "axios"
 import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
 import { Keys } from "casper-js-sdk"
+import SpinnerFrame from "../atoms/spinner-frame"
 
 type AccountData = {
     publicKey: string
@@ -62,17 +63,7 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
             account.privateKey.toLowerCase().includes(searchValue.toLowerCase().trim())
     )
 
-    if (isLoading && isNetworkLaunched)
-        return (
-            <Flex
-                justifyContent="center"
-                height="calc(100vh - 148px)"
-                alignItems="center"
-                m={["68px 0 0 0", "68px 0 0 0", "0"]}
-            >
-                <Spinner size="xl" colorScheme="gray" />
-            </Flex>
-        )
+    if (isLoading && isNetworkLaunched) return <SpinnerFrame />
 
     return (
         <>

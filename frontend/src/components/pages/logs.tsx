@@ -80,18 +80,6 @@ export default function Logs() {
             </Flex>
         )
 
-    // if (filteredLogs.length === 0) {
-    //     return (
-    //         <Flex justifyContent="center" height="100vh" alignItems="center">
-    //             <Box overflowY="auto" p={3}>
-    //                 <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
-    //                     <Text color="grey.400">No logs available to display</Text>
-    //                 </Flex>
-    //             </Box>
-    //         </Flex>
-    //     )
-    // }
-
     return (
         <Flex
             width="100%"
@@ -100,7 +88,13 @@ export default function Logs() {
             m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}
         >
             <VStack spacing={4} width="100%" maxW={1440} p={5}>
-                <Select onChange={handleLevelChange} value={currentLevel} w="200px" mb={3}>
+                <Select
+                    onChange={handleLevelChange}
+                    value={currentLevel}
+                    w="200px"
+                    mb={3}
+                    alignSelf="flex-end"
+                >
                     {LogLevels.map((level) => (
                         <option key={level} value={level}>
                             {level}
@@ -108,10 +102,12 @@ export default function Logs() {
                     ))}
                 </Select>
                 {filteredLogs.length === 0 ? (
-                    <Flex justifyContent="center" height="100vh" alignItems="center">
+                    <Flex justifyContent="center" height="calc(100vh - 338px)" alignItems="center">
                         <Box overflowY="auto" p={3}>
                             <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
-                                <Text color="grey.400">No logs available to display</Text>
+                                <Text fontFamily="primary" color="grey.400">
+                                    No logs available to display
+                                </Text>
                             </Flex>
                         </Box>
                     </Flex>

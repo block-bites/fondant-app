@@ -98,7 +98,11 @@ const Blocks: React.FC<BlocksProps> = ({ isNetworkRunning }) => {
                 alignItems="center"
                 m={["68px 0 0 0", "-68px 0 0 0"]}
             >
-                <Spinner size="xl" colorScheme="gray" />
+                {isNetworkRunning ? (
+                    <Spinner size="xl" colorScheme="gray" />
+                ) : (
+                    <Text color="grey.400">Network stopped</Text>
+                )}
             </Flex>
         )
     }

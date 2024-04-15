@@ -98,7 +98,7 @@ function AppContent() {
             )}
             <Routes>
                 <Route path="/" element={<Accounts isNetworkLaunched={isNetworkLaunched} />} />
-                <Route path="/blocks" element={<Blocks />} />
+                <Route path="/blocks" element={<Blocks isNetworkRunning={isNetworkRunning} />} />
                 <Route path="/deploys" element={<Deploys />} />
                 <Route path="/events" element={<Events isNetworkRunning={isNetworkRunning} />} />
                 <Route path="/logs" element={<Logs />} />

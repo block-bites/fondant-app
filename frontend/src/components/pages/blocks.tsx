@@ -4,7 +4,11 @@ import { Helmet } from "react-helmet-async"
 import BlockRowElement from "../molecules/blocks-row-element"
 import { CasperServiceByJsonRPC, GetBlockResult, JsonBlock } from "casper-js-sdk"
 
-const Blocks = () => {
+interface BlocksProps {
+    isNetworkRunning: boolean
+}
+
+const Blocks: React.FC<BlocksProps> = ({ isNetworkRunning }) => {
     const [blocks, setBlocks] = useState<any[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
@@ -71,9 +75,10 @@ const Blocks = () => {
                 setLoading(false)
             }
         }
-
-        fetchBlocks()
-    }, [currentPage])
+        if (isNetworkRunning) {
+            fetchBlocks()
+        }
+    }, [currentPage, isNetworkRunning])
 
     const handlePrevious = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))

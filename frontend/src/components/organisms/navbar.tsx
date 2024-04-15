@@ -178,6 +178,17 @@ const Navbar: React.FC<NavbarProps> = ({
         )
     }
 
+    // Uptime displaying
+    const uptimeDisplayingMode = () => {
+        if (isLaunching || isNetworkStarting) {
+            return "Loading..."
+        } else if ((isNetworkLaunched && !isNetworkRunning) || !isNetworkLaunched) {
+            return "---"
+        } else {
+            return uptime
+        }
+    }
+
     return (
         <Flex w="100%" direction="column">
             <HStack
@@ -345,8 +356,13 @@ const Navbar: React.FC<NavbarProps> = ({
                                 UPTIME
                             </Text>
                             <Text fontSize={["10px", "13px"]} color="black" wordBreak="keep-all">
-                                {uptime.length === 0 ? "Loading..." : uptime}
+                                {uptimeDisplayingMode()}
                             </Text>
+                            <Text
+                                fontSize={["10px", "13px"]}
+                                color="black"
+                                wordBreak="keep-all"
+                            ></Text>
                         </Box>
                     </HStack>
                     <HStack gap={["5px", "6px", "16px"]}>

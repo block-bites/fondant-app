@@ -66,7 +66,7 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
         return (
             <Flex
                 justifyContent="center"
-                height="100vh"
+                height="calc(100vh - 148px)"
                 alignItems="center"
                 m={["68px 0 0 0", "68px 0 0 0", "0"]}
             >
@@ -92,7 +92,11 @@ const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
                             ))}
                         </Flex>
                     ) : (
-                        <Flex justifyContent="center" height="100vh" alignItems="center">
+                        <Flex
+                            justifyContent="center"
+                            height="calc(100vh - 166px)"
+                            alignItems="center"
+                        >
                             <Box overflowY="auto" p={3}>
                                 <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
                                     <Text color="grey.400">No accounts available to display</Text>

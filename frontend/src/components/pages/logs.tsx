@@ -72,7 +72,7 @@ export default function Logs() {
         return (
             <Flex
                 justifyContent="center"
-                height="100vh"
+                height="calc(100vh - 148px)"
                 alignItems="center"
                 m={["68px 0 0 0", "68px 0 0 0", "0"]}
             >
@@ -102,7 +102,7 @@ export default function Logs() {
                     ))}
                 </Select>
                 {filteredLogs.length === 0 ? (
-                    <Flex justifyContent="center" height="calc(100vh - 338px)" alignItems="center">
+                    <Flex justifyContent="center" height="calc(100vh - 438px)" alignItems="center">
                         <Box overflowY="auto" p={3}>
                             <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
                                 <Text fontFamily="primary" color="grey.400">

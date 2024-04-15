@@ -71,7 +71,7 @@ const Events: React.FC<EventsProps> = ({ isNetworkRunning }) => {
         return (
             <Flex
                 justifyContent="center"
-                height="100vh"
+                height="calc(100vh - 148px)"
                 alignItems="center"
                 m={["68px 0 0 0", "68px 0 0 0", "0"]}
             >
@@ -81,10 +81,10 @@ const Events: React.FC<EventsProps> = ({ isNetworkRunning }) => {
 
     if (events?.length === 0) {
         return (
-            <Flex justifyContent="center" height="100vh" alignItems="center">
+            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
                 <Box overflowY="auto" p={3}>
                     <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
-                        <Text color="grey.400">No logs available to display</Text>
+                        <Text color="grey.400">No events available to display</Text>
                     </Flex>
                 </Box>
             </Flex>

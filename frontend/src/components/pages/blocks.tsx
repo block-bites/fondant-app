@@ -2,8 +2,9 @@ import { useState, useEffect } from "react"
 import { Flex, VStack, Text, Button, Spinner, Box } from "@chakra-ui/react"
 import { Helmet } from "react-helmet-async"
 import BlockRowElement from "../molecules/blocks-row-element"
-import { CasperServiceByJsonRPC, GetBlockResult, JsonBlock } from "casper-js-sdk"
+import { GetBlockResult, JsonBlock } from "casper-js-sdk"
 import { useIsNetworkRunningContext } from "../../context/IsNetworkRunningContext"
+import { defaultClient } from "../../casper-client"
 
 const Blocks: React.FC = () => {
     const [blocks, setBlocks] = useState<any[]>([])
@@ -16,15 +17,13 @@ const Blocks: React.FC = () => {
     const DISPLAY_PER_PAGE = 10
 
     useEffect(() => {
-        const client = new CasperServiceByJsonRPC("http://localhost/node-1/rpc")
-
         const fetchBlocks = async () => {
             setLoading(true)
             setError(null)
             try {
                 let latestBlockInfo
                 try {
-                    latestBlockInfo = await client.getLatestBlockInfo()
+                    latestBlockInfo = await defaultClient.casperService.getLatestBlockInfo()
                 } catch (error) {
                     console.error("Error fetching latest block info:", error)
                     setBlocks([])
@@ -57,7 +56,7 @@ const Blocks: React.FC = () => {
                 }
 
                 const blockInfoPromises = blockHeights.map((height) =>
-                    client.getBlockInfoByHeight(height)
+                    defaultClient.casperService.getBlockInfoByHeight(height)
                 )
                 const blockInfos: GetBlockResult[] = await Promise.all(blockInfoPromises)
                 const newBlocks = blockInfos

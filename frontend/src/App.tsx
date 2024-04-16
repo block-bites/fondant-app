@@ -15,17 +15,29 @@ import Settings from "./components/pages/settings"
 import Events from "./components/pages/events"
 import Deploys from "./components/pages/deploys"
 import { NODE_URL_PORT } from "./constant"
+import {
+    IsNetworkRunningProvider,
+    useIsNetworkRunningContext,
+} from "./context/IsNetworkRunningContext"
+import {
+    IsNetworkLaunchedProvider,
+    useIsNetworkLaunchedContext,
+} from "./context/IsNetworkLaunchedContext"
 
 export const App = () => {
     return (
         <NodeProvider>
             <HelmetProvider>
                 <ChakraProvider theme={fondantTheme}>
-                    <SearchProvider>
-                        <Router>
-                            <AppContent />
-                        </Router>
-                    </SearchProvider>
+                    <IsNetworkLaunchedProvider>
+                        <IsNetworkRunningProvider>
+                            <SearchProvider>
+                                <Router>
+                                    <AppContent />
+                                </Router>
+                            </SearchProvider>
+                        </IsNetworkRunningProvider>
+                    </IsNetworkLaunchedProvider>
                 </ChakraProvider>
             </HelmetProvider>
         </NodeProvider>
@@ -35,12 +47,11 @@ export const App = () => {
 function AppContent() {
     const location = useLocation()
     const isSettingsPage = location.pathname === "/settings"
-
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [isLaptop, setIsLaptop] = useState<boolean>(false)
     const [isMobile, setIsMobile] = useState<boolean>(false)
-    const [isNetworkLaunched, setIsNetworkLaunched] = useState<boolean>(false)
-    const [isNetworkRunning, setIsNetworkRunning] = useState<boolean>(false)
+    const { setIsNetworkRunning } = useIsNetworkRunningContext()
+    const { isNetworkLaunched, setIsNetworkLaunched } = useIsNetworkLaunchedContext()
 
     useEffect(() => {
         setIsLaptop(window.innerWidth >= 768 && window.innerWidth < 1024)
@@ -86,21 +97,12 @@ function AppContent() {
 
     return (
         <>
-            {!isSettingsPage && (
-                <Navbar
-                    isNetworkLaunched={isNetworkLaunched}
-                    setIsNetworkLaunched={setIsNetworkLaunched}
-                    isNetworkRunning={isNetworkRunning}
-                    setIsNetworkRunning={setIsNetworkRunning}
-                    isLaptop={isLaptop}
-                    isMobile={isMobile}
-                />
-            )}
+            {!isSettingsPage && <Navbar isLaptop={isLaptop} isMobile={isMobile} />}
             <Routes>
                 <Route path="/" element={<Accounts isNetworkLaunched={isNetworkLaunched} />} />
-                <Route path="/blocks" element={<Blocks isNetworkRunning={isNetworkRunning} />} />
+                <Route path="/blocks" element={<Blocks />} />
                 <Route path="/deploys" element={<Deploys />} />
-                <Route path="/events" element={<Events isNetworkRunning={isNetworkRunning} />} />
+                <Route path="/events" element={<Events />} />
                 <Route path="/logs" element={<Logs />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<Navigate to="/" />} />

@@ -4,22 +4,20 @@ import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
 import SpinnerFrame from "../atoms/spinner-frame"
+import { useIsNetworkRunningContext } from "../../context/IsNetworkRunningContext"
 
 type Event = any
 
-interface EventsProps {
-    isNetworkRunning: boolean
-}
-
 const EventsPerPage = 10
 
-const Events: React.FC<EventsProps> = ({ isNetworkRunning }) => {
+const Events: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([])
     const [filteredEvents, setFilteredEvents] = useState<Event[]>([])
     const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const { nodeNumber } = useNodeContext()
+    const { isNetworkRunning } = useIsNetworkRunningContext()
 
     useEffect(() => {
         const fetchEvents = async () => {

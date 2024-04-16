@@ -4,22 +4,16 @@ import { useNodeContext } from "../../context/NodeContext"
 import React, { useEffect, useState } from "react"
 import { defaultClient } from "../../casper-client"
 import { GetStatusResult } from "casper-js-sdk"
+import { useIsNetworkRunningContext } from "../../context/IsNetworkRunningContext"
+import { useIsNetworkLaunchedContext } from "../../context/IsNetworkLaunchedContext"
 
 interface NavbarSubbarProps {
-    isNetworkLaunched: boolean
-    setIsNetworkLaunched: React.Dispatch<React.SetStateAction<boolean>>
-    isNetworkRunning: boolean
-    setIsNetworkRunning: React.Dispatch<React.SetStateAction<boolean>>
     isMobile: boolean
 }
 
-const NavbarSubbar: React.FC<NavbarSubbarProps> = ({
-    isNetworkRunning,
-    setIsNetworkRunning,
-    isNetworkLaunched,
-    setIsNetworkLaunched,
-    isMobile,
-}) => {
+const NavbarSubbar: React.FC<NavbarSubbarProps> = ({ isMobile }) => {
+    const { isNetworkRunning, setIsNetworkRunning } = useIsNetworkRunningContext()
+    const { isNetworkLaunched, setIsNetworkLaunched } = useIsNetworkLaunchedContext()
     const { nodeNumber, setNodeNumber } = useNodeContext()
     const [currentBlock, setCurrentBlock] = useState<number>(0)
     const [uptime, setUptime] = useState<string>("")

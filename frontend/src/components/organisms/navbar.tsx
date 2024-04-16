@@ -10,27 +10,18 @@ import NavbarMobile from "../molecules/navbar-mobile"
 
 import Logo from "../../assets/logo.svg"
 import NavbarSubbar from "../molecules/navbar-subbar"
+import { useIsNetworkLaunchedContext } from "../../context/IsNetworkLaunchedContext"
 
 interface NavbarProps {
     isLaptop: boolean
     isMobile: boolean
-    isNetworkLaunched: boolean
-    setIsNetworkLaunched: React.Dispatch<React.SetStateAction<boolean>>
-    isNetworkRunning: boolean
-    setIsNetworkRunning: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Navbar: React.FC<NavbarProps> = ({
-    isLaptop,
-    isMobile,
-    isNetworkLaunched,
-    setIsNetworkLaunched,
-    isNetworkRunning,
-    setIsNetworkRunning,
-}) => {
+const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     const location: Location = useLocation()
     const [activePath, setActivePath] = useState<string>(location.pathname)
     const [open, setOpen] = useState<boolean>(false)
+    const { isNetworkLaunched, setIsNetworkLaunched } = useIsNetworkLaunchedContext()
 
     useEffect(() => {
         setActivePath(location.pathname)
@@ -170,13 +161,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     </Tabs>
                 </HStack>
             </HStack>
-            <NavbarSubbar
-                isMobile
-                isNetworkLaunched={isNetworkLaunched}
-                setIsNetworkLaunched={setIsNetworkLaunched}
-                isNetworkRunning={isNetworkRunning}
-                setIsNetworkRunning={setIsNetworkRunning}
-            />
+            <NavbarSubbar isMobile />
         </Flex>
     )
 }

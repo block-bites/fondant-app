@@ -3,17 +3,15 @@ import { Flex, VStack, Text, Button, Spinner, Box } from "@chakra-ui/react"
 import { Helmet } from "react-helmet-async"
 import BlockRowElement from "../molecules/blocks-row-element"
 import { CasperServiceByJsonRPC, GetBlockResult, JsonBlock } from "casper-js-sdk"
+import { useIsNetworkRunningContext } from "../../context/IsNetworkRunningContext"
 
-interface BlocksProps {
-    isNetworkRunning: boolean
-}
-
-const Blocks: React.FC<BlocksProps> = ({ isNetworkRunning }) => {
+const Blocks: React.FC = () => {
     const [blocks, setBlocks] = useState<any[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [isLastPage, setIsLastPage] = useState<boolean>(false)
+    const { isNetworkRunning } = useIsNetworkRunningContext()
 
     const DISPLAY_PER_PAGE = 10
 

@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Navbar menu is working correctly](https://github.com/block-bites/fondant-app/pull/64)
 - [Fixed access to all other subpages when network is not initialized](https://github.com/block-bites/fondant-app/issues/85)
 - [Fixed Start/Pause buttons](https://github.com/block-bites/fondant-app/issues/82)
-- Pagination on all subpages
+- Fixed pagination on all subpages
 
 ## [1.0.0] - 2024-01-15
 

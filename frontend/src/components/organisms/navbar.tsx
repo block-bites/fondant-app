@@ -85,6 +85,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                             color: "grey.400",
                                             borderColor: "grey.400",
                                         }}
+                                        _active={{ bg: "none" }}
                                         color={activePath === "/" ? "pri.orange" : "grey.100"}
                                         borderBottom={activePath === "/" ? "2px solid" : "none"}
                                     >
@@ -99,6 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                             color: "grey.400",
                                             borderColor: "grey.400",
                                         }}
+                                        _active={{ bg: "none" }}
                                         color={activePath === "/blocks" ? "pri.orange" : "grey.100"}
                                         borderBottom={
                                             activePath === "/blocks" ? "2px solid" : "none"
@@ -115,6 +117,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                             color: "grey.400",
                                             borderColor: "grey.400",
                                         }}
+                                        _active={{ bg: "none" }}
                                         color={
                                             activePath === "/deploys" ? "pri.orange" : "grey.100"
                                         }
@@ -133,6 +136,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                             color: "grey.400",
                                             borderColor: "grey.400",
                                         }}
+                                        _active={{ bg: "none" }}
                                         color={activePath === "/events" ? "pri.orange" : "grey.100"}
                                         borderBottom={
                                             activePath === "/events" ? "2px solid" : "none"
@@ -149,6 +153,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
                                             color: "grey.400",
                                             borderColor: "grey.400",
                                         }}
+                                        _active={{ bg: "none" }}
                                         color={activePath === "/logs" ? "pri.orange" : "grey.100"}
                                         borderBottom={activePath === "/logs" ? "2px solid" : "none"}
                                     >

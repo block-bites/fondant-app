@@ -21,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLaptop, isMobile }) => {
     const location: Location = useLocation()
     const [activePath, setActivePath] = useState<string>(location.pathname)
     const [open, setOpen] = useState<boolean>(false)
-    const { isNetworkLaunched, setIsNetworkLaunched } = useIsNetworkLaunchedContext()
+    const { isNetworkLaunched } = useIsNetworkLaunchedContext()
 
     useEffect(() => {
         setActivePath(location.pathname)

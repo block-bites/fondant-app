@@ -98,7 +98,7 @@ const Blocks: React.FC = () => {
                 {isNetworkRunning ? (
                     <Spinner size="xl" colorScheme="gray" />
                 ) : (
-                    <Text color="grey.400">Network stopped</Text>
+                    <Text color="grey.400">Network paused</Text>
                 )}
             </Flex>
         )

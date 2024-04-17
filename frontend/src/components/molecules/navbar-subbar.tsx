@@ -244,7 +244,7 @@ const NavbarSubbar: React.FC<NavbarSubbarProps> = ({ isMobile }) => {
                             isDisabled={isNetworkStopping}
                             _hover={{ bg: "red.400" }}
                         >
-                            {isNetworkStopping ? <Spinner size="sm" /> : "Stop"}
+                            {isNetworkStopping ? <Spinner size="sm" /> : "Pause"}
                         </Button>
                     ) : null}
                     <Select

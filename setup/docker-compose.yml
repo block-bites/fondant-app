@@ -1,1 +1,27 @@
-# TODO
+version: "2.1"
+
+services:
+  fondant-cctl-container:
+    image: blockbites/fondant-nctl-container:latest
+    ports:
+      - "3001:3001"
+      - "80:80"
+    networks:
+      - fondant-network
+
+  fondant-frontend:
+    image: blockbites/fondant-frontend-container:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - fondant-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+networks:
+  fondant-network:
+    driver: bridge
+
+volumes:
+  app-volume:

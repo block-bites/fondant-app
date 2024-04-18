@@ -22,9 +22,14 @@ export default function Events() {
             setIsLoading(true)
             try {
                 const response = await axios.get(`http://localhost:3001/cache/events/${nodeNumber}`)
-                const historicalEvents = response.data.events.map((event: string) =>
-                    JSON.parse(event)
-                )
+                const historicalEvents = response.data.map((event: string) => {
+                    try {
+                        const json = JSON.parse(event)
+                        return json
+                    } catch {
+                        return null
+                    }
+                }).filter((e: any) => !!e).reverse();
                 setEvents(historicalEvents)
                 setFilteredEvents(historicalEvents)
             } catch (error) {
@@ -38,31 +43,31 @@ export default function Events() {
         fetchEvents()
     }, [nodeNumber])
 
-    useEffect(() => {
-        const streamUrl = `http://localhost:3000/net/${nodeNumber}/sse/events/main`
-        const eventSource = new EventSource(streamUrl)
+    // useEffect(() => {
+    //     const streamUrl = `http://localhost:3000/net/${nodeNumber}/sse/events/main`
+    //     const eventSource = new EventSource(streamUrl)
 
-        eventSource.onmessage = (e: MessageEvent) => {
-            try {
-                const newEvent: Event = JSON.parse(e.data)
-                setEvents((prevEvents) => {
-                    const updatedEvents = prevEvents ? [newEvent, ...prevEvents] : [newEvent]
-                    return updatedEvents.slice(0, eventCapacity)
-                })
-            } catch (error) {
-                console.error("Error parsing event data:", error)
-            }
-        }
+    //     eventSource.onmessage = (e: MessageEvent) => {
+    //         try {
+    //             const newEvent: Event = JSON.parse(e.data)
+    //             setEvents((prevEvents) => {
+    //                 const updatedEvents = prevEvents ? [newEvent, ...prevEvents] : [newEvent]
+    //                 return updatedEvents.slice(0, eventCapacity)
+    //             })
+    //         } catch (error) {
+    //             console.error("Error parsing event data:", error)
+    //         }
+    //     }
 
-        eventSource.onerror = (error) => {
-            console.error(`EventSource failed for ${streamUrl}:`, error)
-            eventSource.close()
-        }
+    //     eventSource.onerror = (error) => {
+    //         console.error(`EventSource failed for ${streamUrl}:`, error)
+    //         eventSource.close()
+    //     }
 
-        return () => {
-            eventSource.close()
-        }
-    }, [nodeNumber])
+    //     return () => {
+    //         eventSource.close()
+    //     }
+    // }, [nodeNumber])
 
     const toggleEvent = (index: number) => {
         setExpandedEventIndex(expandedEventIndex === index ? null : index)

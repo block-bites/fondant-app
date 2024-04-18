@@ -14,7 +14,7 @@ import Logs from "./components/pages/logs"
 import Settings from "./components/pages/settings"
 import Events from "./components/pages/events"
 import Deploys from "./components/pages/deploys"
-import Start from "./components/pages/start"
+import { NODE_URL_PORT } from "./constant"
 
 export const App = () => {
     return (
@@ -33,14 +33,14 @@ export const App = () => {
 }
 
 function AppContent() {
-    // we can move it to separate components
     const location = useLocation()
     const isSettingsPage = location.pathname === "/settings"
-    const isStartPage = location.pathname === "/"
 
     const [screenWidth, setScreenWidth] = useState<number>(0)
     const [isLaptop, setIsLaptop] = useState<boolean>(false)
     const [isMobile, setIsMobile] = useState<boolean>(false)
+    const [isNetworkLaunched, setIsNetworkLaunched] = useState<boolean>(false)
+    const [isNetworkRunning, setIsNetworkRunning] = useState<boolean>(false)
 
     useEffect(() => {
         setIsLaptop(window.innerWidth >= 768 && window.innerWidth < 1024)
@@ -48,6 +48,7 @@ function AppContent() {
     }, [screenWidth])
 
     useEffect(() => {
+        checkStatus()
         function handleResize() {
             setScreenWidth(window.innerWidth)
         }
@@ -55,12 +56,48 @@ function AppContent() {
         return () => window.removeEventListener("resize", handleResize)
     }, [])
 
+    const checkStatus = async () => {
+        try {
+            const response = await fetch(`${NODE_URL_PORT}/status`)
+            const resJson = await response.json()
+            if (response.ok) {
+                if (resJson.message === "") {
+                    console.log("Network status: NOT LAUNCHED")
+                    setIsNetworkLaunched(false)
+                    setIsNetworkRunning(false)
+                }
+                if (resJson.message === "running") {
+                    console.log("Network status: RUNNING")
+                    setIsNetworkLaunched(true)
+                    setIsNetworkRunning(true)
+                }
+                if (resJson.message === "stopped") {
+                    console.log("Network status: STOPPED")
+                    setIsNetworkLaunched(true)
+                    setIsNetworkRunning(false)
+                }
+            }
+        } catch (error) {
+            setIsNetworkRunning(false)
+            setIsNetworkLaunched(false)
+            console.error("Error fetching system status:", error)
+        }
+    }
+
     return (
         <>
-            {!isSettingsPage && !isStartPage && <Navbar isLaptop={isLaptop} isMobile={isMobile} />}
+            {!isSettingsPage && (
+                <Navbar
+                    isNetworkLaunched={isNetworkLaunched}
+                    setIsNetworkLaunched={setIsNetworkLaunched}
+                    isNetworkRunning={isNetworkRunning}
+                    setIsNetworkRunning={setIsNetworkRunning}
+                    isLaptop={isLaptop}
+                    isMobile={isMobile}
+                />
+            )}
             <Routes>
-                <Route path="/" element={<Start />} />
-                <Route path="/accounts" element={<Accounts />} />
+                <Route path="/" element={<Accounts isNetworkLaunched={isNetworkLaunched} />} />
                 <Route path="/blocks" element={<Blocks />} />
                 <Route path="/deploys" element={<Deploys />} />
                 <Route path="/events" element={<Events />} />

@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Added modal (popup) window for networks reset confirmation](https://github.com/block-bites/fondant-app/pull/77)
 - [Added preloaders for all pages, visual bugs fixed](https://github.com/block-bites/fondant-app/pull/80)
 
+#### Backend
+
+- Exchanged NCTL container to in-house created CCTL container
+- Discarded Lean API. Now the API uses rust rocket framework.
+- Merged API and CCTL containers.
+- Run endpoint that is compatible with all CCTL commands.
+
 ### Fixed
 
 #### Frontend

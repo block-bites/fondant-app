@@ -4,13 +4,19 @@ import { Helmet } from "react-helmet-async"
 import { Flex, VStack, Text, Spinner, Box } from "@chakra-ui/react"
 import AccountRowElement from "../molecules/account-row-element"
 import axios from "axios"
+import { NODE_URL_PORT, NUM_OF_NODES_CONSIDERED_RUNNING } from "../../constant"
+import { Keys } from "casper-js-sdk"
 
 type AccountData = {
     publicKey: string
     privateKey: string
 }
 
-const Accounts = () => {
+interface AccountsProps {
+    isNetworkLaunched: boolean
+}
+
+const Accounts: React.FC<AccountsProps> = ({ isNetworkLaunched }) => {
     const { searchValue } = useSearchContext()
     const [accountsData, setAccountsData] = useState<AccountData[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true) // Initialize as true
@@ -18,12 +24,25 @@ const Accounts = () => {
     useEffect(() => {
         const fetchAccountsData = async () => {
             let fetchedAccounts: AccountData[] = []
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= NUM_OF_NODES_CONSIDERED_RUNNING; i++) {
                 try {
-                    const response = await axios.get(`http://localhost:3001/user-keys/${i}`)
+                    const getPrivateKey = axios.get(`${NODE_URL_PORT}/users/${i}/private_key`)
+                    const getPublicKey = axios.get(`${NODE_URL_PORT}/users/${i}/public_key`)
+
+                    const results = await Promise.all([getPrivateKey, getPublicKey]).then(
+                        (values) => {
+                            return values.map((v) => v.data.message.split("\r\n")[1])
+                        }
+                    )
+
+                    const keyPair = Keys.getKeysFromHexPrivKey(
+                        results[1],
+                        Keys.SignatureAlgorithm.Ed25519
+                    )
+
                     fetchedAccounts.push({
-                        publicKey: response.data.public_key,
-                        privateKey: response.data.private_key,
+                        publicKey: keyPair.publicKey.toHex(),
+                        privateKey: results[0],
                     })
                 } catch (error) {
                     console.error(`Error fetching data for user ${i}:`, error)
@@ -32,9 +51,10 @@ const Accounts = () => {
             setAccountsData(fetchedAccounts)
             setIsLoading(false)
         }
-
-        fetchAccountsData()
-    }, [])
+        if (isNetworkLaunched) {
+            fetchAccountsData()
+        }
+    }, [isNetworkLaunched])
 
     const filteredAccounts = accountsData.filter(
         (account) =>
@@ -42,7 +62,7 @@ const Accounts = () => {
             account.privateKey.toLowerCase().includes(searchValue.toLowerCase().trim())
     )
 
-    if (isLoading)
+    if (isLoading && isNetworkLaunched)
         return (
             <Flex
                 justifyContent="center"

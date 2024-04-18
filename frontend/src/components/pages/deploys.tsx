@@ -3,6 +3,7 @@ import { Flex, Text, Box, Spinner, VStack, Button } from "@chakra-ui/react"
 import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
+import { EventName } from "casper-js-sdk"
 
 type Event = any
 const EventsPerPage = 10
@@ -17,16 +18,22 @@ export default function Events() {
         const fetchEvents = async () => {
             setIsLoading(true)
             try {
-                const response = await axios.get(
-                    `http://localhost:3001/cache/deploys/${nodeNumber}`
-                )
-                const historicalEvents = response.data.events.map((event: string) =>
-                    JSON.parse(event)
-                )
+                const response = await axios.get(`http://localhost:3001/cache/events/${nodeNumber}`)
+                const historicalEvents = response.data
+                    .filter((e: any) => e.includes("DeployProcessed"))
+                    .map((event: string) => {
+                        try {
+                            const json = JSON.parse(event)
+                            return json
+                        } catch {
+                            return null
+                        }
+                    })
+                    .filter((e: any) => !!e)
+                    .reverse()
                 setEvents(historicalEvents)
             } catch (error) {
-                setEvents([])
-                console.error("Error fetching historical deploys:", error)
+                console.error("Error fetching historical events:", error)
             } finally {
                 setIsLoading(false)
             }

@@ -20,16 +20,9 @@ jobs:
     - name: Build and Push fondant-nctl-container Image
       uses: docker/build-push-action@v3
       with:
-        context: ./nctl-container
+        context: ./cctl-container
         push: true
-        tags: blockbites/fondant-nctl-container:latest
-
-    - name: Build and Push fondant-lean-api Image
-      uses: docker/build-push-action@v3
-      with:
-        context: ./lean-api
-        push: true
-        tags: blockbites/fondant-lean-api:latest
+        tags: blockbites/fondant-cctl-container:latest
 
     - name: Build and Push fondant-frontend Image
       uses: docker/build-push-action@v3

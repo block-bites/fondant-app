@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react"
-import { Flex, Text, Box, Spinner, VStack, Button } from "@chakra-ui/react"
+import { Flex, Text, Box, VStack, Button } from "@chakra-ui/react"
 import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
 import formatJson from "../atoms/format-json"
+import SpinnerFrame from "../atoms/spinner-frame"
+import { useIsNetworkRunningContext } from "../../context/IsNetworkRunningContext"
 
 type Event = any
 
 const EventsPerPage = 10
 
-export default function Events() {
+const Events: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([])
     const [filteredEvents, setFilteredEvents] = useState<Event[]>([])
     const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const eventCapacity = 100
     const { nodeNumber } = useNodeContext()
+    const { isNetworkRunning } = useIsNetworkRunningContext()
 
     useEffect(() => {
         const fetchEvents = async () => {
             setIsLoading(true)
             try {
                 const response = await axios.get(`http://localhost:3001/cache/events/${nodeNumber}`)
-                const historicalEvents = response.data.map((event: string) => {
-                    try {
-                        const json = JSON.parse(event)
-                        return json
-                    } catch {
-                        return null
-                    }
-                }).filter((e: any) => !!e).reverse();
+                const historicalEvents = response.data
+                    .map((event: string) => {
+                        try {
+                            const json = JSON.parse(event)
+                            return json
+                        } catch {
+                            return null
+                        }
+                    })
+                    .filter((e: any) => !!e)
+                    .reverse()
                 setEvents(historicalEvents)
                 setFilteredEvents(historicalEvents)
             } catch (error) {
@@ -39,35 +44,10 @@ export default function Events() {
                 setIsLoading(false)
             }
         }
-
-        fetchEvents()
-    }, [nodeNumber])
-
-    // useEffect(() => {
-    //     const streamUrl = `http://localhost:3000/net/${nodeNumber}/sse/events/main`
-    //     const eventSource = new EventSource(streamUrl)
-
-    //     eventSource.onmessage = (e: MessageEvent) => {
-    //         try {
-    //             const newEvent: Event = JSON.parse(e.data)
-    //             setEvents((prevEvents) => {
-    //                 const updatedEvents = prevEvents ? [newEvent, ...prevEvents] : [newEvent]
-    //                 return updatedEvents.slice(0, eventCapacity)
-    //             })
-    //         } catch (error) {
-    //             console.error("Error parsing event data:", error)
-    //         }
-    //     }
-
-    //     eventSource.onerror = (error) => {
-    //         console.error(`EventSource failed for ${streamUrl}:`, error)
-    //         eventSource.close()
-    //     }
-
-    //     return () => {
-    //         eventSource.close()
-    //     }
-    // }, [nodeNumber])
+        if (isNetworkRunning) {
+            fetchEvents()
+        }
+    }, [nodeNumber, isNetworkRunning])
 
     const toggleEvent = (index: number) => {
         setExpandedEventIndex(expandedEventIndex === index ? null : index)
@@ -86,24 +66,14 @@ export default function Events() {
     const startIndex = (currentPage - 1) * EventsPerPage
     const selectedEvents = filteredEvents.slice(startIndex, startIndex + EventsPerPage)
 
-    if (isLoading)
-        return (
-            <Flex
-                justifyContent="center"
-                height="100vh"
-                alignItems="center"
-                m={["68px 0 0 0", "68px 0 0 0", "0"]}
-            >
-                <Spinner size="xl" colorScheme="gray" />
-            </Flex>
-        )
+    if (isLoading) return <SpinnerFrame />
 
     if (events?.length === 0) {
         return (
-            <Flex justifyContent="center" height="100vh" alignItems="center">
+            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
                 <Box overflowY="auto" p={3}>
                     <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
-                        <Text color="grey.400">No logs available to display</Text>
+                        <Text color="grey.400">No events available to display</Text>
                     </Flex>
                 </Box>
             </Flex>
@@ -147,7 +117,7 @@ export default function Events() {
                     ))}
                 </Box>
                 <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
-                    <Button onClick={handlePrevPage} disabled={currentPage === 1}>
+                    <Button onClick={handlePrevPage} isDisabled={currentPage === 1}>
                         Previous
                     </Button>
                     <Text fontFamily="secondary">
@@ -155,7 +125,7 @@ export default function Events() {
                     </Text>
                     <Button
                         onClick={handleNextPage}
-                        disabled={currentPage * EventsPerPage >= filteredEvents.length}
+                        isDisabled={currentPage * EventsPerPage >= filteredEvents.length}
                     >
                         Next
                     </Button>
@@ -164,3 +134,5 @@ export default function Events() {
         </Flex>
     )
 }
+
+export default Events

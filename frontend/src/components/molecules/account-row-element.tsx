@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Flex, HStack, Text, VStack } from "@chakra-ui/react"
+import { Center, Flex, HStack, Text, VStack } from "@chakra-ui/react"
 import { BiKey } from "react-icons/bi"
 import AccountModal from "./account-modal" // Assuming this is the modal component
 
@@ -18,8 +18,6 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
     const handleCloseModal = () => {
         setIsModalOpen(false)
     }
-   
-    const fontSize = "xl" // maybe we can update it, but I like it how it now
 
     return (
         <>
@@ -36,7 +34,7 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
                         Public Key
                     </Text>
                     <Text
-                        fontSize={fontSize}
+                        fontSize="xl"
                         width={[
                             "calc(100vw - 100px)",
                             "calc(100vw - 100px)",
@@ -52,24 +50,18 @@ const AccountRowElement = ({ publicKey, privateKey }: IAccountRowElemProps) => {
                     </Text>
                 </VStack>
                 <HStack>
-                    <VStack
+                    <Center
                         onClick={handleOpenModal}
-                        align="center"
-                        justify="center"
-                        style={{
-                            background: "#DEDEDE",
-                            borderRadius: "5px",
-                            height: "60px",
-                            width: "60px",
-                            transform: "scaleX(-1)",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
+                        background="grey.50"
+                        borderRadius="5px"
+                        height="60px"
+                        width="60px"
+                        transform="scaleX(-1)"
+                        cursor="pointer"
+                        _hover={{ bg: "grey.100" }}
                     >
                         <BiKey style={{ width: "25px", height: "25px" }} />
-                    </VStack>
+                    </Center>
                 </HStack>
             </Flex>
             {/* Modal will display the private key */}

@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Flex, VStack, Text, Button, Spinner, Box } from "@chakra-ui/react"
 import { Helmet } from "react-helmet-async"
 import BlockRowElement from "../molecules/blocks-row-element"
-import { CasperServiceByJsonRPC, GetBlockResult, JsonBlock } from "casper-js-sdk"
+import { GetBlockResult, JsonBlock } from "casper-js-sdk"
+import { useIsNetworkRunningContext } from "../../context/IsNetworkRunningContext"
+import { defaultClient } from "../../casper-client"
 
-const Blocks = () => {
+const Blocks: React.FC = () => {
     const [blocks, setBlocks] = useState<any[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [isLastPage, setIsLastPage] = useState<boolean>(false)
+    const { isNetworkRunning } = useIsNetworkRunningContext()
 
     const DISPLAY_PER_PAGE = 10
 
     useEffect(() => {
-        const client = new CasperServiceByJsonRPC("http://localhost/node-1/rpc")
-
         const fetchBlocks = async () => {
             setLoading(true)
             setError(null)
             try {
                 let latestBlockInfo
                 try {
-                    latestBlockInfo = await client.getLatestBlockInfo()
+                    latestBlockInfo = await defaultClient.casperService.getLatestBlockInfo()
                 } catch (error) {
                     console.error("Error fetching latest block info:", error)
                     setBlocks([])
@@ -55,7 +56,7 @@ const Blocks = () => {
                 }
 
                 const blockInfoPromises = blockHeights.map((height) =>
-                    client.getBlockInfoByHeight(height)
+                    defaultClient.casperService.getBlockInfoByHeight(height)
                 )
                 const blockInfos: GetBlockResult[] = await Promise.all(blockInfoPromises)
                 const newBlocks = blockInfos
@@ -71,9 +72,10 @@ const Blocks = () => {
                 setLoading(false)
             }
         }
-
-        fetchBlocks()
-    }, [currentPage])
+        if (isNetworkRunning) {
+            fetchBlocks()
+        }
+    }, [currentPage, isNetworkRunning])
 
     const handlePrevious = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))
@@ -89,11 +91,15 @@ const Blocks = () => {
         return (
             <Flex
                 justifyContent="center"
-                height="100vh"
+                height="calc(100vh - 148px)"
                 alignItems="center"
-                m={["68px 0 0 0", "-68px 0 0 0"]}
+                mt={["144px", "144px", "0"]}
             >
-                <Spinner size="xl" colorScheme="gray" />
+                {isNetworkRunning ? (
+                    <Spinner size="xl" colorScheme="gray" />
+                ) : (
+                    <Text color="grey.400">Network paused</Text>
+                )}
             </Flex>
         )
     }
@@ -108,7 +114,7 @@ const Blocks = () => {
 
     if (blocks.length === 0 && !loading) {
         return (
-            <Flex justifyContent="center" height="100vh" alignItems="center">
+            <Flex justifyContent="center" height="calc(100vh - 148px)" alignItems="center">
                 <Box overflowY="auto" p={3}>
                     <Flex w="100%" justify="center" mt={["144px", "144px", "0"]}>
                         <Text color="grey.400">No blocks available to display</Text>

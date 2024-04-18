@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Added support for smaller screens](https://github.com/block-bites/fondant-app/pull/91)
 - [Added modal (popup) window for networks reset confirmation](https://github.com/block-bites/fondant-app/pull/77)
 - [Added preloaders for all pages, visual bugs fixed](https://github.com/block-bites/fondant-app/pull/80)
+- [Added loader to topbar start/pasue buttons](https://github.com/block-bites/fondant-app/issues/81)
+- Prepared frontend to handle CCTL
 
 #### Backend
 
@@ -28,6 +30,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - [Deploy, Event and Logs mapped elements are separated](https://github.com/block-bites/fondant-app/pull/78)
 - [Navbar menu is working correctly](https://github.com/block-bites/fondant-app/pull/64)
+- [Fixed access to all other subpages when network is not initialized](https://github.com/block-bites/fondant-app/issues/85)
+- [Fixed Start/Pause buttons](https://github.com/block-bites/fondant-app/issues/82)
+- Fixed pagination on all subpages
 
 ## [1.0.0] - 2024-01-15
 

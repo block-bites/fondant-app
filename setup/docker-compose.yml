@@ -2,7 +2,7 @@ version: "2.1"
 
 services:
   fondant-cctl-container:
-    image: blockbites/fondant-nctl-container:latest
+    image: blockbites/fondant-cctl-container:latest
     ports:
       - "3001:3001"
       - "80:80"

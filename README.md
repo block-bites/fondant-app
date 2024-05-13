@@ -3,11 +3,8 @@
 Welcome to Fondant version 1.1! Fondant is a suite of tools the purpose of which is to help you develop and test your applications on the Casper blokchain. We provide all the functionality of CCTL packaged in a slick UI. The app runs on docker containers so you don't have to wander about cross-compatibility or demanding compilations.
 
 To get started install **docker**, clone the repo and build the images using the docker compomse file. 
-```git clone https://github.com/block-bites/fondant-app | docker-compose up --build```
+```git clone https://github.com/block-bites/fondant-app | cd  fondant-app | docker-compose up --build```
 
-### Want to add something to fondant?
-
-You can clone this repository and build the docker-compose file that's inside root folder, or use one of our setup scripts.
 
 ## Frontend Features
 

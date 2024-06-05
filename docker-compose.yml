@@ -10,7 +10,6 @@ services:
         CLIENT_GITBRANCH: release-2.0.0
     ports:
       - "3001:3001"
-      - "80:80"
     networks:
       - fondant-network
 

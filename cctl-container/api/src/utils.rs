@@ -86,12 +86,16 @@ pub fn parse_node_ports() -> HashMap<String, HashMap<String, i32>> {
 }   
 
 pub fn generate_nginx_config(node_service_ports: &HashMap<String, HashMap<String, i32>>) {
+    let port = match std::env::var("PROXY_PORT") {
+        Ok(port) => port,
+        Err(_) => "80".to_string(),
+    };
     let mut config = String::from("events {
  worker_connections 1024;
 }
  http {
  server {
- listen 80;
+ listen " + port + ";
  server_name localhost;
 
 ");

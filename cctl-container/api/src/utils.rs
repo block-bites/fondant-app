@@ -90,15 +90,17 @@ pub fn generate_nginx_config(node_service_ports: &HashMap<String, HashMap<String
         Ok(port) => port,
         Err(_) => "80".to_string(),
     };
-    let mut config = String::from("events {
- worker_connections 1024;
-}
- http {
- server {
- listen " + port + ";
- server_name localhost;
+    
+    let mut config = format!(
+        "events {{
+    worker_connections 1024;
+}}
+http {{
+    server {{
+        listen {};
+        server_name localhost;
 
-");
+", port);
 
     for (node_name, services) in node_service_ports {
         for (service_name_unready, port) in services {

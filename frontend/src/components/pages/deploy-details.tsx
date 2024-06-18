@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { defaultClient } from "../../casper-client"
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Box, Flex, Text, VStack } from "@chakra-ui/react"
+import JsonView from "@uiw/react-json-view"
+import {
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+} from "@chakra-ui/react"
 
 interface DeployDetailsProps {
     deploys: any[]
-    setDeploys: React.Dispatch<React.SetStateAction<any[]>>
 }
 
-const DeployDetails: React.FC<DeployDetailsProps> = ({ setDeploys, deploys }) => {
+const DeployDetails: React.FC<DeployDetailsProps> = ({ deploys }) => {
     const { deployHash } = useParams()
     const [deployInfo, setDeployInfo] = useState<any>()
 
-    // const defaultClient.casperService.getDeployInfo()
-    // console.log(deploys.filter((e) => e.DeployProcessed.deploy_hash === deployHash))
+    const selectedEvent = deploys.filter((e) => e.DeployProcessed.deploy_hash === deployHash)[0]
 
     useEffect(() => {
         const fetchInfo = async () => {
+            console.log(deployHash)
             try {
                 let info
                 if (deployHash) {
                     info = await defaultClient.casperService.getDeployInfo(deployHash)
                     setDeployInfo(info)
-                    console.log("1")
                 }
             } catch (error) {
                 console.error("Error fetching latest block info:", error)
@@ -31,8 +37,6 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ setDeploys, deploys }) =>
         fetchInfo()
         // eslint-disable-next-line
     }, [])
-
-    console.log(deployInfo)
 
     if (!deployInfo) {
         return (
@@ -47,13 +51,33 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ setDeploys, deploys }) =>
     }
 
     return (
-        <Flex
-            direction="column"
-            width="100%"
-            alignItems="center"
-            m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}
-        >
-            {deployInfo !== undefined ? deployInfo.api_version : null}
+        <Flex width="100%" justifyContent="center" mt={["138px", "148px", "80px"]}>
+            <VStack w="100%" maxW={1440} gap="0" p={"16px 32px"}>
+                {deployInfo ? (
+                    <Box w="full" p="0 16px">
+                        <JsonView value={deployInfo} displayDataTypes={false} collapsed={3} />
+                    </Box>
+                ) : null}
+                <Accordion allowToggle w="full">
+                    <AccordionItem>
+                        <AccordionButton w="full" bgColor={"grey.50"}>
+                            <Text as="span" flex="1" textAlign="left">
+                                Raw Event
+                            </Text>
+                            <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel p={0}>
+                            <Box w="full" p={4} bgColor="#f5f5f5">
+                                <JsonView
+                                    value={selectedEvent}
+                                    displayDataTypes={false}
+                                    collapsed={false}
+                                />
+                            </Box>
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
+            </VStack>
         </Flex>
     )
 }

@@ -85,20 +85,30 @@ const Deploys: React.FC<DeploysProps> = ({ setDeploys, deploys }) => {
                         <DeployRowElement deploy={deploy} key={index} />
                     ))}
                 </Box>
-                <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center" p={5}>
-                    <Button onClick={handlePrevPage} isDisabled={currentPage === 1}>
-                        Previous
-                    </Button>
-                    <Text fontFamily="secondary">
-                        Page {currentPage} of {Math.ceil(selectedDeploys.length / DeploysPerPage)}
-                    </Text>
-                    <Button
-                        onClick={handleNextPage}
-                        isDisabled={currentPage * DeploysPerPage >= selectedDeploys.length}
+
+                {deploys.length > DeploysPerPage ? (
+                    <Flex
+                        justifyContent="space-between"
+                        mt="10px"
+                        w="100%"
+                        alignItems="center"
+                        p={5}
                     >
-                        Next
-                    </Button>
-                </Flex>
+                        <Button onClick={handlePrevPage} isDisabled={currentPage === 1}>
+                            Previous
+                        </Button>
+                        <Text fontFamily="secondary">
+                            Page {currentPage} of{" "}
+                            {Math.ceil(selectedDeploys.length / DeploysPerPage)}
+                        </Text>
+                        <Button
+                            onClick={handleNextPage}
+                            isDisabled={currentPage * DeploysPerPage >= selectedDeploys.length}
+                        >
+                            Next
+                        </Button>
+                    </Flex>
+                ) : null}
             </VStack>
         </Flex>
     )

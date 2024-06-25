@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import { Flex, Text, Box, VStack, Button } from "@chakra-ui/react"
 import axios from "axios"
 import { useNodeContext } from "../../context/NodeContext"
-import formatJson from "../atoms/format-json"
 import SpinnerFrame from "../atoms/spinner-frame"
 import { useIsNetworkRunningContext } from "../../context/IsNetworkRunningContext"
+import JsonView from "@uiw/react-json-view"
 
 type Event = any
 
@@ -88,34 +88,18 @@ const Events: React.FC = () => {
             m={["138px 0 0 0", "148px 0 0 0", "80px 0 0 0"]}
         >
             <VStack spacing={4} width="100%" maxW={1440} p={5}>
-                <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
+                <VStack overflowY="auto" w="100%" gap={3}>
                     {selectedEvents?.map((event, index) => (
-                        <Box
-                            key={index}
-                            p={3}
-                            borderBottom="1px solid grey"
-                            cursor="pointer"
-                            onClick={() => toggleEvent(startIndex + index)}
-                        >
-                            <Flex alignItems="center">
-                                <Text
-                                    transform={
-                                        expandedEventIndex === startIndex + index
-                                            ? "rotate(90deg)"
-                                            : "rotate(0deg)"
-                                    }
-                                >
-                                    ▶
-                                </Text>
-                                <Box ml={2} overflowX="auto">
-                                    {expandedEventIndex === startIndex + index
-                                        ? formatJson(event, 0, true)
-                                        : formatJson(event, 0, false)}
-                                </Box>
-                            </Flex>
+                        <Box w="100%" borderBottom="1px solid" p="0 12px 12px 12px ">
+                            <JsonView
+                                value={event}
+                                displayDataTypes={false}
+                                collapsed={5}
+                                shortenTextAfterLength={0}
+                            />
                         </Box>
                     ))}
-                </Box>
+                </VStack>
                 <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
                     <Button onClick={handlePrevPage} isDisabled={currentPage === 1}>
                         Previous

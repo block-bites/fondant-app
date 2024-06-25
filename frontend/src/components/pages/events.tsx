@@ -90,7 +90,7 @@ const Events: React.FC = () => {
             <VStack spacing={4} width="100%" maxW={1440} p={5}>
                 <VStack overflowY="auto" w="100%" gap={3}>
                     {selectedEvents?.map((event, index) => (
-                        <Box w="100%" borderBottom="1px solid" p="0 12px 12px 12px ">
+                        <Box key={index} w="100%" borderBottom="1px solid" p="0 12px 12px 12px ">
                             <JsonView
                                 value={event}
                                 displayDataTypes={false}

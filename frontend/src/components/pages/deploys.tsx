@@ -10,9 +10,10 @@ const DeploysPerPage = 10
 interface DeploysProps {
     deploys: any[]
     setDeploys: React.Dispatch<React.SetStateAction<any[]>>
+    screenWidth: number
 }
 
-const Deploys: React.FC<DeploysProps> = ({ setDeploys, deploys }) => {
+const Deploys: React.FC<DeploysProps> = ({ setDeploys, deploys, screenWidth }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { nodeNumber } = useNodeContext() // Use nodeNumber from context
     const [currentPage, setCurrentPage] = useState<number>(1)
@@ -82,7 +83,7 @@ const Deploys: React.FC<DeploysProps> = ({ setDeploys, deploys }) => {
             <VStack spacing={4} width="100%" maxW={1440}>
                 <Box overflowY="auto" w="100%">
                     {selectedDeploys.map((deploy, index) => (
-                        <DeployRowElement deploy={deploy} key={index} />
+                        <DeployRowElement deploy={deploy} key={index} screenWidth={screenWidth} />
                     ))}
                 </Box>
 

@@ -108,9 +108,18 @@ function AppContent() {
                 <Route path="/blocks" element={<Blocks />} />
                 <Route
                     path="/deploys"
-                    element={<Deploys deploys={deploys} setDeploys={setDeploys} />}
+                    element={
+                        <Deploys
+                            deploys={deploys}
+                            setDeploys={setDeploys}
+                            screenWidth={screenWidth}
+                        />
+                    }
                 />
-                <Route path="/deploys/:deployHash" element={<DeployDetails deploys={deploys} />} />
+                <Route
+                    path="/deploys/:deployHash"
+                    element={<DeployDetails deploys={deploys} screenWidth={screenWidth} />}
+                />
                 <Route path="/events" element={<Events />} />
                 <Route path="/logs" element={<Logs />} />
                 <Route path="/settings" element={<Settings />} />

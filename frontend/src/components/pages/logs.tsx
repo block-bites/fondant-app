@@ -16,7 +16,6 @@ export default function Logs() {
     const [filteredLogs, setFilteredLogs] = useState<LogEntry[]>([])
     const [currentLevel, setCurrentLevel] = useState<string>("All")
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const [expandedLogIndex, setExpandedLogIndex] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { nodeNumber } = useNodeContext()
 
@@ -60,10 +59,6 @@ export default function Logs() {
 
     const handleNextPage = () => {
         setCurrentPage((current) => Math.min(current + 1, Math.ceil(logs.length / LogsPerPage)))
-    }
-
-    const toggleLog = (index: number) => {
-        setExpandedLogIndex(expandedLogIndex === index ? null : index)
     }
 
     const startIndex = (currentPage - 1) * LogsPerPage

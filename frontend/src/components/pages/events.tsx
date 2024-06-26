@@ -13,7 +13,6 @@ const EventsPerPage = 10
 const Events: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([])
     const [filteredEvents, setFilteredEvents] = useState<Event[]>([])
-    const [expandedEventIndex, setExpandedEventIndex] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const { nodeNumber } = useNodeContext()
@@ -48,10 +47,6 @@ const Events: React.FC = () => {
             fetchEvents()
         }
     }, [nodeNumber, isNetworkRunning])
-
-    const toggleEvent = (index: number) => {
-        setExpandedEventIndex(expandedEventIndex === index ? null : index)
-    }
 
     const handlePrevPage = () => {
         setCurrentPage((current) => Math.max(current - 1, 1))

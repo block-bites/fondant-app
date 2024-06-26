@@ -26,7 +26,6 @@ const DeployRowElement: React.FC<DeployRowElementProps> = ({ deploy, screenWidth
         <Link to={`${deploy.DeployProcessed.deploy_hash}`}>
             <Flex
                 w="100%"
-                // h={["120px", "160px", "94px"]}
                 borderBottom="1px solid"
                 borderBottomColor="grey.100"
                 justify="left"
@@ -34,7 +33,6 @@ const DeployRowElement: React.FC<DeployRowElementProps> = ({ deploy, screenWidth
                 transition={"0.3s"}
                 _hover={{ bg: "grey.50" }}
                 p={["12px 24px", "12px 24px", "12px 24px", "16px 32px", "16px 32px"]}
-                // flexDirection={"column"}
             >
                 <VStack align="left" w="100%" gap="5px">
                     <Text fontSize="md" color="grey.300" fontWeight={500}>

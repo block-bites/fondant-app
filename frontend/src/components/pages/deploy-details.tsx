@@ -11,19 +11,22 @@ import {
     AccordionIcon,
 } from "@chakra-ui/react"
 import { truncateToXSymbols } from "../utils"
+import DeployDetailsCeil from "../atoms/deploy-details-ceil"
 
 interface DeployDetailsProps {
-    deploys: any[]
     screenWidth: number
 }
 
-const DeployDetails: React.FC<DeployDetailsProps> = ({ deploys, screenWidth }) => {
+const DeployDetails: React.FC<DeployDetailsProps> = ({ screenWidth }) => {
     const { deployHash } = useParams()
     const [deployInfo, setDeployInfo] = useState<any>()
 
-    const selectedEvent = deploys.filter((e) => e.DeployProcessed.deploy_hash === deployHash)[0]
+    console.log(screenWidth)
 
     const setTruncateLength = () => {
+        if (screenWidth === 0) {
+            return 0
+        }
         if (screenWidth <= 480) {
             return 10
         }
@@ -33,9 +36,9 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ deploys, screenWidth }) =
         return 0
     }
 
+    // We use casper-js-sdk to get more info about Deploy (based on deploy hash that is taken from endpoint http://localhost:3001/cache/events/${nodeNumber} )
     useEffect(() => {
         const fetchInfo = async () => {
-            console.log(deployHash)
             try {
                 let info
                 if (deployHash) {
@@ -64,7 +67,7 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ deploys, screenWidth }) =
 
     return (
         <Flex width="100%" justifyContent="center" mt={["138px", "148px", "80px"]}>
-            <VStack w="100%" maxW={1440} p={["8px 16px", "8px 16px", "16px 32px"]}>
+            <VStack w="100%" maxW={1440} p={["8px 16px", "8px 16px", "16px 32px"]} gap={0}>
                 {deployInfo ? (
                     <Box w="full">
                         <VStack gap="8px" align={"left"}>
@@ -73,7 +76,7 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ deploys, screenWidth }) =
                                 gap="15px"
                                 borderBottom="1px solid"
                                 borderBottomColor="grey.100"
-                                p="8px 0"
+                                p="8px"
                             >
                                 <Text fontSize="md" color="grey.300" fontWeight={500} minW="120px">
                                     Timestamp:
@@ -82,41 +85,32 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ deploys, screenWidth }) =
                                     {deployInfo.deploy.header.timestamp}
                                 </Text>
                             </HStack>
-                            <HStack
-                                w="100%"
-                                gap="15px"
-                                bgColor={"#ffffff"}
-                                borderBottom="1px solid"
-                                borderBottomColor="grey.100"
-                                p="8px 0"
-                            >
-                                <Text fontSize="md" color="grey.300" fontWeight={500} minW="120px">
-                                    Deploy hash:
-                                </Text>
-                                <Text fontSize="sm" fontWeight="semibold" color="grey.800">
-                                    {deployHash
+                            <DeployDetailsCeil
+                                title="Deploy Hash"
+                                value={
+                                    deployHash
                                         ? truncateToXSymbols(deployHash, setTruncateLength())
-                                        : null}
-                                </Text>
-                            </HStack>
-                            <HStack
-                                w="100%"
-                                gap="15px"
-                                borderBottom="1px solid"
-                                borderBottomColor="grey.100"
-                                p="8px 0"
-                            >
-                                <Text fontSize="md" color="grey.300" fontWeight={500} minW="120px">
-                                    Account hash:
-                                </Text>
-                                <Text fontSize="sm" fontWeight="semibold" color="grey.800">
-                                    {truncateToXSymbols(
-                                        deployInfo.deploy.header.account,
-                                        setTruncateLength()
-                                    )}
-                                </Text>
-                            </HStack>
-                            <JsonView value={deployInfo} displayDataTypes={false} collapsed={3} />
+                                        : "-"
+                                }
+                            />
+                            <DeployDetailsCeil
+                                title="Account Hash"
+                                value={truncateToXSymbols(
+                                    deployInfo.deploy.header.account,
+                                    setTruncateLength()
+                                )}
+                            />
+                            <DeployDetailsCeil
+                                title="Body Hash"
+                                value={truncateToXSymbols(
+                                    deployInfo.deploy.header.body_hash,
+                                    setTruncateLength()
+                                )}
+                            />
+                            <DeployDetailsCeil
+                                title="Chain Name"
+                                value={deployInfo.deploy.header.chain_name}
+                            />
                         </VStack>
                     </Box>
                 ) : null}
@@ -124,16 +118,17 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ deploys, screenWidth }) =
                     <AccordionItem>
                         <AccordionButton w="full" bgColor={"grey.50"}>
                             <Text as="span" flex="1" textAlign="left" fontWeight="semibold">
-                                Raw Event
+                                Raw Data
                             </Text>
                             <AccordionIcon />
                         </AccordionButton>
                         <AccordionPanel p={0}>
                             <Box w="full" p={4} bgColor="#f5f5f5">
                                 <JsonView
-                                    value={selectedEvent}
+                                    value={deployInfo}
                                     displayDataTypes={false}
-                                    collapsed={false}
+                                    collapsed={5}
+                                    shortenTextAfterLength={0}
                                 />
                             </Box>
                         </AccordionPanel>

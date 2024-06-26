@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { defaultClient } from "../../casper-client"
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
 import JsonView from "@uiw/react-json-view"
@@ -67,7 +67,25 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ screenWidth, isMobile }) 
 
     return (
         <Flex width="100%" justifyContent="center" mt={["138px", "148px", "80px"]}>
-            <VStack w="100%" maxW={1440} p={["8px 16px", "8px 16px", "16px 32px"]} gap={0}>
+            <VStack
+                w="100%"
+                maxW={1440}
+                p={["8px 16px", "8px 16px", "16px 32px"]}
+                gap={0}
+                align={"left"}
+            >
+                <Flex
+                    as={Link}
+                    to="/deploys"
+                    alignSelf={"left"}
+                    p={"12px 0px"}
+                    color={"pri.orange"}
+                    fontWeight={"semibold"}
+                    _hover={{ color: "red.600" }}
+                >
+                    {"<- "}
+                    Deploys
+                </Flex>
                 {deployInfo ? (
                     <Box w="full">
                         <VStack gap="8px" align={"left"}>

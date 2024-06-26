@@ -113,12 +113,13 @@ function AppContent() {
                             deploys={deploys}
                             setDeploys={setDeploys}
                             screenWidth={screenWidth}
+                            isMobile={isMobile}
                         />
                     }
                 />
                 <Route
                     path="/deploys/:deployHash"
-                    element={<DeployDetails screenWidth={screenWidth} />}
+                    element={<DeployDetails screenWidth={screenWidth} isMobile={isMobile} />}
                 />
                 <Route path="/events" element={<Events />} />
                 <Route path="/logs" element={<Logs />} />

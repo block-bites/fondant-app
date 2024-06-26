@@ -15,23 +15,23 @@ import DeployDetailsCeil from "../atoms/deploy-details-ceil"
 
 interface DeployDetailsProps {
     screenWidth: number
+    isMobile: boolean
 }
 
-const DeployDetails: React.FC<DeployDetailsProps> = ({ screenWidth }) => {
+const DeployDetails: React.FC<DeployDetailsProps> = ({ screenWidth, isMobile }) => {
     const { deployHash } = useParams()
     const [deployInfo, setDeployInfo] = useState<any>()
 
-    console.log(screenWidth)
-
     const setTruncateLength = () => {
-        if (screenWidth === 0) {
-            return 0
-        }
-        if (screenWidth <= 480) {
-            return 10
-        }
-        if (screenWidth <= 768) {
-            return 15
+        if (screenWidth === 0 && isMobile) {
+            return 5
+        } else if (screenWidth !== 0) {
+            if (screenWidth <= 480) {
+                return 10
+            }
+            if (screenWidth <= 768) {
+                return 15
+            }
         }
         return 0
     }

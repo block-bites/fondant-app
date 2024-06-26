@@ -6,18 +6,23 @@ import { truncateToXSymbols } from "../utils"
 interface DeployRowElementProps {
     deploy: any
     screenWidth: number
+    isMobile: boolean
 }
 
-const DeployRowElement: React.FC<DeployRowElementProps> = ({ deploy, screenWidth }) => {
+const DeployRowElement: React.FC<DeployRowElementProps> = ({ deploy, screenWidth, isMobile }) => {
     const setTruncateLength = () => {
-        if (screenWidth <= 680) {
+        if (screenWidth === 0 && isMobile) {
             return 5
-        }
-        if (screenWidth <= 940) {
-            return 10
-        }
-        if (screenWidth <= 1200) {
-            return 15
+        } else if (screenWidth !== 0) {
+            if (screenWidth <= 680) {
+                return 5
+            }
+            if (screenWidth <= 940) {
+                return 10
+            }
+            if (screenWidth <= 1200) {
+                return 15
+            }
         }
         return 20
     }

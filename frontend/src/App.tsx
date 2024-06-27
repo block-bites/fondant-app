@@ -14,6 +14,8 @@ import Logs from "./components/pages/logs"
 import Settings from "./components/pages/settings"
 import Events from "./components/pages/events"
 import Deploys from "./components/pages/deploys"
+import DeployDetails from "./components/pages/deploy-details"
+
 import { NODE_URL_PORT } from "./constant"
 import {
     IsNetworkRunningProvider,
@@ -43,6 +45,7 @@ export const App = () => {
         </NodeProvider>
     )
 }
+type Deploy = any
 
 function AppContent() {
     const location = useLocation()
@@ -52,6 +55,7 @@ function AppContent() {
     const [isMobile, setIsMobile] = useState<boolean>(false)
     const { setIsNetworkRunning } = useIsNetworkRunningContext()
     const { isNetworkLaunched, setIsNetworkLaunched } = useIsNetworkLaunchedContext()
+    const [deploys, setDeploys] = useState<Deploy[]>([])
 
     useEffect(() => {
         setIsLaptop(window.innerWidth >= 768 && window.innerWidth < 1024)
@@ -102,7 +106,21 @@ function AppContent() {
             <Routes>
                 <Route path="/" element={<Accounts isNetworkLaunched={isNetworkLaunched} />} />
                 <Route path="/blocks" element={<Blocks />} />
-                <Route path="/deploys" element={<Deploys />} />
+                <Route
+                    path="/deploys"
+                    element={
+                        <Deploys
+                            deploys={deploys}
+                            setDeploys={setDeploys}
+                            screenWidth={screenWidth}
+                            isMobile={isMobile}
+                        />
+                    }
+                />
+                <Route
+                    path="/deploys/:deployHash"
+                    element={<DeployDetails screenWidth={screenWidth} isMobile={isMobile} />}
+                />
                 <Route path="/events" element={<Events />} />
                 <Route path="/logs" element={<Logs />} />
                 <Route path="/settings" element={<Settings />} />

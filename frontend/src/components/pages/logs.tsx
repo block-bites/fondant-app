@@ -1,8 +1,8 @@
 import { useState, useEffect, ChangeEvent } from "react"
 import { Box, Text, Flex, Button, Select, VStack } from "@chakra-ui/react"
 import { useNodeContext } from "../../context/NodeContext"
-import formatJson from "../atoms/format-json"
 import SpinnerFrame from "../atoms/spinner-frame"
+import JsonView from "@uiw/react-json-view"
 
 interface LogEntry {
     [key: string]: string
@@ -16,7 +16,6 @@ export default function Logs() {
     const [filteredLogs, setFilteredLogs] = useState<LogEntry[]>([])
     const [currentLevel, setCurrentLevel] = useState<string>("All")
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const [expandedLogIndex, setExpandedLogIndex] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { nodeNumber } = useNodeContext()
 
@@ -62,10 +61,6 @@ export default function Logs() {
         setCurrentPage((current) => Math.min(current + 1, Math.ceil(logs.length / LogsPerPage)))
     }
 
-    const toggleLog = (index: number) => {
-        setExpandedLogIndex(expandedLogIndex === index ? null : index)
-    }
-
     const startIndex = (currentPage - 1) * LogsPerPage
     const selectedLogs = filteredLogs.slice(startIndex, startIndex + LogsPerPage)
 
@@ -104,35 +99,24 @@ export default function Logs() {
                     </Flex>
                 ) : (
                     <>
-                        <Box overflowY="auto" w="100%" borderWidth="1px" borderRadius="lg" p={3}>
+                        <VStack overflowY="auto" w="100%" gap={3}>
                             {selectedLogs.map((log, index) => (
-                                <Flex
+                                <Box
                                     key={index}
-                                    direction="column"
-                                    p={3}
-                                    borderBottom="1px solid #ddd"
-                                    onClick={() => toggleLog(startIndex + index)}
-                                    cursor="pointer"
+                                    w="100%"
+                                    borderBottom="1px solid"
+                                    p="0 12px 12px 12px "
                                 >
-                                    <Flex alignItems="center">
-                                        <Text
-                                            transform={
-                                                expandedLogIndex === startIndex + index
-                                                    ? "rotate(90deg)"
-                                                    : "rotate(0deg)"
-                                            }
-                                        >
-                                            ▶
-                                        </Text>
-                                        <Box ml={2} overflowX="auto">
-                                            {expandedLogIndex === startIndex + index
-                                                ? formatJson(log, 0, true)
-                                                : formatJson(log, 0, false)}
-                                        </Box>
-                                    </Flex>
-                                </Flex>
+                                    <JsonView
+                                        value={log}
+                                        displayDataTypes={false}
+                                        collapsed={5}
+                                        shortenTextAfterLength={0}
+                                        displayObjectSize={false}
+                                    />
+                                </Box>
                             ))}
-                        </Box>
+                        </VStack>
                         <Flex justifyContent="space-between" mt="10px" w="100%" alignItems="center">
                             <Button onClick={handlePrevPage} isDisabled={currentPage === 1}>
                                 Previous

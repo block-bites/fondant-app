@@ -23,7 +23,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - REACT_APP_PROXY_PORT=80
+      - REACT_APP_PORT=80
     networks:
       - fondant-network
     volumes:

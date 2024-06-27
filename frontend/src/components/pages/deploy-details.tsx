@@ -89,20 +89,10 @@ const DeployDetails: React.FC<DeployDetailsProps> = ({ screenWidth, isMobile }) 
                 {deployInfo ? (
                     <Box w="full">
                         <VStack gap="8px" align={"left"}>
-                            <HStack
-                                w="100%"
-                                gap="15px"
-                                borderBottom="1px solid"
-                                borderBottomColor="grey.100"
-                                p="8px"
-                            >
-                                <Text fontSize="md" color="grey.300" fontWeight={500} minW="120px">
-                                    Timestamp:
-                                </Text>
-                                <Text fontSize="sm" fontWeight="semibold" color="grey.800">
-                                    {deployInfo.deploy.header.timestamp}
-                                </Text>
-                            </HStack>
+                            <DeployDetailsCeil
+                                title="Timestamp"
+                                value={deployInfo.deploy.header.timestamp}
+                            />
                             <DeployDetailsCeil
                                 title="Deploy Hash"
                                 value={
